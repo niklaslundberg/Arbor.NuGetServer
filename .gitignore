@@ -27,3 +27,4 @@ _ReSharper*
 *.BACKUP*
 *.orig
 *.pubxml
+src/.vs
