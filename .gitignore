@@ -11,8 +11,12 @@ _ReSharper.*
 *.nupkg
 nuget.exe
 publish
-[Pp]ackages
+[Pp]ackages/*.NuGet
+[Pp]ackages/*.sha512
+[Pp]ackages/*.nuspec
+src/packages
 **/App_Data/Logs/Elmah.Errors
+**/App_Data/NuGet/packages
 [Bb]uild
 [Aa]rtifacts
 _patchedAssemblyInfos

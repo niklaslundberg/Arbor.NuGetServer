@@ -1,0 +1,29 @@
+﻿@using Arbor.NuGetServer.IisHost.Controllers
+@using Arbor.NuGetServer.IisHost.Extensions
+@model Arbor.NuGetServer.IisHost.Models.PackagesViewModel
+
+<h2>Packages</h2>
+
+<h3>NuGet packages (@Model.TotalNuGetSize.AsMiB() MiB)</h3>
+
+@if (Model.RelativeNuGetPaths.Any())
+{
+    <ul>
+        @foreach (var item in Model.RelativeNuGetPaths)
+        {
+            <li>@item.RelativePath, <strong>@item.FileInfo.Length.AsMiB()</strong> MiB</li>
+        }
+    </ul>
+}
+
+<h3>Other files (@Model.TotalOtherFileSize.AsMiB()) MiB)</h3>
+
+@if (Model.RelativeOtherPaths.Any())
+{
+    <ul>
+        @foreach (var item in Model.RelativeOtherPaths)
+        {
+            <li>@item.RelativePath <strong>@item.FileInfo.Length.AsMiB()</strong> MiB</li>
+        }
+    </ul>
+}
