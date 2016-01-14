@@ -1,0 +1,43 @@
+<Project ToolsVersion="12.0"
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <ExcludeFromPackageFolders Include="**\node_modules\**\*.*;obj;**\bower_components\**.*">
+      <FromTarget></FromTarget>
+    </ExcludeFromPackageFolders>
+  </ItemGroup>
+
+  <Target Name="CustomExcludeFiles" BeforeTargets="ExcludeFilesFromPackage">
+    <ItemGroup Condition="'$(Configuration)' == 'release'">
+      <ExcludeFromPackageFiles Include="*.map" />
+    </ItemGroup>
+    <ItemGroup>
+      <ExcludeFromPackageFiles Include="Content\**\*Dummy*.*;*.ncrunchproject;*.wpp.targets;*.debug.config;*.release.config;*.packages.config;package.json;bower.json;gruntfile.js;.jshintrc;*.stage.config;packages.config" />
+    </ItemGroup>
+    <Message Text="Configuration: $(Configuration)" />
+    <Message Text="ExcludeFromPackageFiles: %(ExcludeFromPackageFiles.Identity)" Importance="normal" />
+  </Target>
+
+  <PropertyGroup>
+    <CopyAllFilesToSingleFolderForPackageDependsOn>
+      CustomCollectFiles;
+      $(CopyAllFilesToSingleFolderForPackageDependsOn);
+    </CopyAllFilesToSingleFolderForPackageDependsOn>
+
+  </PropertyGroup>
+
+  <Target Name="CustomCollectFiles">
+    <ItemGroup>
+      <_CustomFiles Include="Content\**\*.*" Exclude="@(ExcludeFromPackageFiles)" />
+
+      <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
+        <DestinationRelativePath>Content\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+
+    </ItemGroup>
+
+    <Message Text="FilesForPackagingFromProject: %(FilesForPackagingFromProject.Identity)" Importance="normal" />
+    <Message Text="_CustomFiles: %(_CustomFiles.Identity)" Importance="normal" />
+  </Target>
+
+</Project>
