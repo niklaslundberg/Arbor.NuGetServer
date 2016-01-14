@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
+using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.IisHost.Extensions;
 using Arbor.NuGetServer.IisHost.Models;
 
@@ -22,7 +23,7 @@ namespace Arbor.NuGetServer.IisHost.Controllers
             const string Key = "packagesPath";
 
             string packagesPath =
-                ConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace($"AppSetting key '{Key}' is not set");
+                KVConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace($"AppSetting key '{Key}' is not set");
 
             string fullPath = Server.MapPath(packagesPath);
 

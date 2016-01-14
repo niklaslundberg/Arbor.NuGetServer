@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.IisHost.Extensions;
 using Arbor.NuGetServer.IisHost.Security;
 
 using Microsoft.Owin.Extensions;
@@ -17,15 +19,19 @@ namespace Arbor.NuGetServer.IisHost
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            List<string> authorizedPaths = new List<string>(10) { "nuget", "packages" };
+            const string Key = "nuget:base-route";
+
+            var nugetRoute =
+                KVConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace(
+                    $"AppSetting with key '{Key}' is not set");
+
+            List<string> authorizedPaths = new List<string>(10) { nugetRoute, "packages" };
 
             app.MapWhen(
                 context =>
                 authorizedPaths.Any(
                     path =>
-                    context.Request.Uri.PathAndQuery.StartsWith(
-                        $"/{path}",
-                        StringComparison.InvariantCultureIgnoreCase)),
+                    context.Request.Uri.PathAndQuery.StartsWith($"/{path}", StringComparison.InvariantCultureIgnoreCase)),
                 configuration =>
                     {
                         configuration.UseBasicAuthentication(

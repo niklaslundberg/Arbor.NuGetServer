@@ -45,6 +45,30 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Arbor.KVConfiguration.Core, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Core.0.1.0\lib\net45\Arbor.KVConfiguration.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Arbor.KVConfiguration.JsonConfiguration, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.JsonConfiguration.0.1.0\lib\net45\Arbor.KVConfiguration.JsonConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Arbor.KVConfiguration.Schema, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Schema.0.1.0\lib\net45\Arbor.KVConfiguration.Schema.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Arbor.KVConfiguration.Schema.Json, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Schema.Json.0.1.0\lib\net45\Arbor.KVConfiguration.Schema.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Arbor.KVConfiguration.SystemConfiguration, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.SystemConfiguration.0.1.0\lib\net45\Arbor.KVConfiguration.SystemConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Arbor.KVConfiguration.UserConfiguration, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.UserConfiguration.0.1.0\lib\net45\Arbor.KVConfiguration.UserConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
       <Private>True</Private>
@@ -203,6 +227,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataServices\ConfigurationStartup.cs" />
     <Compile Include="Models\AppConfiguration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
