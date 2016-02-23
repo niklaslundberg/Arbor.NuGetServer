@@ -1,7 +1,11 @@
-﻿using Microsoft.Owin;
+﻿using Arbor.NuGetServer.IisHost;
+
+using Microsoft.Owin;
+
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Arbor.NuGetServer.IisHost.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
+
 namespace Arbor.NuGetServer.IisHost
 {
     public partial class Startup
@@ -9,6 +13,10 @@ namespace Arbor.NuGetServer.IisHost
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+
+            app.Map(
+                "/api/v2",
+                config => { config.Use<NuGetInterceptMiddleware>(); });
         }
     }
 }

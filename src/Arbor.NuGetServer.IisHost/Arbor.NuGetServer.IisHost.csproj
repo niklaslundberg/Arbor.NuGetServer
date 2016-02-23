@@ -202,6 +202,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Controllers\PackagesController.cs" />
     <Compile Include="Models\PackagesViewModel.cs" />
+    <Compile Include="NuGetInterceptMiddleware.cs" />
     <Compile Include="Security\NuGetAuthorizationMiddleware.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Security\SimpleAuthenticator.cs" />
