@@ -33,36 +33,37 @@ namespace Arbor.NuGetServer.IisHost
 
                     string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
 
-                    var fileCount = HttpContext.Current.Request.Files.Count;
+                    int fileCount = HttpContext.Current.Request.Files.Count;
 
-                    if (fileCount == 1)
+                    for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
                     {
-                        var file = HttpContext.Current.Request.Files[0];
+                        HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
 
                         string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
                         file.SaveAs(tempFilePath);
 
                         var myPackage = new ZipPackage(tempFilePath);
 
-                        var id = myPackage.Id;
-                        var semVer = myPackage.Version;
+                        string id = myPackage.Id;
+                        SemanticVersion semVer = myPackage.Version;
 
                         if (File.Exists(tempFilePath))
                         {
                             File.Delete(tempFilePath);
                         }
 
-                        string normalizedString = semVer.ToNormalizedString();
-                        var existingPackage = Path.Combine(
+                        string normalizedSemVer = semVer.ToNormalizedString();
+
+                        string existingPackage = Path.Combine(
                             physicalPath,
                             id,
-                            normalizedString,
-                            $"{id}.{normalizedString}.nupkg");
+                            normalizedSemVer,
+                            $"{id}.{normalizedSemVer}.nupkg");
 
                         if (File.Exists(existingPackage))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                            await context.Response.WriteAsync("The package already exists");
+                            await context.Response.WriteAsync($"The package '{id}' version '{normalizedSemVer}' already exists");
                             return;
                         }
                     }
