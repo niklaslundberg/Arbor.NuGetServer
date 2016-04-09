@@ -21,7 +21,10 @@ namespace Arbor.NuGetServer.IisHost
             {
                 app.Map(
                     "/api/v2",
-                    config => { config.Use<NuGetInterceptMiddleware>(); });
+                    config => {
+                        config.Use<NuGetWebHookMiddleware>();
+                        config.Use<NuGetInterceptMiddleware>();
+                    });
             }
         }
     }

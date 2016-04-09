@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace Arbor.NuGetServer.IisHost
 
                     int fileCount = HttpContext.Current.Request.Files.Count;
 
+                    List<PackageIdentifier> packageIdentifiers = new List<PackageIdentifier>();
+
                     for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
                     {
                         HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
@@ -63,14 +66,33 @@ namespace Arbor.NuGetServer.IisHost
                         if (File.Exists(existingPackage))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                            await context.Response.WriteAsync($"The package '{id}' version '{normalizedSemVer}' already exists");
+                            await
+                                context.Response.WriteAsync(
+                                    $"The package '{id}' version '{normalizedSemVer}' already exists");
                             return;
                         }
+
+                        packageIdentifiers.Add(new PackageIdentifier(id, semVer));
+
+                        context.Set("urn:arbor:nuget:packages", packageIdentifiers);
                     }
                 }
             }
 
             await Next.Invoke(context);
+        }
+    }
+
+    public class PackageIdentifier
+    {
+        public string PackageId { get; }
+
+        public SemanticVersion SemanticVersion { get; }
+
+        public PackageIdentifier(string packageId, SemanticVersion semanticVersion)
+        {
+            PackageId = packageId;
+            SemanticVersion = semanticVersion;
         }
     }
 }
