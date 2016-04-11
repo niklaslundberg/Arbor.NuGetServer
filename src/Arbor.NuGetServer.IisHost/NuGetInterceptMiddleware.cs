@@ -28,41 +28,41 @@ namespace Arbor.NuGetServer.IisHost
                 var allowOverride =
                     KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].AsBool(false);
 
-                if (!allowOverride)
+                string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
+
+                string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
+
+                int fileCount = HttpContext.Current.Request.Files.Count;
+
+                List<PackageIdentifier> packageIdentifiers = new List<PackageIdentifier>();
+
+                for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
                 {
-                    string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
+                    HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
 
-                    string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
+                    string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
+                    file.SaveAs(tempFilePath);
 
-                    int fileCount = HttpContext.Current.Request.Files.Count;
+                    var myPackage = new ZipPackage(tempFilePath);
 
-                    List<PackageIdentifier> packageIdentifiers = new List<PackageIdentifier>();
+                    string id = myPackage.Id;
+                    SemanticVersion semVer = myPackage.Version;
 
-                    for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
+                    if (File.Exists(tempFilePath))
                     {
-                        HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
+                        File.Delete(tempFilePath);
+                    }
 
-                        string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
-                        file.SaveAs(tempFilePath);
+                    string normalizedSemVer = semVer.ToNormalizedString();
 
-                        var myPackage = new ZipPackage(tempFilePath);
+                    string existingPackage = Path.Combine(
+                        physicalPath,
+                        id,
+                        normalizedSemVer,
+                        $"{id}.{normalizedSemVer}.nupkg");
 
-                        string id = myPackage.Id;
-                        SemanticVersion semVer = myPackage.Version;
-
-                        if (File.Exists(tempFilePath))
-                        {
-                            File.Delete(tempFilePath);
-                        }
-
-                        string normalizedSemVer = semVer.ToNormalizedString();
-
-                        string existingPackage = Path.Combine(
-                            physicalPath,
-                            id,
-                            normalizedSemVer,
-                            $"{id}.{normalizedSemVer}.nupkg");
-
+                    if (!allowOverride)
+                    {
                         if (File.Exists(existingPackage))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Conflict;
@@ -71,28 +71,15 @@ namespace Arbor.NuGetServer.IisHost
                                     $"The package '{id}' version '{normalizedSemVer}' already exists");
                             return;
                         }
-
-                        packageIdentifiers.Add(new PackageIdentifier(id, semVer));
-
-                        context.Set("urn:arbor:nuget:packages", packageIdentifiers);
                     }
+
+                    packageIdentifiers.Add(new PackageIdentifier(id, semVer));
+
+                    context.Set("urn:arbor:nuget:packages", packageIdentifiers);
                 }
             }
 
             await Next.Invoke(context);
-        }
-    }
-
-    public class PackageIdentifier
-    {
-        public string PackageId { get; }
-
-        public SemanticVersion SemanticVersion { get; }
-
-        public PackageIdentifier(string packageId, SemanticVersion semanticVersion)
-        {
-            PackageId = packageId;
-            SemanticVersion = semanticVersion;
         }
     }
 }

@@ -45,28 +45,28 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.Core, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Core.0.3.0\lib\net45\Arbor.KVConfiguration.Core.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.Core, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Core.0.4.1\lib\net45\Arbor.KVConfiguration.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.JsonConfiguration, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.JsonConfiguration.0.3.0\lib\net45\Arbor.KVConfiguration.JsonConfiguration.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.JsonConfiguration, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.JsonConfiguration.0.4.1\lib\net45\Arbor.KVConfiguration.JsonConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.Schema, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Schema.0.3.0\lib\net45\Arbor.KVConfiguration.Schema.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.Schema, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Schema.0.4.1\lib\net45\Arbor.KVConfiguration.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.Schema.Json, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Schema.Json.0.3.0\lib\net45\Arbor.KVConfiguration.Schema.Json.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.Schema.Json, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.Schema.Json.0.4.1\lib\net45\Arbor.KVConfiguration.Schema.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.SystemConfiguration, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.SystemConfiguration.0.3.0\lib\net45\Arbor.KVConfiguration.SystemConfiguration.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.SystemConfiguration, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.SystemConfiguration.0.4.1\lib\net45\Arbor.KVConfiguration.SystemConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Arbor.KVConfiguration.UserConfiguration, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.UserConfiguration.0.3.0\lib\net45\Arbor.KVConfiguration.UserConfiguration.dll</HintPath>
+    <Reference Include="Arbor.KVConfiguration.UserConfiguration, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.KVConfiguration.UserConfiguration.0.4.1\lib\net45\Arbor.KVConfiguration.UserConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
@@ -90,7 +90,7 @@
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.10.1.766, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -98,7 +98,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NuGet.Server, Version=2.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Server.2.10.0-master-0004\lib\net45\NuGet.Server.dll</HintPath>
+      <HintPath>..\packages\NuGet.Server.2.10.2\lib\net45\NuGet.Server.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RouteMagic, Version=1.3.0.0, Culture=neutral, PublicKeyToken=84b59be021aa4cee, processorArchitecture=MSIL">
@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataServices\ConfigurationStartup.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Models\AppConfiguration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Models\PackagesViewModel.cs" />
     <Compile Include="NuGetInterceptMiddleware.cs" />
     <Compile Include="NuGetWebHookMiddleware.cs" />
+    <Compile Include="PackageIdentifier.cs" />
     <Compile Include="Security\NuGetAuthorizationMiddleware.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Security\SimpleAuthenticator.cs" />
@@ -226,6 +228,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Packages\Readme.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -237,10 +240,10 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <None Include="Scripts\jquery-2.2.2.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.2.js" />
+    <Content Include="Scripts\jquery-2.2.2.min.js" />
+    <Content Include="Scripts\jquery-2.2.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
