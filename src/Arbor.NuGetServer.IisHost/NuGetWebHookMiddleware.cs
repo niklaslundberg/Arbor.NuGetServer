@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Arbor.KVConfiguration.Core;
@@ -64,7 +65,22 @@ namespace Arbor.NuGetServer.IisHost
 
                                 request.Content = new StringContent(packages, Encoding.UTF8, "application/json");
 
-                                using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(request))
+                                string timeOutAppSettingsValue = KVConfigurationManager.AppSettings["nuget:push:timeout-in-seconds"];
+
+                                int timeoutInSeconds;
+
+                                if (!int.TryParse(timeOutAppSettingsValue, out timeoutInSeconds)
+                                    || timeoutInSeconds <= 0)
+                                {
+                                    timeoutInSeconds = 10;
+                                }
+
+                                CancellationTokenSource cancellationTokenSource =
+                                    new CancellationTokenSource(TimeSpan.FromSeconds(timeoutInSeconds));
+
+                                using (
+                                    HttpResponseMessage httpResponseMessage =
+                                        await httpClient.SendAsync(request, cancellationTokenSource.Token))
                                 {
                                     Logger.Info(
                                         $"{url} status: {httpResponseMessage.StatusCode}, content {packages}");
@@ -73,6 +89,10 @@ namespace Arbor.NuGetServer.IisHost
                                         await
                                         httpResponseMessage.Content.ReadAsStringAsync());
                                 }
+                            }
+                            catch (TaskCanceledException ex)
+                            {
+                                Logger.Error($"Task cancelled when invoking web hook url {url} {ex}");
                             }
                             catch (Exception ex)
                             {
