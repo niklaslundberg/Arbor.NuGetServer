@@ -68,7 +68,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="PackageIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProtectedRoute.cs" />
+    <Compile Include="IProtectedRoute.cs" />
     <Compile Include="SimpleAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
