@@ -23,59 +23,76 @@ namespace Arbor.NuGetServer.IisHost
 
         public override async Task Invoke(IOwinContext context)
         {
-            if (context.Request.Method.Equals("PUT", StringComparison.OrdinalIgnoreCase))
+            if (context.Request.Method.Equals("PUT", StringComparison.OrdinalIgnoreCase) && HttpContext.Current != null)
             {
-                var allowOverride =
-                    KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].AsBool(false);
-
-                string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
-
-                string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
-
-                int fileCount = HttpContext.Current.Request.Files.Count;
-
-                List<PackageIdentifier> packageIdentifiers = new List<PackageIdentifier>();
-
-                for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
+                try
                 {
-                    HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
+                    var allowOverride =
+                        KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].AsBool(false);
 
-                    string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
-                    file.SaveAs(tempFilePath);
+                    string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
 
-                    var myPackage = new ZipPackage(tempFilePath);
+                    string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
 
-                    string id = myPackage.Id;
-                    SemanticVersion semVer = myPackage.Version;
+                    int fileCount = HttpContext.Current.Request.Files.Count;
 
-                    if (File.Exists(tempFilePath))
+                    List<PackageIdentifier> packageIdentifiers = new List<PackageIdentifier>();
+
+                    for (int fileCounter = 0; fileCounter < fileCount; fileCounter++)
                     {
-                        File.Delete(tempFilePath);
-                    }
+                        HttpPostedFile file = HttpContext.Current.Request.Files[fileCounter];
 
-                    string normalizedSemVer = semVer.ToNormalizedString();
+                        string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
+                        file.SaveAs(tempFilePath);
 
-                    string existingPackage = Path.Combine(
-                        physicalPath,
-                        id,
-                        normalizedSemVer,
-                        $"{id}.{normalizedSemVer}.nupkg");
+                        var myPackage = new ZipPackage(tempFilePath);
 
-                    if (!allowOverride)
-                    {
-                        if (File.Exists(existingPackage))
+                        string id = myPackage.Id;
+                        SemanticVersion semVer = myPackage.Version;
+
+                        if (File.Exists(tempFilePath))
                         {
-                            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                            await
-                                context.Response.WriteAsync(
-                                    $"The package '{id}' version '{normalizedSemVer}' already exists");
-                            return;
+                            try
+                            {
+                                File.Delete(tempFilePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error($"Could not delete temp file '{tempFilePath}', {ex}");
+                            }
                         }
+
+                        string normalizedSemVer = semVer.ToNormalizedString();
+
+                        string existingPackage = Path.Combine(
+                            physicalPath,
+                            id,
+                            normalizedSemVer,
+                            $"{id}.{normalizedSemVer}.nupkg");
+
+                        if (!allowOverride)
+                        {
+                            if (File.Exists(existingPackage))
+                            {
+                                context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                                await
+                                    context.Response.WriteAsync(
+                                        $"The package '{id}' version '{normalizedSemVer}' already exists");
+                                return;
+                            }
+                        }
+
+                        packageIdentifiers.Add(new PackageIdentifier(id, semVer));
+
+                        context.Set("urn:arbor:nuget:packages", packageIdentifiers);
                     }
 
-                    packageIdentifiers.Add(new PackageIdentifier(id, semVer));
-
-                    context.Set("urn:arbor:nuget:packages", packageIdentifiers);
+                    context.Request.Body.Position = 0;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString());
+                    throw;
                 }
             }
 

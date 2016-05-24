@@ -32,3 +32,4 @@ _ReSharper*
 *.orig
 *.pubxml
 src/.vs
+src/Arbor.NuGetServer.IisHost/App_Data/log.txt

@@ -36,10 +36,29 @@ namespace Arbor.NuGetServer.IisHost
 
                 if (anyStatusCode.Any(code => code == context.Response.StatusCode))
                 {
-                    string[] webHooks = KVConfigurationManager.AppSettings.AllValues.Where(
+                    Uri[] webHooks = KVConfigurationManager.AppSettings.AllValues.Where(
                         pair =>
                         pair.Key.Equals("urn:arbor:nuget:web-hook:url", StringComparison.InvariantCultureIgnoreCase))
-                        .Select(pair => pair.Value).ToArray();
+                        .Select(pair => pair.Value)
+                        .Select(
+                            url =>
+                                {
+                                    Uri parsed;
+
+                                    if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                                    {
+                                        return null;
+                                    }
+
+                                    if (!Uri.TryCreate(url, UriKind.Absolute, out parsed))
+                                    {
+                                        return null;
+                                    }
+
+                                    return parsed;
+                                })
+                        .Where(uri => uri != null)
+                        .ToArray();
 
                     List<PackageIdentifier> packageIdentifiers =
                         context.Get<List<PackageIdentifier>>("urn:arbor:nuget:packages");
@@ -50,53 +69,61 @@ namespace Arbor.NuGetServer.IisHost
                         return;
                     }
 
-                    Logger.Info($"Found webhooks: {string.Join(Environment.NewLine, webHooks)}");
-
-                    using (var httpClient = new HttpClient())
+                    if (!webHooks.Any())
                     {
-                        foreach (string url in webHooks)
+                        Logger.Info($"Found no webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
+                    }
+                    else
+                    {
+                        Logger.Info($"Found webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
+
+                        using (var httpClient = new HttpClient())
                         {
-                            try
+                            foreach (Uri url in webHooks)
                             {
-                                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
-
-                                string packages = JsonConvert.SerializeObject(
-                                    packageIdentifiers);
-
-                                request.Content = new StringContent(packages, Encoding.UTF8, "application/json");
-
-                                string timeOutAppSettingsValue = KVConfigurationManager.AppSettings["nuget:push:timeout-in-seconds"];
-
-                                int timeoutInSeconds;
-
-                                if (!int.TryParse(timeOutAppSettingsValue, out timeoutInSeconds)
-                                    || timeoutInSeconds <= 0)
+                                try
                                 {
-                                    timeoutInSeconds = 10;
+                                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+
+                                    string packages = JsonConvert.SerializeObject(
+                                        packageIdentifiers);
+
+                                    request.Content = new StringContent(packages, Encoding.UTF8, "application/json");
+
+                                    string timeOutAppSettingsValue =
+                                        KVConfigurationManager.AppSettings["nuget:push:timeout-in-seconds"];
+
+                                    int timeoutInSeconds;
+
+                                    if (!int.TryParse(timeOutAppSettingsValue, out timeoutInSeconds)
+                                        || timeoutInSeconds <= 0)
+                                    {
+                                        timeoutInSeconds = 10;
+                                    }
+
+                                    CancellationTokenSource cancellationTokenSource =
+                                        new CancellationTokenSource(TimeSpan.FromSeconds(timeoutInSeconds));
+
+                                    using (
+                                        HttpResponseMessage httpResponseMessage =
+                                            await httpClient.SendAsync(request, cancellationTokenSource.Token))
+                                    {
+                                        Logger.Info(
+                                            $"{url} status: {httpResponseMessage.StatusCode}, content {packages}");
+
+                                        Logger.Info(
+                                            await
+                                            httpResponseMessage.Content.ReadAsStringAsync());
+                                    }
                                 }
-
-                                CancellationTokenSource cancellationTokenSource =
-                                    new CancellationTokenSource(TimeSpan.FromSeconds(timeoutInSeconds));
-
-                                using (
-                                    HttpResponseMessage httpResponseMessage =
-                                        await httpClient.SendAsync(request, cancellationTokenSource.Token))
+                                catch (TaskCanceledException ex)
                                 {
-                                    Logger.Info(
-                                        $"{url} status: {httpResponseMessage.StatusCode}, content {packages}");
-
-                                    Logger.Info(
-                                        await
-                                        httpResponseMessage.Content.ReadAsStringAsync());
+                                    Logger.Error($"Task cancelled when invoking web hook url {url} {ex}");
                                 }
-                            }
-                            catch (TaskCanceledException ex)
-                            {
-                                Logger.Error($"Task cancelled when invoking web hook url {url} {ex}");
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.Error($"Exception when invoking web hook url {url} {ex}");
+                                catch (Exception ex)
+                                {
+                                    Logger.Error($"Exception when invoking web hook url {url} {ex}");
+                                }
                             }
                         }
                     }
