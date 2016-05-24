@@ -1,8 +1,9 @@
 ﻿using System;
 
 using NuGet;
+using NuGet.Versioning;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.Core
 {
     public class PackageIdentifier
     {

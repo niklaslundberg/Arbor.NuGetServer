@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.IisHost.Extensions;
+using Arbor.NuGetServer.Core.Extensions;
 
-namespace Arbor.NuGetServer.IisHost.Security
+namespace Arbor.NuGetServer.Core
 {
     public class SimpleAuthenticator
     {
@@ -21,8 +20,12 @@ namespace Arbor.NuGetServer.IisHost.Security
             var usernameKey = "nuget:authentication:basicauthentication:username";
             var passwordKey = "nuget:authentication:basicauthentication:password";
 
-            string storedUsername = KVConfigurationManager.AppSettings[usernameKey].ThrowIfNullOrWhitespace($"AppSetting key '{usernameKey}' is not set");
-            string storedPassword = KVConfigurationManager.AppSettings[passwordKey].ThrowIfNullOrWhitespace($"AppSetting key '{passwordKey}' is not set");
+            string storedUsername =
+                KVConfigurationManager.AppSettings[usernameKey].ThrowIfNullOrWhitespace(
+                    $"AppSetting key '{usernameKey}' is not set");
+            string storedPassword =
+                KVConfigurationManager.AppSettings[passwordKey].ThrowIfNullOrWhitespace(
+                    $"AppSetting key '{passwordKey}' is not set");
 
             bool correctUsername = username.Equals(storedUsername, StringComparison.InvariantCultureIgnoreCase);
             bool correctPassword = password.Equals(storedPassword, StringComparison.InvariantCulture);
@@ -34,7 +37,11 @@ namespace Arbor.NuGetServer.IisHost.Security
 
             return
                 Task.FromResult<IEnumerable<Claim>>(
-                    new List<Claim> { new Claim(ClaimTypes.NameIdentifier, storedUsername) });
+                    new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, storedUsername),
+                            new Claim(ClaimTypes.NameIdentifier, storedUsername)
+                        });
         }
     }
 }

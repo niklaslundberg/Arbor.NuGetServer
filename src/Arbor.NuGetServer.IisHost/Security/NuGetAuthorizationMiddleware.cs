@@ -3,7 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 using Microsoft.Owin;
 
@@ -51,6 +53,12 @@ namespace Arbor.NuGetServer.IisHost.Security
 
                     return;
                 }
+            }
+
+            if (HttpContext.Current != null)
+            {
+                Thread.CurrentPrincipal = context.Authentication.User;
+                HttpContext.Current.User = context.Authentication.User;
             }
 
             await Next.Invoke(context);

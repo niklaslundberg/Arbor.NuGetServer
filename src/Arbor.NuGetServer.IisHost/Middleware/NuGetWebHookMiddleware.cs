@@ -8,12 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.IisHost.Configuration;
 
 using Microsoft.Owin;
 
 using Newtonsoft.Json;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Middleware
 {
     public class NuGetWebHookMiddleware : OwinMiddleware
     {
@@ -71,11 +73,13 @@ namespace Arbor.NuGetServer.IisHost
 
                     if (!webHooks.Any())
                     {
-                        Logger.Info($"Found no webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
+                        Logger.Info(
+                            $"Found no webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
                     }
                     else
                     {
-                        Logger.Info($"Found webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
+                        Logger.Info(
+                            $"Found webhooks: {string.Join(Environment.NewLine, webHooks.Select(hook => hook.ToString()))}");
 
                         using (var httpClient = new HttpClient())
                         {
@@ -91,7 +95,7 @@ namespace Arbor.NuGetServer.IisHost
                                     request.Content = new StringContent(packages, Encoding.UTF8, "application/json");
 
                                     string timeOutAppSettingsValue =
-                                        KVConfigurationManager.AppSettings["nuget:push:timeout-in-seconds"];
+                                        KVConfigurationManager.AppSettings[ConfigurationKeys.NuGetWebHookTimeout];
 
                                     int timeoutInSeconds;
 

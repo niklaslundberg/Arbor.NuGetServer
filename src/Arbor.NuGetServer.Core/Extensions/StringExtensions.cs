@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arbor.NuGetServer.IisHost.Extensions
+namespace Arbor.NuGetServer.Core.Extensions
 {
     public static class StringExtensions
     {

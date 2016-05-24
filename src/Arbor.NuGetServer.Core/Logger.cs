@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.Core
 {
-    static class Logger
+    public static class Logger
     {
         public static void Info(string message)
         {

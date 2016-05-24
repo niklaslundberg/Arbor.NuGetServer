@@ -1,4 +1,5 @@
 ﻿@using Arbor.NuGetServer.IisHost.Models
+@using Arbor.NuGetServer.IisHost.Routes
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Packages", "Index", "Packages")</li>
+                    <li><a href="~/@RouteConstants.PackageRoute">Packages</a></li>
                 </ul>
 
             </div>

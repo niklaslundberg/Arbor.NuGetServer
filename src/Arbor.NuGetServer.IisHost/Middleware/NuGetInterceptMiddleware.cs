@@ -4,15 +4,18 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.WebPages;
 
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Core.Extensions;
 
 using Microsoft.Owin;
 
 using NuGet;
 
-namespace Arbor.NuGetServer.IisHost
+using SemanticVersion = NuGet.Versioning.SemanticVersion;
+
+namespace Arbor.NuGetServer.IisHost.Middleware
 {
     public class NuGetInterceptMiddleware : OwinMiddleware
     {
@@ -28,7 +31,8 @@ namespace Arbor.NuGetServer.IisHost
                 try
                 {
                     var allowOverride =
-                        KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].AsBool(false);
+                        KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].ParseAsBoolOrDefault(
+                            false);
 
                     string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
 
@@ -48,7 +52,7 @@ namespace Arbor.NuGetServer.IisHost
                         var myPackage = new ZipPackage(tempFilePath);
 
                         string id = myPackage.Id;
-                        SemanticVersion semVer = myPackage.Version;
+                        SemanticVersion semVer = SemanticVersion.Parse(myPackage.Version.ToNormalizedString());
 
                         if (File.Exists(tempFilePath))
                         {

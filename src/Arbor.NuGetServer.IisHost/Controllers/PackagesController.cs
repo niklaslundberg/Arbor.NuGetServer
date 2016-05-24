@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.IisHost.Extensions;
+using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Models;
+using Arbor.NuGetServer.IisHost.Routes;
 
 namespace Arbor.NuGetServer.IisHost.Controllers
 {
     [Authorize]
-    [RoutePrefix("packages")]
     public class PackagesController : Controller
     {
+        [Route(RouteConstants.PackageRoute)]
         [Authorize]
-        [Route]
         public ActionResult Index()
         {
             const string Key = "packagesPath";
