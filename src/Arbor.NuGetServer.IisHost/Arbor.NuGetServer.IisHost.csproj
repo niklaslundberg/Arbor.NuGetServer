@@ -221,6 +221,7 @@
     <Compile Include="Configuration\Modules\MvcModule.cs" />
     <Compile Include="Configuration\Modules\ProtectedRoutesModule.cs" />
     <Compile Include="Configuration\Modules\WebApiModule.cs" />
+    <Compile Include="Configuration\Modules\WebModule.cs" />
     <Compile Include="DataServices\ConfigurationStartup.cs" />
     <Compile Include="Models\AppConfiguration.cs" />
     <Compile Include="Configuration\BundleConfig.cs" />
@@ -241,6 +242,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\Startup.cs" />
+    <Compile Include="ServerMapPath.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />

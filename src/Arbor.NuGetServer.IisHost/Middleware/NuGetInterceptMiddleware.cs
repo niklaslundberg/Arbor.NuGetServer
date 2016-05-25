@@ -8,6 +8,7 @@ using System.Web;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.IisHost.Configuration;
 
 using Microsoft.Owin;
 
@@ -31,10 +32,10 @@ namespace Arbor.NuGetServer.IisHost.Middleware
                 try
                 {
                     var allowOverride =
-                        KVConfigurationManager.AppSettings["allowOverrideExistingPackageOnPush"].ParseAsBoolOrDefault(
+                        KVConfigurationManager.AppSettings[PackageConfigurationConstants.AllowPackageOverride].ParseAsBoolOrDefault(
                             false);
 
-                    string packagesPath = KVConfigurationManager.AppSettings["packagesPath"];
+                    string packagesPath = KVConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath];
 
                     string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
 
