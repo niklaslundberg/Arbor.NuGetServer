@@ -89,7 +89,7 @@ namespace Arbor.NuGetServer.Api.Clean
         {
             DirectoryInfo directoryInfo = nugetPackageFile.Directory;
 
-            if (directoryInfo.Exists)
+            if (directoryInfo == null || !directoryInfo.Exists)
             {
                 return;
             }
