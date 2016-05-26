@@ -1,6 +1,5 @@
 ﻿using System;
 
-using NuGet;
 using NuGet.Versioning;
 
 namespace Arbor.NuGetServer.Core

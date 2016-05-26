@@ -9,13 +9,10 @@ using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.Core.Logging;
-using Arbor.NuGetServer.IisHost.Configuration;
 
 using Microsoft.Owin;
 
 using NuGet;
-
-using SemanticVersion = NuGet.Versioning.SemanticVersion;
 
 namespace Arbor.NuGetServer.IisHost.Middleware
 {
@@ -54,7 +51,7 @@ namespace Arbor.NuGetServer.IisHost.Middleware
                         var myPackage = new ZipPackage(tempFilePath);
 
                         string id = myPackage.Id;
-                        SemanticVersion semVer = SemanticVersion.Parse(myPackage.Version.ToNormalizedString());
+                        NuGet.Versioning.SemanticVersion semVer = NuGet.Versioning.SemanticVersion.Parse(myPackage.Version.ToNormalizedString());
 
                         if (File.Exists(tempFilePath))
                         {
