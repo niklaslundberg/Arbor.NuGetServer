@@ -8,6 +8,7 @@ using System.Web;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Core.Logging;
 using Arbor.NuGetServer.IisHost.Configuration;
 
 using Microsoft.Owin;

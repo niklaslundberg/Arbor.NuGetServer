@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Clean\CleanConstants.cs" />
     <Compile Include="Clean\CleanController.cs" />
+    <Compile Include="Clean\CleanedPackage.cs" />
     <Compile Include="Clean\CleanModule.cs" />
     <Compile Include="Clean\CleanProtectedRoute.cs" />
     <Compile Include="Clean\CleanResult.cs" />

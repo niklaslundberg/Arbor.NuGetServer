@@ -1,4 +1,4 @@
-﻿namespace Arbor.NuGetServer.Core
+namespace Arbor.NuGetServer.Core
 {
     public static class PackageConfigurationConstants
     {

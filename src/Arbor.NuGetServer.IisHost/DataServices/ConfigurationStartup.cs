@@ -1,6 +1,8 @@
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.SystemConfiguration;
 using Arbor.KVConfiguration.UserConfiguration;
+using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Core.Logging;
 
 namespace Arbor.NuGetServer.IisHost.DataServices
 {
@@ -11,6 +13,9 @@ namespace Arbor.NuGetServer.IisHost.DataServices
             IKeyValueConfiguration keyValueConfiguration = new UserConfiguration(new AppSettingsKeyValueConfiguration());
 
             KVConfigurationManager.Initialize(keyValueConfiguration);
+
+            Logger.Initialize(
+                new CategoryLogger(new CheckedLogger(new CompositeLogger(new DebugLogger(), new ConsoleLogger(), new FileLogger()))));
         }
     }
 }

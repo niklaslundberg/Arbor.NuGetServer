@@ -1,24 +1,24 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
-namespace Arbor.NuGetServer.Core
+namespace Arbor.NuGetServer.Core.Logging
 {
-    public static class Logger
+    public class FileLogger : ILogger
     {
-        public static void Info(string message)
+        public void Info(string message)
         {
-            Write($"INFO {message}");
+            Write(message);
         }
 
-        public static void Error(string message)
+        public void Error(string message)
         {
-            Write($"ERROR {message}");
+            Write(message);
         }
 
-        public static void Debug(string message)
+        public void Debug(string message)
         {
-            Write($"DEBUG {message}");
+            Write(message);
         }
 
         private static void Write(string message)
