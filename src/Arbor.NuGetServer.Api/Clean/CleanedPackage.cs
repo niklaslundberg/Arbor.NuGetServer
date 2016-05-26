@@ -1,12 +1,21 @@
+using System;
+
+using JetBrains.Annotations;
+
 namespace Arbor.NuGetServer.Api.Clean
 {
     public class CleanedPackage
     {
-        private readonly string _fullName;
-
-        public CleanedPackage(string fullName)
+        public CleanedPackage([NotNull] string fullName)
         {
-            _fullName = fullName;
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(fullName));
+            }
+
+            FullName = fullName;
         }
+
+        public string FullName { get; }
     }
 }
