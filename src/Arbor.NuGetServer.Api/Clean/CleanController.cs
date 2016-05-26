@@ -29,7 +29,7 @@ namespace Arbor.NuGetServer.Api.Clean
                        {
                            Content =
                                new StringContent(
-                               JsonConvert.SerializeObject(cleanResult),
+                               JsonConvert.SerializeObject(new { whatif, cleanResult}),
                                Encoding.UTF8,
                                "application/json")
                        };
