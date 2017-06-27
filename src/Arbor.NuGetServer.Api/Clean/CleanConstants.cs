@@ -6,5 +6,11 @@
 
         public const string CleanEnabled = "nuget:clean:enabled";
 
+        public const string PackagesToKeepKey = "urn:arbor-nuget-server:nuget:clean:packages-to-keep-count";
+
+        public static class DefaultValues
+        {
+            public const int PackagesToKeep = 5;
+        }
     }
 }

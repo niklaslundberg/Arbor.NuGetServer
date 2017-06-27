@@ -5,15 +5,24 @@ using System.Linq;
 using System.Web.Mvc;
 
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Api.Clean;
+using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.IisHost.Models;
 using Arbor.NuGetServer.IisHost.Routes;
+using Arbor.NuGetServer.Core.Extensions;
 
 namespace Arbor.NuGetServer.IisHost.Controllers
 {
     [Authorize]
     public class PackagesController : Controller
     {
+        private readonly IPathMapper _mapper;
+
+        public PackagesController(IPathMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         [Route(RouteConstants.PackageRoute)]
         [Authorize]
         public ActionResult Index()
@@ -48,12 +57,15 @@ namespace Arbor.NuGetServer.IisHost.Controllers
             }
 
             List<CustomFileInfo> relativeNuGetPaths =
-                nuGetFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1)))
-                    .OrderBy(_ => _.RelativePath)
+                nuGetFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1), PackageIdentifierHelper.GetPackageIdentifier(file,nugetPackagesDirectory)))
+                    .OrderBy(_ => _.PackageIdentifier.PackageId)
+                    .ThenByDescending(_=>_.PackageIdentifier.SemanticVersion)
                     .ToList();
+
             List<CustomFileInfo> relativeOtherPaths =
-                otherFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1)))
-                    .OrderBy(_ => _.RelativePath)
+                otherFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1), PackageIdentifierHelper.GetPackageIdentifier(file, nugetPackagesDirectory)))
+                   .OrderBy(_ => _.PackageIdentifier.PackageId)
+                    .ThenByDescending(_ => _.PackageIdentifier.SemanticVersion)
                     .ToList();
 
             var viewModel = new PackagesViewModel(relativeNuGetPaths, relativeOtherPaths);

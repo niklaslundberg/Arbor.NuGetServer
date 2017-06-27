@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-
 using Arbor.NuGetServer.Core.Configuration.Modules;
 using Arbor.NuGetServer.Core.Extensions;
-
 using Autofac;
 using Autofac.Core;
+using IContainer = Autofac.IContainer;
 
 namespace Arbor.NuGetServer.Core.Configuration
 {
@@ -22,7 +22,9 @@ namespace Arbor.NuGetServer.Core.Configuration
 
             var builder = new ContainerBuilder();
 
-            IReadOnlyCollection<Assembly> assemblies = assemblyResolver().Where(assembly => !assembly.IsDynamic && assembly.GetName().Name.StartsWith("Arbor.NuGetServer")).ToArray();
+            IReadOnlyCollection<Assembly> assemblies = assemblyResolver()
+                .Where(assembly => !assembly.IsDynamic && assembly.GetName().Name
+                                       .StartsWith("Arbor.NuGetServer", StringComparison.OrdinalIgnoreCase)).ToArray();
 
             builder.RegisterInstance(assemblies).AsImplementedInterfaces();
 
@@ -33,20 +35,20 @@ namespace Arbor.NuGetServer.Core.Configuration
             builder.RegisterAssemblyTypes(assemblies.ToArray())
                 .Where(
                     type =>
-                    !type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>()
-                    && type.GetTypeInfo().IsPublicConcreteClassImplementing<IModule>())
+                        !type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>()
+                        && type.GetTypeInfo().IsPublicConcreteClassImplementing<IModule>())
                 .As<IModule>();
 
             IContainer container = builder.Build();
 
-            var metaModules = container.Resolve<IEnumerable<MetaModule>>().ToList();
+            List<MetaModule> metaModules = container.Resolve<IEnumerable<MetaModule>>().ToList();
 
             foreach (MetaModule metaModule in metaModules)
             {
                 metaModule.Configure(container.ComponentRegistry);
             }
 
-            var standardModules = container.Resolve<IEnumerable<IModule>>().ToList();
+            List<IModule> standardModules = container.Resolve<IEnumerable<IModule>>().ToList();
 
             foreach (IModule module in standardModules)
             {

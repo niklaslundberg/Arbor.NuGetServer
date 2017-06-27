@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.Core.Logging;
-
+using JetBrains.Annotations;
 using NuGet.Versioning;
 
 namespace Arbor.NuGetServer.Api.Clean
@@ -28,6 +29,11 @@ namespace Arbor.NuGetServer.Api.Clean
                 return CleanResult.NotRun;
             }
 
+            if (!int.TryParse(KVConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey], out int packagesToKeep) || packagesToKeep <= 0)
+            {
+                packagesToKeep = CleanConstants.DefaultValues.PackagesToKeep;
+            }
+
             string packagesFullPath =
                 _pathMapper.MapPath(KVConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
 
@@ -44,7 +50,7 @@ namespace Arbor.NuGetServer.Api.Clean
                 package => new
                                {
                                    File = package,
-                                   PackageIdentifier = GetPackageIdentifier(package, packageDirectory)
+                    PackageIdentifier = PackageIdentifierHelper.GetPackageIdentifier(package, packageDirectory)
                                }).ToArray();
 
             var preReleaseVersions =
@@ -57,7 +63,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (var group in grouped)
             {
-                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion).Skip(3).Select(x => x.File).ToArray());
+                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion).Skip(packagesToKeep).Select(x => x.File).ToArray());
             }
 
             foreach (FileInfo fileInfo in packagesToDelete)
@@ -131,8 +137,23 @@ namespace Arbor.NuGetServer.Api.Clean
             }
         }
 
-        private PackageIdentifier GetPackageIdentifier(FileInfo fileInfo, DirectoryInfo packageDirectory)
+    }
+
+    public static class PackageIdentifierHelper
+    {
+
+        public static  PackageIdentifier GetPackageIdentifier([NotNull] FileInfo fileInfo, [NotNull] DirectoryInfo packageDirectory)
         {
+            if (fileInfo == null)
+            {
+                throw new ArgumentNullException(nameof(fileInfo));
+            }
+
+            if (packageDirectory == null)
+            {
+                throw new ArgumentNullException(nameof(packageDirectory));
+            }
+
             string relativePath = fileInfo.FullName.Replace(packageDirectory.FullName, "").TrimStart(Path.DirectorySeparatorChar);
 
             int firstSeparatorIndex = relativePath.IndexOf(Path.DirectorySeparatorChar);
