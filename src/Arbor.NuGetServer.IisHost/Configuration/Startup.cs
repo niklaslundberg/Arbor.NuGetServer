@@ -30,7 +30,7 @@ namespace Arbor.NuGetServer.IisHost.Configuration
 
             ConfigureAuth(app);
 
-            if (KVConfigurationManager.AppSettings[ConfigurationKeys.ConflictMiddlewareEnabled].AsBool(false))
+            if (StaticKeyValueConfigurationManager.AppSettings[ConfigurationKeys.ConflictMiddlewareEnabled].AsBool(false))
             {
                 app.Map(
                     "/api/v2",
@@ -49,7 +49,7 @@ namespace Arbor.NuGetServer.IisHost.Configuration
             const string Key = "nuget:base-route";
 
             var nugetRoute =
-                KVConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace(
+                StaticKeyValueConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace(
                     $"AppSetting with key '{Key}' is not set");
 
             List<string> authorizedPaths = new List<string>(10)

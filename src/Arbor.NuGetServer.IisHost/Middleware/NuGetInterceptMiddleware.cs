@@ -30,10 +30,10 @@ namespace Arbor.NuGetServer.IisHost.Middleware
                 try
                 {
                     var allowOverride =
-                        KVConfigurationManager.AppSettings[PackageConfigurationConstants.AllowPackageOverride].ParseAsBoolOrDefault(
+                        StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.AllowPackageOverride].ParseAsBoolOrDefault(
                             false);
 
-                    string packagesPath = KVConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath];
+                    string packagesPath = StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath];
 
                     string physicalPath = HttpContext.Current.Server.MapPath(packagesPath);
 

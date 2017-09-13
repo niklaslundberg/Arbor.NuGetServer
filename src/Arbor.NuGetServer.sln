@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.IisHost", "Arbor.NuGetServer.IisHost\Arbor.NuGetServer.IisHost.csproj", "{B6D84E18-51C9-4D21-BFA3-FAA8F2972F1A}"
 EndProject
@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
 		..\build\build.bat = ..\build\build.bat
+		Directory.Build.props = Directory.Build.props
 		..\LICENSE.txt = ..\LICENSE.txt
 	EndProjectSection
 EndProject
@@ -45,5 +46,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59BA9EA8-ED99-464C-AEEF-1BA2DD0F873F}
 	EndGlobalSection
 EndGlobal

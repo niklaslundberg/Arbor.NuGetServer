@@ -21,10 +21,10 @@ namespace Arbor.NuGetServer.Core
             var passwordKey = "nuget:authentication:basicauthentication:password";
 
             string storedUsername =
-                KVConfigurationManager.AppSettings[usernameKey].ThrowIfNullOrWhitespace(
+                StaticKeyValueConfigurationManager.AppSettings[usernameKey].ThrowIfNullOrWhitespace(
                     $"AppSetting key '{usernameKey}' is not set");
             string storedPassword =
-                KVConfigurationManager.AppSettings[passwordKey].ThrowIfNullOrWhitespace(
+                StaticKeyValueConfigurationManager.AppSettings[passwordKey].ThrowIfNullOrWhitespace(
                     $"AppSetting key '{passwordKey}' is not set");
 
             bool correctUsername = username.Equals(storedUsername, StringComparison.InvariantCultureIgnoreCase);

@@ -8,11 +8,22 @@ using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.Core.Logging;
-using JetBrains.Annotations;
-using NuGet.Versioning;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
+
+    public class CleanTarget
+    {
+        public FileInfo FileInfo { get; }
+        public PackageIdentifier PackageIdentifier { get; }
+
+        public CleanTarget(FileInfo fileInfo, PackageIdentifier packageIdentifier)
+        {
+            FileInfo = fileInfo;
+            PackageIdentifier = packageIdentifier;
+        }
+    }
+
     public class CleanService
     {
         private readonly IPathMapper _pathMapper;
@@ -22,20 +33,20 @@ namespace Arbor.NuGetServer.Api.Clean
             _pathMapper = pathMapper;
         }
 
-        public async Task<CleanResult> CleanAsync(bool whatif = false)
+        public async Task<CleanResult> CleanAsync(bool whatif = false, bool preReleaseOnly = true, string packageId = "")
         {
-            if (!KVConfigurationManager.AppSettings[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
+            if (!StaticKeyValueConfigurationManager.AppSettings[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
             {
                 return CleanResult.NotRun;
             }
 
-            if (!int.TryParse(KVConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey], out int packagesToKeep) || packagesToKeep <= 0)
+            if (!int.TryParse(StaticKeyValueConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey], out int packagesToKeep) || packagesToKeep <= 0)
             {
                 packagesToKeep = CleanConstants.DefaultValues.PackagesToKeep;
             }
 
             string packagesFullPath =
-                _pathMapper.MapPath(KVConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
+                _pathMapper.MapPath(StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 
@@ -46,36 +57,44 @@ namespace Arbor.NuGetServer.Api.Clean
 
             FileInfo[] allNuGetPackageFiles = packageDirectory.GetFiles("*.nupkg", SearchOption.AllDirectories);
 
-            var packagesInfo = allNuGetPackageFiles.Select(
-                package => new
-                               {
-                                   File = package,
-                    PackageIdentifier = PackageIdentifierHelper.GetPackageIdentifier(package, packageDirectory)
-                               }).ToArray();
+            CleanTarget[] packagesInfo = allNuGetPackageFiles
+                .Select(package => new CleanTarget(package,
+                    PackageIdentifierHelper.GetPackageIdentifier(package, packageDirectory)))
+                .Where(target => target.PackageIdentifier != null)
+                .ToArray();
 
-            var preReleaseVersions =
-                packagesInfo.Where(package => package.PackageIdentifier.SemanticVersion.IsPrerelease)
-                    .SafeToReadOnlyCollection();
+            CleanTarget[] filtered = packagesInfo;
 
-            var grouped = preReleaseVersions.GroupBy(_ => _.PackageIdentifier.PackageId);
+            filtered = filtered
+                .Where(package => package.PackageIdentifier.SemanticVersion.IsPrerelease == preReleaseOnly)
+                .ToArray();
 
-            var packagesToDelete = new List<FileInfo>();
-
-            foreach (var group in grouped)
+            if (!string.IsNullOrWhiteSpace(packageId))
             {
-                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion).Skip(packagesToKeep).Select(x => x.File).ToArray());
+                filtered = filtered.Where(package =>
+                        package.PackageIdentifier.PackageId.Equals(packageId, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
             }
 
-            foreach (FileInfo fileInfo in packagesToDelete)
+            IEnumerable<IGrouping<string, CleanTarget>> grouped = filtered.GroupBy(_ => _.PackageIdentifier.PackageId);
+
+            var packagesToDelete = new List<CleanTarget>();
+
+            foreach (IGrouping<string, CleanTarget> group in grouped)
             {
-                Logger.Debug($"Deleting package {fileInfo.FullName}");
+                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion).Skip(packagesToKeep).ToArray());
             }
 
-            IReadOnlyCollection<CleanedPackage> cleanedPackages = packagesToDelete.Select(file => new CleanedPackage(file.FullName)).SafeToReadOnlyCollection();
-
-            foreach (FileInfo fileInfo in packagesToDelete)
+            foreach (CleanTarget cleanTarget in packagesToDelete)
             {
-                DeletePackageAndRelatedFiles(fileInfo, whatif);
+                Logger.Debug($"Deleting package {cleanTarget.FileInfo.FullName}");
+            }
+
+            IReadOnlyCollection<CleanedPackage> cleanedPackages = packagesToDelete.Select(cleanTarget => new CleanedPackage(cleanTarget.FileInfo.FullName)).SafeToReadOnlyCollection();
+
+            foreach (CleanTarget cleanTarget in packagesToDelete)
+            {
+                DeletePackageAndRelatedFiles(cleanTarget, whatif);
             }
 
             foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
@@ -91,30 +110,30 @@ namespace Arbor.NuGetServer.Api.Clean
             return new CleanResult(cleanedPackages);
         }
 
-        private void DeletePackageAndRelatedFiles(FileInfo nugetPackageFile, bool whatif)
+        private void DeletePackageAndRelatedFiles(CleanTarget nugetPackageFile, bool whatif)
         {
-            DirectoryInfo directoryInfo = nugetPackageFile.Directory;
+            DirectoryInfo directoryInfo = nugetPackageFile.FileInfo.Directory;
 
             if (directoryInfo == null || !directoryInfo.Exists)
             {
                 return;
             }
 
-            string shaFilePath = $"{nugetPackageFile.FullName}.sha512";
+            string shaFilePath = $"{nugetPackageFile.FileInfo.FullName}.sha512";
 
             string nuspecFilePath = Path.Combine(
                 directoryInfo.FullName,
-                $"{Path.GetFileNameWithoutExtension(nugetPackageFile.Name)}.nuspec");
+                $"{Path.GetFileNameWithoutExtension(nugetPackageFile.FileInfo.Name)}.nuspec");
 
             var shaFile = new FileInfo(shaFilePath);
             var nuspecFile = new FileInfo(nuspecFilePath);
 
-            if (nugetPackageFile.Exists)
+            if (nugetPackageFile.FileInfo.Exists)
             {
-                Logger.Debug($"Deleting NuGet package file '{nugetPackageFile.FullName}'");
+                Logger.Debug($"Deleting NuGet package file '{nugetPackageFile.FileInfo.FullName}'");
                 if (!whatif)
                 {
-                    nugetPackageFile.Delete();
+                    nugetPackageFile.FileInfo.Delete();
                 }
             }
 
@@ -137,38 +156,5 @@ namespace Arbor.NuGetServer.Api.Clean
             }
         }
 
-    }
-
-    public static class PackageIdentifierHelper
-    {
-
-        public static  PackageIdentifier GetPackageIdentifier([NotNull] FileInfo fileInfo, [NotNull] DirectoryInfo packageDirectory)
-        {
-            if (fileInfo == null)
-            {
-                throw new ArgumentNullException(nameof(fileInfo));
-            }
-
-            if (packageDirectory == null)
-            {
-                throw new ArgumentNullException(nameof(packageDirectory));
-            }
-
-            string relativePath = fileInfo.FullName.Replace(packageDirectory.FullName, "").TrimStart(Path.DirectorySeparatorChar);
-
-            int firstSeparatorIndex = relativePath.IndexOf(Path.DirectorySeparatorChar);
-
-            string versionAndFile = relativePath.Substring(firstSeparatorIndex + 1);
-
-            int secondSeparatorIndex = versionAndFile.IndexOf(Path.DirectorySeparatorChar);
-
-            string identifier = relativePath.Substring(0, firstSeparatorIndex);
-
-            string version = versionAndFile.Substring(0, secondSeparatorIndex);
-
-            SemanticVersion semanticVersion = SemanticVersion.Parse(version);
-
-            return new PackageIdentifier(identifier, semanticVersion);
-        }
     }
 }

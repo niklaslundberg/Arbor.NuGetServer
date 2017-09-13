@@ -21,18 +21,20 @@ namespace Arbor.NuGetServer.Api.Clean
 
         [Route]
         [HttpPost]
-        public async Task<HttpResponseMessage> CleanAsync(bool whatif = false)
+        public async Task<IHttpActionResult> CleanAsync(bool whatif = false, bool preReleaseOnly = true, string packageId = "")
         {
-            CleanResult cleanResult = await _cleanService.CleanAsync(whatif);
+            CleanResult cleanResult = await _cleanService.CleanAsync(whatif, preReleaseOnly, packageId);
 
-            return new HttpResponseMessage(HttpStatusCode.OK)
-                       {
-                           Content =
-                               new StringContent(
-                               JsonConvert.SerializeObject(new { whatif, cleanResult}),
-                               Encoding.UTF8,
-                               "application/json")
-                       };
+            var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content =
+                    new StringContent(
+                        JsonConvert.SerializeObject(new { whatif, cleanResult, preReleaseOnly,packageId}),
+                        Encoding.UTF8,
+                        "application/json")
+            };
+
+            return ResponseMessage(httpResponseMessage);
         }
     }
 }

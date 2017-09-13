@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Api.Clean;
+using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Models;
 using Arbor.NuGetServer.IisHost.Routes;
-using Arbor.NuGetServer.Core.Extensions;
 
 namespace Arbor.NuGetServer.IisHost.Controllers
 {
@@ -30,7 +29,8 @@ namespace Arbor.NuGetServer.IisHost.Controllers
             const string Key = "packagesPath";
 
             string packagesPath =
-                KVConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace($"AppSetting key '{Key}' is not set");
+                StaticKeyValueConfigurationManager.AppSettings[Key]
+                    .ThrowIfNullOrWhitespace($"AppSetting key '{Key}' is not set");
 
             string fullPath = Server.MapPath(packagesPath);
 
@@ -57,14 +57,20 @@ namespace Arbor.NuGetServer.IisHost.Controllers
             }
 
             List<CustomFileInfo> relativeNuGetPaths =
-                nuGetFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1), PackageIdentifierHelper.GetPackageIdentifier(file,nugetPackagesDirectory)))
+                nuGetFiles.Select(file => new CustomFileInfo(file,
+                        file.FullName.Substring(fullPath.Length + 1),
+                        PackageIdentifierHelper.GetPackageIdentifier(file, nugetPackagesDirectory)))
+                    .Where(file => file.PackageIdentifier != null)
                     .OrderBy(_ => _.PackageIdentifier.PackageId)
-                    .ThenByDescending(_=>_.PackageIdentifier.SemanticVersion)
+                    .ThenByDescending(_ => _.PackageIdentifier.SemanticVersion)
                     .ToList();
 
             List<CustomFileInfo> relativeOtherPaths =
-                otherFiles.Select(file => new CustomFileInfo(file, file.FullName.Substring(fullPath.Length + 1), PackageIdentifierHelper.GetPackageIdentifier(file, nugetPackagesDirectory)))
-                   .OrderBy(_ => _.PackageIdentifier.PackageId)
+                otherFiles.Select(file => new CustomFileInfo(file,
+                        file.FullName.Substring(fullPath.Length + 1),
+                        PackageIdentifierHelper.GetPackageIdentifier(file, nugetPackagesDirectory)))
+                    .Where(package => package.PackageIdentifier != null)
+                    .OrderBy(_ => _.PackageIdentifier.PackageId)
                     .ThenByDescending(_ => _.PackageIdentifier.SemanticVersion)
                     .ToList();
 

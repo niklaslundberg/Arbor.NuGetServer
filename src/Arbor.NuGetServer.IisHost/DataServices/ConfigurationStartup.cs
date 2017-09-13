@@ -10,9 +10,12 @@ namespace Arbor.NuGetServer.IisHost.DataServices
     {
         public static void Start()
         {
-            IKeyValueConfiguration keyValueConfiguration = new UserConfiguration(new AppSettingsKeyValueConfiguration());
+            IKeyValueConfiguration keyValueConfiguration = KeyValueConfigurationManager
+                .Add(new AppSettingsKeyValueConfiguration())
+                .Add(new UserConfiguration())
+                .Build();
 
-            KVConfigurationManager.Initialize(keyValueConfiguration);
+            StaticKeyValueConfigurationManager.Initialize(keyValueConfiguration);
 
             Logger.Initialize(
                 new CategoryLogger(new CheckedLogger(new CompositeLogger(new DebugLogger(), new ConsoleLogger(), new FileLogger()))));

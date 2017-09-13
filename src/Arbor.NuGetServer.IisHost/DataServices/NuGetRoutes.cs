@@ -29,7 +29,7 @@ namespace Arbor.NuGetServer.IisHost.DataServices
         {
             const string Key = "nuget:base-route";
             var nugetRoute =
-                KVConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace(
+                StaticKeyValueConfigurationManager.AppSettings[Key].ThrowIfNullOrWhitespace(
                     $"AppSetting with key '{Key}' is not set");
 
             var factory = new DataServiceHostFactory();

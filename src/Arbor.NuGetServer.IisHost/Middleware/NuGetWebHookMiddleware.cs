@@ -39,7 +39,7 @@ namespace Arbor.NuGetServer.IisHost.Middleware
 
                 if (anyStatusCode.Any(code => code == context.Response.StatusCode))
                 {
-                    Uri[] webHooks = KVConfigurationManager.AppSettings.AllValues.Where(
+                    Uri[] webHooks = StaticKeyValueConfigurationManager.AppSettings.AllValues.Where(
                         pair =>
                         pair.Key.Equals("urn:arbor:nuget:web-hook:url", StringComparison.InvariantCultureIgnoreCase))
                         .Select(pair => pair.Value)
@@ -96,7 +96,7 @@ namespace Arbor.NuGetServer.IisHost.Middleware
                                     request.Content = new StringContent(packages, Encoding.UTF8, "application/json");
 
                                     string timeOutAppSettingsValue =
-                                        KVConfigurationManager.AppSettings[ConfigurationKeys.NuGetWebHookTimeout];
+                                        StaticKeyValueConfigurationManager.AppSettings[ConfigurationKeys.NuGetWebHookTimeout];
 
                                     int timeoutInSeconds;
 

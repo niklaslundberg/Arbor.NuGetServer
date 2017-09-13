@@ -10,12 +10,7 @@ namespace Arbor.NuGetServer.Core.Logging
 
         public CategoryLogger([NotNull] ILogger logger)
         {
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
-
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void Info(string message)

@@ -7,24 +7,14 @@ namespace Arbor.NuGetServer.IisHost.Models
 {
     public class CustomFileInfo
     {
-        public CustomFileInfo(FileInfo fileInfo, string relativePath, [NotNull] PackageIdentifier packageIdentifier)
+        public CustomFileInfo(FileInfo fileInfo, string relativePath, PackageIdentifier packageIdentifier)
         {
-            if (fileInfo == null)
-            {
-                throw new ArgumentNullException(nameof(fileInfo));
-            }
-
-            if (packageIdentifier == null)
-            {
-                throw new ArgumentNullException(nameof(packageIdentifier));
-            }
-
             if (string.IsNullOrWhiteSpace(relativePath))
             {
                 throw new ArgumentException("Argument is null or whitespace", nameof(relativePath));
             }
 
-            FileInfo = fileInfo;
+            FileInfo = fileInfo ?? throw new ArgumentNullException(nameof(fileInfo));
             RelativePath = relativePath;
             PackageIdentifier = packageIdentifier;
         }
