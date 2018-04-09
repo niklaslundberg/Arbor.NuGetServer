@@ -10,26 +10,26 @@ namespace Arbor.NuGetServer.Api.Clean
 {
     [RoutePrefix(CleanConstants.Route)]
     [Authorize]
-    public class CleanController : ApiController
+    public class CleanApiController : ApiController
     {
         private readonly CleanService _cleanService;
 
-        public CleanController(CleanService cleanService)
+        public CleanApiController(CleanService cleanService)
         {
             _cleanService = cleanService;
         }
 
         [Route]
         [HttpPost]
-        public async Task<IHttpActionResult> CleanAsync(bool whatif = false, bool preReleaseOnly = true, string packageId = "")
+        public async Task<IHttpActionResult> CleanAsync(CleanInputModel cleanInputModel)
         {
-            CleanResult cleanResult = await _cleanService.CleanAsync(whatif, preReleaseOnly, packageId);
+            CleanResult cleanResult = await _cleanService.CleanAsync(cleanInputModel.Whatif, cleanInputModel.PreReleaseOnly, cleanInputModel.PackageId);
 
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content =
                     new StringContent(
-                        JsonConvert.SerializeObject(new { whatif, cleanResult, preReleaseOnly,packageId}),
+                        JsonConvert.SerializeObject(cleanInputModel),
                         Encoding.UTF8,
                         "application/json")
             };

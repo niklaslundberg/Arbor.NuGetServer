@@ -38,6 +38,12 @@
     <Reference Include="Arbor.KVConfiguration.Core, Version=0.7.4.62, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Arbor.KVConfiguration.Core.0.7.4\lib\net461\Arbor.KVConfiguration.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Arbor.ModelBinding.Core, Version=0.2.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.ModelBinding.0.2.0\lib\net461\Arbor.ModelBinding.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Arbor.WebApi.Formatting.HtmlForms, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arbor.WebApi.Formatting.HtmlForms.2.1.1\lib\net45\Arbor.WebApi.Formatting.HtmlForms.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
@@ -96,12 +102,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clean\CleanConstants.cs" />
-    <Compile Include="Clean\CleanController.cs" />
+    <Compile Include="Clean\CleanApiController.cs" />
     <Compile Include="Clean\CleanedPackage.cs" />
+    <Compile Include="Clean\CleanInputModel.cs" />
     <Compile Include="Clean\CleanModule.cs" />
     <Compile Include="Clean\CleanProtectedRoute.cs" />
     <Compile Include="Clean\CleanResult.cs" />
     <Compile Include="Clean\CleanService.cs" />
+    <Compile Include="Clean\CleanTarget.cs" />
     <Compile Include="PackageIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

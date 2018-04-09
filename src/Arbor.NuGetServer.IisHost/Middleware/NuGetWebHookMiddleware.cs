@@ -46,14 +46,12 @@ namespace Arbor.NuGetServer.IisHost.Middleware
                         .Select(
                             url =>
                                 {
-                                    Uri parsed;
-
                                     if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                                     {
                                         return null;
                                     }
 
-                                    if (!Uri.TryCreate(url, UriKind.Absolute, out parsed))
+                                    if (!Uri.TryCreate(url, UriKind.Absolute, out Uri parsed))
                                     {
                                         return null;
                                     }
