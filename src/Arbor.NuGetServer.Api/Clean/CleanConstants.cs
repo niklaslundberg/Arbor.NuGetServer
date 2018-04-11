@@ -2,7 +2,11 @@
 {
     public static class CleanConstants
     {
-        public const string Route = "manage/clean";
+        public const string CleanOnStartEnabled = "urn:arbor-nuget-server:nuget:clean:clean-bin-files-on-start:enabled";
+
+        public const string PostRoute = "manage/clean";
+
+        public const string GetRoute = "manage/cleaning";
 
         public const string CleanEnabled = "nuget:clean:enabled";
 

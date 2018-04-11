@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
@@ -13,27 +12,63 @@ namespace Arbor.NuGetServer.Api.Clean
 {
     public class CleanService
     {
+        private readonly ILogger _logger;
         private readonly IPathMapper _pathMapper;
 
-        public CleanService(IPathMapper pathMapper)
+        public CleanService(IPathMapper pathMapper, ILogger logger)
         {
             _pathMapper = pathMapper;
+            _logger = logger;
         }
 
-        public async Task<CleanResult> CleanAsync(bool whatif = false, bool preReleaseOnly = true, string packageId = "")
+        public void CleanBinFiles(bool whatIf)
+        {
+            string packagesFullPath =
+                _pathMapper.MapPath(
+                    StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
+
+            var packageDirectory = new DirectoryInfo(packagesFullPath);
+
+            if (!packageDirectory.Exists)
+            {
+                return;
+            }
+
+            foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
+            {
+                _logger.Debug($"Deleting bin file '{binFile.FullName}'");
+
+                if (!whatIf)
+                {
+                    _logger.Debug($"Skipped deleting bin file '{binFile.FullName}' due to what if flag set to true");
+                    binFile.Delete();
+                }
+            }
+        }
+
+        public async Task<CleanResult> CleanAsync(
+            bool whatif = false,
+            bool preReleaseOnly = true,
+            string packageId = "",
+            int packagesToKeep = -1)
         {
             if (!StaticKeyValueConfigurationManager.AppSettings[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
             {
                 return CleanResult.NotRun;
             }
 
-            if (!int.TryParse(StaticKeyValueConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey], out int packagesToKeep) || packagesToKeep <= 0)
+            if (packagesToKeep < 0)
             {
-                packagesToKeep = CleanConstants.DefaultValues.PackagesToKeep;
+                if (!int.TryParse(StaticKeyValueConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey],
+                        out int packagesToKeepFromConfig) || packagesToKeepFromConfig <= 0)
+                {
+                    packagesToKeep = CleanConstants.DefaultValues.PackagesToKeep;
+                }
             }
 
             string packagesFullPath =
-                _pathMapper.MapPath(StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
+                _pathMapper.MapPath(
+                    StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 
@@ -52,9 +87,12 @@ namespace Arbor.NuGetServer.Api.Clean
 
             CleanTarget[] filtered = packagesInfo;
 
-            filtered = filtered
-                .Where(package => package.PackageIdentifier.SemanticVersion.IsPrerelease == preReleaseOnly)
-                .ToArray();
+            if (preReleaseOnly)
+            {
+                filtered = filtered
+                    .Where(package => package.PackageIdentifier.SemanticVersion.IsPrerelease)
+                    .ToArray();
+            }
 
             if (!string.IsNullOrWhiteSpace(packageId))
             {
@@ -69,15 +107,17 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (IGrouping<string, CleanTarget> group in grouped)
             {
-                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion).Skip(packagesToKeep).ToArray());
+                packagesToDelete.AddRange(group.OrderByDescending(_ => _.PackageIdentifier.SemanticVersion)
+                    .Skip(packagesToKeep).ToArray());
             }
 
             foreach (CleanTarget cleanTarget in packagesToDelete)
             {
-                Logger.Debug($"Deleting package {cleanTarget.FileInfo.FullName}");
+                _logger.Debug($"Deleting package {cleanTarget.FileInfo.FullName}");
             }
 
-            IReadOnlyCollection<CleanedPackage> cleanedPackages = packagesToDelete.Select(cleanTarget => new CleanedPackage(cleanTarget.FileInfo.FullName)).SafeToReadOnlyCollection();
+            IReadOnlyCollection<CleanedPackage> cleanedPackages = packagesToDelete
+                .Select(cleanTarget => new CleanedPackage(cleanTarget.FileInfo.FullName)).SafeToReadOnlyCollection();
 
             foreach (CleanTarget cleanTarget in packagesToDelete)
             {
@@ -86,7 +126,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
             {
-                Logger.Debug($"Deleting bin file '{binFile.FullName}'");
+                _logger.Debug($"Deleting bin file '{binFile.FullName}'");
 
                 if (!whatif)
                 {
@@ -94,7 +134,7 @@ namespace Arbor.NuGetServer.Api.Clean
                 }
             }
 
-            return new CleanResult(cleanedPackages);
+            return new CleanResult(cleanedPackages, packagesToKeep);
         }
 
         private void DeletePackageAndRelatedFiles(CleanTarget nugetPackageFile, bool whatif)
@@ -111,13 +151,17 @@ namespace Arbor.NuGetServer.Api.Clean
             string nuspecFilePath = Path.Combine(
                 directoryInfo.FullName,
                 $"{Path.GetFileNameWithoutExtension(nugetPackageFile.FileInfo.Name)}.nuspec");
+            string nuspec2FilePath = Path.Combine(
+                directoryInfo.FullName,
+                $"{nugetPackageFile.PackageIdentifier.PackageId}.nuspec");
 
             var shaFile = new FileInfo(shaFilePath);
             var nuspecFile = new FileInfo(nuspecFilePath);
+            var nuspec2File = new FileInfo(nuspec2FilePath);
 
             if (nugetPackageFile.FileInfo.Exists)
             {
-                Logger.Debug($"Deleting NuGet package file '{nugetPackageFile.FileInfo.FullName}'");
+                _logger.Debug($"Deleting NuGet package file '{nugetPackageFile.FileInfo.FullName}'");
                 if (!whatif)
                 {
                     nugetPackageFile.FileInfo.Delete();
@@ -126,7 +170,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (shaFile.Exists)
             {
-                Logger.Debug($"Deleting NuGet package SHA file '{shaFile.FullName}'");
+                _logger.Debug($"Deleting NuGet package SHA file '{shaFile.FullName}'");
                 if (!whatif)
                 {
                     shaFile.Delete();
@@ -135,13 +179,58 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (nuspecFile.Exists)
             {
-                Logger.Debug($"Deleting NuGet specification file '{nuspecFile.FullName}'");
+                _logger.Debug($"Deleting NuGet specification file '{nuspecFile.FullName}'");
+
                 if (!whatif)
                 {
                     nuspecFile.Delete();
                 }
             }
-        }
 
+            if (nuspec2File.Exists)
+            {
+                _logger.Debug($"Deleting NuGet specification file '{nuspec2File.FullName}'");
+
+                if (!whatif)
+                {
+                    nuspec2File.Delete();
+                }
+            }
+
+            if (nuspec2File.Directory != null &&
+                nuspec2File.Directory.Name.Equals(
+                    nugetPackageFile.PackageIdentifier.SemanticVersion.ToNormalizedString()))
+            {
+                nuspec2File.Directory.Refresh();
+                FileInfo[] fileInfos = nuspec2File.Directory.GetFiles();
+
+                if (!fileInfos.Any())
+                {
+                    var parent = nuspec2File.Directory.Parent;
+
+                    if (!whatif)
+                    {
+                        nuspec2File.Directory.Delete();
+                    }
+
+                    if (parent != null)
+                    {
+                        parent.Refresh();
+
+                        if (parent.Name.Equals(nugetPackageFile.PackageIdentifier.PackageId,
+                            StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (parent.GetDirectories().Length == 0 && parent.GetFiles().Length == 0)
+                            {
+                                if (!whatif)
+                                {
+                                    parent.Delete();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

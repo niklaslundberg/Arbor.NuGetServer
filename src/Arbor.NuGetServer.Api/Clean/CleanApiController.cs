@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
-    [RoutePrefix(CleanConstants.Route)]
+    [RoutePrefix(CleanConstants.PostRoute)]
     [Authorize]
     public class CleanApiController : ApiController
     {
@@ -23,13 +23,13 @@ namespace Arbor.NuGetServer.Api.Clean
         [HttpPost]
         public async Task<IHttpActionResult> CleanAsync(CleanInputModel cleanInputModel)
         {
-            CleanResult cleanResult = await _cleanService.CleanAsync(cleanInputModel.Whatif, cleanInputModel.PreReleaseOnly, cleanInputModel.PackageId);
+            CleanResult cleanResult = await _cleanService.CleanAsync(cleanInputModel.Whatif, cleanInputModel.PreReleaseOnly, cleanInputModel.PackageId, cleanInputModel.PackagesToKeep);
 
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content =
                     new StringContent(
-                        JsonConvert.SerializeObject(cleanInputModel),
+                        JsonConvert.SerializeObject(new {cleanResult, cleanInputModel}),
                         Encoding.UTF8,
                         "application/json")
             };

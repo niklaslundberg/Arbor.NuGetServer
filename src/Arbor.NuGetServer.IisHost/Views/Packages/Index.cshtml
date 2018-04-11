@@ -6,7 +6,7 @@
 
 <h3>NuGet packages (@Model.TotalNuGetSize.AsSuitableByteUnit())</h3>
 
-@if (Model.RelativeNuGetPaths.Any())
+@if (Model.RelativeNuGetPaths.Count > 0)
 {
     <h4>Top packages by size</h4>
 
@@ -27,7 +27,7 @@
 
 <h3>Other files (@Model.TotalOtherFileSize.AsSuitableByteUnit())</h3>
 
-@if (Model.RelativeOtherPaths.Any())
+@if (Model.RelativeOtherPaths.Count > 0)
 {
     <ul>
         @foreach (CustomFileInfo item in Model.RelativeOtherPaths)

@@ -4,21 +4,24 @@
 
 <form method="post" action="@Model.CleanPostRoute">
 
-    <div>
-        <label for="what-if-field">What If</label> <input id="what-if-field" name="whatif" type="checkbox"/>
+    <div class="input-field">
+        <input id="what-if-field" name="whatif" type="checkbox" /> <label for="what-if-field">What If</label>
     </div>
 
-    <div>
-        <label for="pre-prelease-only-field">Pre-release only</label> <input id="pre-prelease-only-field" name="preReleaseOnly" type="checkbox"/>
+    <div class="input-field">
+        <input id="pre-prelease-only-field" name="preReleaseOnly" type="checkbox" /> <label for="pre-prelease-only-field">Pre-release only</label>
     </div>
 
-
-    <div>
-        <label for="package-id-field">Package Id</label> <input type="text" name="packageId" id="package-id-field"/>
+    <div class="input-field">
+        <label for="package-id-field">Package Id</label> <input type="text" name="packageId" id="package-id-field" />
     </div>
 
-    <div>
-        <input type="submit" value="Clean"/>
+    <div class="input-field">
+        <label for="packages-to-keep-field">Packages to keep</label> <input type="number" name="packagesToKeep" id="packages-to-keep-field" value="@Model.PackagesToKeep" />
+    </div>
+
+    <div class="input-field">
+        <input type="submit" value="Clean" />
     </div>
 
 </form>
