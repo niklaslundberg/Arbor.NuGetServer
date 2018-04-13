@@ -6,26 +6,30 @@ using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
-using Arbor.NuGetServer.Core.Logging;
+using JetBrains.Annotations;
+using Serilog;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
+    [UsedImplicitly]
     public class CleanService
     {
         private readonly ILogger _logger;
+        private readonly IKeyValueConfiguration _keyValueConfiguration;
         private readonly IPathMapper _pathMapper;
 
-        public CleanService(IPathMapper pathMapper, ILogger logger)
+        public CleanService(IPathMapper pathMapper, ILogger logger, IKeyValueConfiguration keyValueConfiguration)
         {
             _pathMapper = pathMapper;
             _logger = logger;
+            _keyValueConfiguration = keyValueConfiguration;
         }
 
         public void CleanBinFiles(bool whatIf)
         {
             string packagesFullPath =
                 _pathMapper.MapPath(
-                    StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
+                    _keyValueConfiguration[PackageConfigurationConstants.PackagePath]);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 
@@ -52,14 +56,14 @@ namespace Arbor.NuGetServer.Api.Clean
             string packageId = "",
             int packagesToKeep = -1)
         {
-            if (!StaticKeyValueConfigurationManager.AppSettings[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
+            if (!_keyValueConfiguration[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
             {
                 return CleanResult.NotRun;
             }
 
             if (packagesToKeep < 0)
             {
-                if (!int.TryParse(StaticKeyValueConfigurationManager.AppSettings[CleanConstants.PackagesToKeepKey],
+                if (!int.TryParse(_keyValueConfiguration[CleanConstants.PackagesToKeepKey],
                         out int packagesToKeepFromConfig) || packagesToKeepFromConfig <= 0)
                 {
                     packagesToKeep = CleanConstants.DefaultValues.PackagesToKeep;
@@ -68,7 +72,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             string packagesFullPath =
                 _pathMapper.MapPath(
-                    StaticKeyValueConfigurationManager.AppSettings[PackageConfigurationConstants.PackagePath]);
+                    _keyValueConfiguration[PackageConfigurationConstants.PackagePath]);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 
@@ -151,6 +155,7 @@ namespace Arbor.NuGetServer.Api.Clean
             string nuspecFilePath = Path.Combine(
                 directoryInfo.FullName,
                 $"{Path.GetFileNameWithoutExtension(nugetPackageFile.FileInfo.Name)}.nuspec");
+
             string nuspec2FilePath = Path.Combine(
                 directoryInfo.FullName,
                 $"{nugetPackageFile.PackageIdentifier.PackageId}.nuspec");
@@ -206,7 +211,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
                 if (!fileInfos.Any())
                 {
-                    var parent = nuspec2File.Directory.Parent;
+                    DirectoryInfo parent = nuspec2File.Directory.Parent;
 
                     if (!whatif)
                     {
@@ -224,7 +229,12 @@ namespace Arbor.NuGetServer.Api.Clean
                             {
                                 if (!whatif)
                                 {
-                                    parent.Delete();
+                                    parent.Refresh();
+
+                                    if (parent.Exists)
+                                    {
+                                        parent.Delete();
+                                    }
                                 }
                             }
                         }

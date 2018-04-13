@@ -1,74 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.Diagnostics;
 using System.Web;
-using System.Web.Compilation;
-using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using Arbor.KVConfiguration.Core;
-using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
-using Arbor.NuGetServer.Api.Clean;
-using Arbor.NuGetServer.Core.Configuration;
+using System.Web.Hosting;
 using Arbor.NuGetServer.Core.Extensions;
-using Arbor.NuGetServer.IisHost.Configuration;
-using Arbor.NuGetServer.IisHost.DataServices;
-
-using Autofac;
-using Autofac.Integration.Mvc;
+using Arbor.NuGetServer.IisHost.Areas.Application;
+using Arbor.NuGetServer.IisHost.Areas.AspNet;
 
 namespace Arbor.NuGetServer.IisHost
 {
     public class MvcApplication : HttpApplication
     {
+        private static NuGetServerApp _nuGetServerApp;
+
+        public static NuGetServerApp NuGetServerApp => _nuGetServerApp;
+
         protected void Application_Start()
         {
-            ConfigurationStartup.Start();
+            Debug.WriteLine("Application start");
+            _nuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem);
 
-            IReadOnlyCollection<Assembly> AssemblyResolver() => BuildManager.GetReferencedAssemblies()
-                .OfType<Assembly>()
-                .SafeToReadOnlyCollection();
+            var appRegistered = new AppRegistered(_nuGetServerApp);
 
-            IContainer container = Bootstrapper.Start(AssemblyResolver);
+            HostingEnvironment.RegisterObject(appRegistered);
 
-            if (StaticKeyValueConfigurationManager.AppSettings.ValueOrDefault(CleanConstants.CleanOnStartEnabled))
-            {
-                ILifetimeScope beginLifetimeScope = container.BeginLifetimeScope();
+            _nuGetServerApp.Start();
 
-                var cleanService = beginLifetimeScope.Resolve<CleanService>();
+            MvcStartup.Start(_nuGetServerApp);
+        }
 
-                cleanService.CleanBinFiles(whatIf: false);
-            }
-
-            string packagesPath = StaticKeyValueConfigurationManager.AppSettings[ConfigurationKeys.PackagesDirectoryPath];
-
-            if (!string.IsNullOrWhiteSpace(packagesPath))
-            {
-                if (packagesPath.StartsWith("~"))
-                {
-                   packagesPath = Server.MapPath(packagesPath);
-                }
-
-                var packagesDirectory = new DirectoryInfo(packagesPath);
-
-                if (!packagesDirectory.Exists)
-                {
-                    packagesDirectory.Create();
-                }
-            }
-            
-            GlobalConfiguration.Configure(configuration => WebApiConfig.Register(configuration, container));
-
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        protected void Application_End()
+        {
+            SafeDispose.Dispose(_nuGetServerApp);
+            _nuGetServerApp = null;
+            Debug.WriteLine("Shut down, application end");
         }
     }
 }

@@ -81,6 +81,9 @@
     <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Owin.4.2.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac.Integration.WebApi, Version=4.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.4.1.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
@@ -89,6 +92,9 @@
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="MediatR, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.4.1.0\lib\net45\MediatR.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -102,6 +108,12 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.2.1\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.2.1\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -139,6 +151,15 @@
     <Reference Include="RouteMagic, Version=1.3.0.0, Culture=neutral, PublicKeyToken=84b59be021aa4cee, processorArchitecture=MSIL">
       <HintPath>..\packages\RouteMagic.1.3\lib\net40\RouteMagic.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Debug, Version=1.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Debug.1.0.1\lib\net46\Serilog.Sinks.Debug.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
@@ -148,6 +169,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.2.1\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
@@ -215,6 +239,7 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -233,36 +258,63 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurationKeys.cs" />
-    <Compile Include="Configuration\Modules\LoggingModule.cs" />
-    <Compile Include="Configuration\Modules\MvcModule.cs" />
-    <Compile Include="Configuration\Modules\ProtectedRoutesModule.cs" />
-    <Compile Include="Configuration\Modules\WebApiModule.cs" />
-    <Compile Include="Configuration\Modules\WebModule.cs" />
-    <Compile Include="Configuration\NuGetFeedModule.cs" />
-    <Compile Include="Controllers\CleanController.cs" />
-    <Compile Include="Controllers\CleanViewOutputModel.cs" />
-    <Compile Include="Controllers\NuGetFeedController.cs" />
-    <Compile Include="DataServices\ConfigurationStartup.cs" />
-    <Compile Include="Models\AppConfiguration.cs" />
-    <Compile Include="Configuration\BundleConfig.cs" />
-    <Compile Include="Configuration\FilterConfig.cs" />
-    <Compile Include="Models\CustomFileInfo.cs" />
-    <Compile Include="Controllers\PackagesController.cs" />
-    <Compile Include="Models\PackagesViewModel.cs" />
-    <Compile Include="Middleware\NuGetInterceptMiddleware.cs" />
-    <Compile Include="Middleware\NuGetWebHookMiddleware.cs" />
-    <Compile Include="Routes\RouteConstants.cs" />
-    <Compile Include="Security\NuGetAuthorizationMiddleware.cs" />
-    <Compile Include="Configuration\RouteConfig.cs" />
-    <Compile Include="Configuration\WebApiConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Areas\Application\AppRegistered.cs" />
+    <Compile Include="Areas\Application\BackgroundServiceModule.cs" />
+    <Compile Include="Areas\Application\Bootstrapper.cs" />
+    <Compile Include="Areas\Application\ConfigurationModule.cs" />
+    <Compile Include="Areas\Application\IBackgroundService.cs" />
+    <Compile Include="Areas\Clean\CleanModule.cs" />
+    <Compile Include="Areas\Clean\CleanBackgroundService.cs" />
+    <Compile Include="Areas\Clean\TestBackgroundService.cs" />
+    <Compile Include="Areas\Clean\TestExceptionInBackgroundService.cs" />
+    <Compile Include="Areas\Clean\TestOnceBackgroundService.cs" />
+    <Compile Include="Areas\Configuration\ConfigurationKeys.cs" />
+    <Compile Include="Areas\Configuration\KeyValueSettingsProvider.cs" />
+    <Compile Include="Areas\Logging\LoggingModule.cs" />
+    <Compile Include="Areas\AspNet\MvcModule.cs" />
+    <Compile Include="Areas\MediatR\MediatRModule.cs" />
+    <Compile Include="Areas\NuGet\HttpClientFactory.cs" />
+    <Compile Include="Areas\NuGet\HttpFactoryModule.cs" />
+    <Compile Include="Areas\NuGet\IHttpClientFactory.cs" />
+    <Compile Include="Areas\NuGet\OtherFileInfo.cs" />
+    <Compile Include="Areas\NuGet\PackagePushedNotification.cs" />
+    <Compile Include="Areas\NuGet\PackagePushedNotificationHandler.cs" />
+    <Compile Include="Areas\NuGet\PackagePushedQueueHandler.cs" />
+    <Compile Include="Areas\NuGet\WebHookBackgroundService.cs" />
+    <Compile Include="Areas\Security\ProtectedRoutesModule.cs" />
+    <Compile Include="Areas\AspNet\WebApiModule.cs" />
+    <Compile Include="Areas\AspNet\WebModule.cs" />
+    <Compile Include="Areas\NuGet\NuGetFeedConfiguration.cs" />
+    <Compile Include="Areas\NuGet\NuGetFeedModule.cs" />
+    <Compile Include="Areas\Application\NuGetServerApp.cs" />
+    <Compile Include="Areas\Clean\CleanController.cs" />
+    <Compile Include="Areas\Clean\CleanViewOutputModel.cs" />
+    <Compile Include="Areas\NuGet\NuGetFeedController.cs" />
+    <Compile Include="Areas\Configuration\ConfigurationStartup.cs" />
+    <Compile Include="Areas\Application\AppConfiguration.cs" />
+    <Compile Include="Areas\AspNet\BundleConfig.cs" />
+    <Compile Include="Areas\AspNet\FilterConfig.cs" />
+    <Compile Include="Areas\NuGet\PackageFileInfo.cs" />
+    <Compile Include="Areas\NuGet\PackagesController.cs" />
+    <Compile Include="Areas\NuGet\PackagesViewOutputModel.cs" />
+    <Compile Include="Areas\NuGet\NuGetInterceptMiddleware.cs" />
+    <Compile Include="Areas\AspNet\MvcStartup.cs" />
+    <Compile Include="Areas\Clean\RouteConstants.cs" />
+    <Compile Include="Areas\Security\BasicAuthenticationConstants.cs" />
+    <Compile Include="Areas\Security\ContentTypes.cs" />
+    <Compile Include="Areas\Security\NuGetAuthorizationMiddleware.cs" />
+    <Compile Include="Areas\AspNet\RouteConfig.cs" />
+    <Compile Include="Areas\AspNet\WebApiConfig.cs" />
+    <Compile Include="Areas\Start\HomeController.cs" />
+    <Compile Include="Areas\WebHooks\WebHookPingController.cs" />
+    <Compile Include="Areas\WebHooks\WebHooksModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\Startup.cs" />
-    <Compile Include="ServerMapPath.cs" />
+    <Compile Include="Areas\AspNet\Startup.cs" />
+    <Compile Include="Areas\AspNet\ServerMapPath.cs" />
+    <Compile Include="Test\TestApiController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

@@ -8,8 +8,9 @@ namespace Arbor.NuGetServer.Api
 {
     public static class PackageIdentifierHelper
     {
-
-        public static  PackageIdentifier GetPackageIdentifier([NotNull] FileInfo fileInfo, [NotNull] DirectoryInfo packageDirectory)
+        public static PackageIdentifier GetPackageIdentifier(
+            [NotNull] FileInfo fileInfo,
+            [NotNull] DirectoryInfo packageDirectory)
         {
             if (fileInfo == null)
             {
@@ -21,7 +22,8 @@ namespace Arbor.NuGetServer.Api
                 throw new ArgumentNullException(nameof(packageDirectory));
             }
 
-            string relativePath = fileInfo.FullName.Replace(packageDirectory.FullName, "").TrimStart(Path.DirectorySeparatorChar);
+            string relativePath = fileInfo.FullName.Replace(packageDirectory.FullName, "")
+                .TrimStart(Path.DirectorySeparatorChar);
 
             int firstSeparatorIndex = relativePath.IndexOf(Path.DirectorySeparatorChar);
 

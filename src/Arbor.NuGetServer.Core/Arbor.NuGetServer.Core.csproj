@@ -56,6 +56,9 @@
     <Reference Include="NuGet.Versioning, Version=4.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Versioning.4.6.2\lib\net46\NuGet.Versioning.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
@@ -90,21 +93,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\AppSettingsExtensions.cs" />
-    <Compile Include="Logging\CategoryLogger.cs" />
-    <Compile Include="Logging\CheckedLogger.cs" />
-    <Compile Include="Logging\CompositeLogger.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
-    <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
+    <Compile Include="Extensions\SafeDispose.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeInfoExtensions.cs" />
-    <Compile Include="Logging\FileLogger.cs" />
-    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="IPathMapper.cs" />
-    <Compile Include="Logging\Logger.cs" />
     <Compile Include="PackageConfigurationConstants.cs" />
     <Compile Include="PackageIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

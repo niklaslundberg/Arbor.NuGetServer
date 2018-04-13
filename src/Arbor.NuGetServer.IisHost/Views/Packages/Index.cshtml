@@ -1,6 +1,6 @@
 ﻿@using Arbor.NuGetServer.Core.Extensions
-@using Arbor.NuGetServer.IisHost.Models
-@model Arbor.NuGetServer.IisHost.Models.PackagesViewModel
+@using Arbor.NuGetServer.IisHost.Areas.NuGet
+@model Arbor.NuGetServer.IisHost.Areas.NuGet.PackagesViewOutputModel
 
 <h2>Packages</h2>
 
@@ -11,14 +11,16 @@
     <h4>Top packages by size</h4>
 
     <ul>
-        @foreach (CustomFileInfo item in Model.TopPackagesBySize)
+        @foreach (PackageFileInfo item in Model.TopPackagesBySize)
         {
             <li>@item.RelativePath, <strong>@item.FileInfo.Length.AsSuitableByteUnit()</strong></li>
         }
     </ul>
 
+    <h4>All packages</h4>
+
     <ul>
-        @foreach (CustomFileInfo item in Model.RelativeNuGetPaths)
+        @foreach (PackageFileInfo item in Model.RelativeNuGetPaths)
         {
             <li>@item.RelativePath, <strong>@item.FileInfo.Length.AsSuitableByteUnit()</strong></li>
         }
@@ -30,7 +32,7 @@
 @if (Model.RelativeOtherPaths.Count > 0)
 {
     <ul>
-        @foreach (CustomFileInfo item in Model.RelativeOtherPaths)
+        @foreach (OtherFileInfo item in Model.RelativeOtherPaths)
         {
             <li>
                 @item.RelativePath <strong>@(item.FileInfo.Length.AsSuitableByteUnit())</strong>

@@ -2,6 +2,10 @@
 {
     public static class CleanConstants
     {
+        public static string AutomaticCleanIntervalInSeconds = "urn:arbor-nuget-server:nuget:clean:automatic-clean:interval-in-seconds";
+
+        public static string AutomaticCleanEnabled = "urn:arbor-nuget-server:nuget:clean:automatic-clean:enabled";
+
         public const string CleanOnStartEnabled = "urn:arbor-nuget-server:nuget:clean:clean-bin-files-on-start:enabled";
 
         public const string PostRoute = "manage/clean";

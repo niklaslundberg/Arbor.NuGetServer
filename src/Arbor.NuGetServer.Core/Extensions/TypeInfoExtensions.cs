@@ -5,7 +5,7 @@ namespace Arbor.NuGetServer.Core.Extensions
 {
     public static class TypeInfoExtensions
     {
-        public static bool IsPublicConcreteClassImplementing<T>(this TypeInfo typeInfo)
+        public static bool IsPublicConcreteClassImplementing<T>(this Type typeInfo)
         {
             if (typeInfo == null)
             {
