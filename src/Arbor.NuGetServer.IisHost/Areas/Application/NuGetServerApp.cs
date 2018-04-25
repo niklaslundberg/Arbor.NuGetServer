@@ -13,6 +13,7 @@ using Arbor.NuGetServer.Api.Clean;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Autofac;
+using JetBrains.Annotations;
 using Serilog;
 using Serilog.Core;
 
@@ -25,6 +26,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         private CancellationTokenSource _cancellationTokenSource;
         private AppContainer _container;
         private Logger _logger;
+        private bool _isStopped;
+        private bool _isRunning;
 
         private NuGetServerApp(
             IKeyValueConfiguration keyValueConfiguration,
@@ -127,23 +130,45 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             {
                 if (backgroundService is IDisposable disposable)
                 {
-                    SafeDispose.Dispose(disposable);
+                    disposable.SafeDispose();
                 }
             }
 
-            SafeDispose.Dispose(_container);
-            SafeDispose.Dispose(_logger);
+            _container.SafeDispose();
+            _logger.SafeDispose();
             _container = null;
             Disposed = true;
         }
 
         public void Stop()
         {
-            _cancellationTokenSource.Cancel();
+            if (_isStopped)
+            {
+                return;
+            }
+
+            CheckState();
+            if (!_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+            }
+
+            _isRunning = false;
+            _isStopped = true;
         }
 
         public void Start()
         {
+            if (_isRunning)
+            {
+                throw new InvalidOperationException("Could not start when already started");
+            }
+
+            if (_isStopped)
+            {
+                throw new InvalidOperationException("Could not start when already stopped");
+            }
+
             foreach (IBackgroundService backgroundService in _backgroundServices)
             {
                 _backgroundServiceHandler.Invoke(token =>
@@ -160,8 +185,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             }
         }
 
-        private async Task ScheduleWork(CancellationToken cancellationToken, Func<CancellationToken, Task> taskFunc)
+        private async Task ScheduleWork(CancellationToken cancellationToken, [NotNull] Func<CancellationToken, Task> taskFunc)
         {
+            if (taskFunc == null)
+            {
+                throw new ArgumentNullException(nameof(taskFunc));
+            }
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 try

@@ -1,14 +1,16 @@
 using System;
+using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Application
 {
-    public class AppContainer : IDisposable
+    public sealed class AppContainer : IDisposable
     {
-        public AppContainer(IContainer container, ILifetimeScope appScope)
+        public AppContainer([NotNull] IContainer container, [NotNull] ILifetimeScope appScope)
         {
-            Container = container;
-            AppScope = appScope;
+            Container = container ?? throw new ArgumentNullException(nameof(container));
+            AppScope = appScope ?? throw new ArgumentNullException(nameof(appScope));
         }
 
         public IContainer Container { get; }
@@ -17,8 +19,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
         public void Dispose()
         {
-            AppScope?.Dispose();
-            Container?.Dispose();
+            AppScope.SafeDispose();
+            Container.SafeDispose();
         }
     }
 }

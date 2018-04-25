@@ -4,9 +4,11 @@ using System.Web.Hosting;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Application;
 using Arbor.NuGetServer.IisHost.Areas.AspNet;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost
 {
+    [UsedImplicitly]
     public class MvcApplication : HttpApplication
     {
         public static NuGetServerApp NuGetServerApp { get; private set; }
@@ -27,7 +29,7 @@ namespace Arbor.NuGetServer.IisHost
 
         protected void Application_End()
         {
-            SafeDispose.Dispose(NuGetServerApp);
+            NuGetServerApp.SafeDispose();
             NuGetServerApp = null;
             Debug.WriteLine("Shut down, application end");
         }

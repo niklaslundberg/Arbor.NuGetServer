@@ -3,9 +3,9 @@ using System.Diagnostics;
 
 namespace Arbor.NuGetServer.Core.Extensions
 {
-    public static class SafeDispose
+    public static class SafeDisposer
     {
-        public static void Dispose(IDisposable disposable, Action<Exception> exceptionHandler = null)
+        public static void SafeDispose(this IDisposable disposable, Action<Exception> exceptionHandler = null)
         {
             if (disposable is null)
             {
