@@ -131,10 +131,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Arbor.NuGetServer.Core.Configuration\Arbor.NuGetServer.Core.Configuration.csproj">
-      <Project>{afdd78c1-7fde-47d2-ac74-ec1d1da29c94}</Project>
-      <Name>Arbor.NuGetServer.Core.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj">
       <Project>{798F43DF-A7F8-485E-A728-DE661AB0C0C6}</Project>
       <Name>Arbor.NuGetServer.Core</Name>

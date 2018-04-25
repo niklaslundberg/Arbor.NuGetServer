@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Arbor.NuGetServer.Core.Configuration.Modules;
 using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
 using JetBrains.Annotations;

@@ -9,28 +9,26 @@ namespace Arbor.NuGetServer.IisHost
 {
     public class MvcApplication : HttpApplication
     {
-        private static NuGetServerApp _nuGetServerApp;
-
-        public static NuGetServerApp NuGetServerApp => _nuGetServerApp;
+        public static NuGetServerApp NuGetServerApp { get; private set; }
 
         protected void Application_Start()
         {
             Debug.WriteLine("Application start");
-            _nuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem);
+            NuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem);
 
-            var appRegistered = new AppRegistered(_nuGetServerApp);
+            var appRegistered = new AppRegistered(NuGetServerApp);
 
             HostingEnvironment.RegisterObject(appRegistered);
 
-            _nuGetServerApp.Start();
+            NuGetServerApp.Start();
 
-            MvcStartup.Start(_nuGetServerApp);
+            MvcStartup.Start(NuGetServerApp);
         }
 
         protected void Application_End()
         {
-            SafeDispose.Dispose(_nuGetServerApp);
-            _nuGetServerApp = null;
+            SafeDispose.Dispose(NuGetServerApp);
+            NuGetServerApp = null;
             Debug.WriteLine("Shut down, application end");
         }
     }

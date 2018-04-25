@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Core.Configuration.Modules;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Logging;
 using Autofac;
@@ -14,7 +13,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 {
     public static class Bootstrapper
     {
-        public static IContainer Start(
+        public static AppContainer Start(
             Func<IReadOnlyCollection<Assembly>> assemblyResolver,
             ILogger logger,
             IKeyValueConfiguration keyValueConfiguration)
@@ -35,11 +34,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             builder.RegisterModule(new LoggingModule(logger));
             builder.RegisterModule(new ConfigurationModule(keyValueConfiguration));
 
-            builder.RegisterAssemblyTypes(assemblies.ToArray())
+            Assembly[] assembliesToScan = assemblies.ToArray();
+
+            builder.RegisterAssemblyTypes(assembliesToScan)
                 .Where(type => type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>())
                 .As<MetaModule>();
 
-            builder.RegisterAssemblyTypes(assemblies.ToArray())
+            builder.RegisterAssemblyTypes(assembliesToScan)
                 .Where(
                     type =>
                         !type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>()
@@ -52,25 +53,15 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
             List<MetaModule> metaModules = container.Resolve<IEnumerable<MetaModule>>().ToList();
 
-            foreach (MetaModule metaModule in metaModules)
+            ILifetimeScope appScope = container.BeginLifetimeScope(scopeBuilder =>
             {
-                metaModule.Configure(container.ComponentRegistry);
-            }
+                foreach (MetaModule metaModule in metaModules)
+                {
+                    scopeBuilder.RegisterModule(metaModule);
+                }
+            });
 
-            List<IModule> standardModules = container.Resolve<IEnumerable<IModule>>().ToList();
-
-            foreach (IModule module in standardModules)
-            {
-                module.Configure(container.ComponentRegistry);
-            }
-
-            var updateBuilder = new ContainerBuilder();
-
-            updateBuilder.RegisterInstance(container);
-
-            updateBuilder.Update(container.ComponentRegistry);
-
-            return container;
+            return new AppContainer(container, appScope);
         }
     }
 }

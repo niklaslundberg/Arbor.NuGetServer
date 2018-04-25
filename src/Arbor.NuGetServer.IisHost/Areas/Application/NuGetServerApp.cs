@@ -23,12 +23,12 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         private readonly Action<Func<CancellationToken, Task>> _backgroundServiceHandler;
         private readonly List<IBackgroundService> _backgroundServices;
         private CancellationTokenSource _cancellationTokenSource;
-        private IContainer _container;
+        private AppContainer _container;
         private Logger _logger;
 
         private NuGetServerApp(
             IKeyValueConfiguration keyValueConfiguration,
-            IContainer container,
+            AppContainer container,
             Logger logger,
             Action<Func<CancellationToken, Task>> backgroundServiceHandler,
             IReadOnlyCollection<IBackgroundService> backgroundServices)
@@ -45,12 +45,12 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
         public IKeyValueConfiguration KeyValueConfiguration { get; }
 
-        public IContainer Container
+        public ILifetimeScope LifeTimeScope
         {
             get
             {
                 CheckState();
-                return _container;
+                return _container.AppScope;
             }
         }
 
@@ -65,25 +65,24 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                 .OfType<Assembly>()
                 .SafeToReadOnlyCollection();
 
-            IContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration);
+            AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration);
 
             var backgroundServices = new List<IBackgroundService>();
 
-            using (ILifetimeScope beginLifetimeScope = container.BeginLifetimeScope())
-            {
+
                 if (keyValueConfiguration.ValueOrDefault(CleanConstants.CleanOnStartEnabled))
                 {
-                    var cleanService = beginLifetimeScope.Resolve<CleanService>();
+                    var cleanService = container.Container.Resolve<CleanService>();
 
                     cleanService.CleanBinFiles(false);
                 }
 
-                var collection = beginLifetimeScope.Resolve<IEnumerable<IBackgroundService>>();
+                var collection = container.Container.Resolve<IEnumerable<IBackgroundService>>();
 
                 backgroundServices.AddRange(collection);
 
                 logger.Information("Added background services {BackgroundServices}", backgroundServices);
-            }
+
 
             string packagesPath =
                 keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath];
@@ -125,6 +124,14 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             if (!_cancellationTokenSource.IsCancellationRequested)
             {
                 _cancellationTokenSource.Cancel(false);
+            }
+
+            foreach (IBackgroundService backgroundService in _backgroundServices)
+            {
+                if (backgroundService is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
             }
 
             Log.CloseAndFlush();

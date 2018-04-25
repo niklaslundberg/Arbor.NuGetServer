@@ -258,11 +258,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Application\AppContainer.cs" />
     <Compile Include="Areas\Application\AppRegistered.cs" />
     <Compile Include="Areas\Application\BackgroundServiceModule.cs" />
     <Compile Include="Areas\Application\Bootstrapper.cs" />
     <Compile Include="Areas\Application\ConfigurationModule.cs" />
     <Compile Include="Areas\Application\IBackgroundService.cs" />
+    <Compile Include="Areas\Application\MetaModule.cs" />
     <Compile Include="Areas\Clean\CleanModule.cs" />
     <Compile Include="Areas\Clean\CleanBackgroundService.cs" />
     <Compile Include="Areas\Clean\TestBackgroundService.cs" />
@@ -414,10 +416,6 @@
     <ProjectReference Include="..\Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj">
       <Project>{8de39052-86c3-44cf-b189-54b9d9577a8c}</Project>
       <Name>Arbor.NuGetServer.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Arbor.NuGetServer.Core.Configuration\Arbor.NuGetServer.Core.Configuration.csproj">
-      <Project>{AFDD78C1-7FDE-47D2-AC74-EC1D1DA29C94}</Project>
-      <Name>Arbor.NuGetServer.Core.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj">
       <Project>{798F43DF-A7F8-485E-A728-DE661AB0C0C6}</Project>

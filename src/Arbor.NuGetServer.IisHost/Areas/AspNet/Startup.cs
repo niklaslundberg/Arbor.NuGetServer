@@ -32,7 +32,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 
             if (nuGetServerApp.KeyValueConfiguration[ConfigurationKeys.ConflictMiddlewareEnabled].AsBool(false))
             {
-                app.UseAutofacLifetimeScopeInjector(nuGetServerApp.Container);
+                app.UseAutofacLifetimeScopeInjector(nuGetServerApp.LifeTimeScope);
                 //app.UseMiddlewareFromContainer<NuGetWebHookMiddleware>();
                 app.UseMiddlewareFromContainer<NuGetInterceptMiddleware>();
             }

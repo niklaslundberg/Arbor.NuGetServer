@@ -1,4 +1,4 @@
-﻿using Arbor.NuGetServer.Core.Configuration.Modules;
+﻿using Arbor.NuGetServer.IisHost.Areas.Application;
 using Autofac;
 using JetBrains.Annotations;
 

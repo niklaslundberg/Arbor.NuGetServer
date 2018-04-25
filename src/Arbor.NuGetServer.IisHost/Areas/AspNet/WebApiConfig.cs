@@ -9,22 +9,19 @@ namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 {
     public static class WebApiConfig
     {
-        public static void Register(HttpConfiguration config, IContainer container)
+        public static void Register(HttpConfiguration config, ILifetimeScope lifetimeScope)
         {
             config.MapHttpAttributeRoutes();
 
             config.Formatters.Insert(0, new XWwwFormUrlEncodedFormatter());
 
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
 
-            using (ILifetimeScope rootScope = container.BeginLifetimeScope())
-            {
-                var nuGetFeedConfiguration = rootScope.Resolve<NuGetFeedConfiguration>();
+            var nuGetFeedConfiguration = lifetimeScope.Resolve<NuGetFeedConfiguration>();
 
-                config.UseNuGetV2WebApiFeed(nuGetFeedConfiguration.RouteName,
-                    nuGetFeedConfiguration.RouteUrl,
-                    nuGetFeedConfiguration.ControllerName);
-            }
+            config.UseNuGetV2WebApiFeed(nuGetFeedConfiguration.RouteName,
+                nuGetFeedConfiguration.RouteUrl,
+                nuGetFeedConfiguration.ControllerName);
         }
     }
 }

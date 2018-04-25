@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Arbor.NuGetServer.Core.Configuration.Modules;
+using Arbor.NuGetServer.IisHost.Areas.Application;
 using Autofac;
 using Autofac.Integration.WebApi;
 using JetBrains.Annotations;

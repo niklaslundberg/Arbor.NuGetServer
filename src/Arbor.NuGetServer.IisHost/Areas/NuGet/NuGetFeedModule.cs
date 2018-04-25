@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Core.Configuration.Modules;
+using Arbor.NuGetServer.IisHost.Areas.Application;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Autofac;
 using JetBrains.Annotations;

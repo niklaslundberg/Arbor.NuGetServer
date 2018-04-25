@@ -18,10 +18,10 @@ namespace Arbor.NuGetServer.IisHost.Areas.AspNet
                 throw new ArgumentNullException(nameof(app));
             }
 
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(app.Container));
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(app.LifeTimeScope));
 
             GlobalConfiguration.Configure(configuration =>
-                WebApiConfig.Register(configuration, app.Container));
+                WebApiConfig.Register(configuration, app.LifeTimeScope));
 
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
