@@ -45,7 +45,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
 
             _logger.Information("Clean background service is enabled");
 
-            await Task.Delay(TimeSpan.FromSeconds(20), cancellationToken);
+            TimeSpan initialDelay = TimeSpan.FromSeconds(20);
+
+            await Task.Delay(initialDelay, cancellationToken);
 
             while (!cancellationToken.IsCancellationRequested)
             {
