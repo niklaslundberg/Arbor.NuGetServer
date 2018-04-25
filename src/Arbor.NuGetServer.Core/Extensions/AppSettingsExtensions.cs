@@ -6,7 +6,8 @@ namespace Arbor.NuGetServer.Core.Extensions
 {
     public static class AppSettingsExtensions
     {
-        public static string ThrowIfNullOrWhitespace([NotNull] this IKeyValueConfiguration keyValueConfiguration,
+        public static string ThrowIfNullOrWhitespace(
+            [NotNull] this IKeyValueConfiguration keyValueConfiguration,
             [NotNull] string key)
         {
             if (keyValueConfiguration == null)

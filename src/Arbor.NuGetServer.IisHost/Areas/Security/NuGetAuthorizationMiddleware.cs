@@ -68,7 +68,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Security
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             context.Response.ContentType = ContentTypes.PlainText;
 
-            using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, leaveOpen: true))
+            using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
                 await streamWriter.WriteAsync("Unauthorized");
             }
@@ -76,7 +76,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.Security
 
         private void Challenge(IOwinContext context)
         {
-            context.Response.Headers.AppendValues(BasicAuthenticationConstants.Challenge, BasicAuthenticationConstants.Realm);
+            context.Response.Headers.AppendValues(BasicAuthenticationConstants.Challenge,
+                BasicAuthenticationConstants.Realm);
         }
     }
 }

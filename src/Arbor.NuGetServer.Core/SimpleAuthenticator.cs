@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core.Extensions;
 
@@ -45,10 +44,10 @@ namespace Arbor.NuGetServer.Core
             return
                 Task.FromResult<IEnumerable<Claim>>(
                     new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, storedUsername),
-                            new Claim(ClaimTypes.NameIdentifier, storedUsername)
-                        });
+                    {
+                        new Claim(ClaimTypes.Name, storedUsername),
+                        new Claim(ClaimTypes.NameIdentifier, storedUsername)
+                    });
         }
     }
 }

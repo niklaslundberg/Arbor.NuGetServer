@@ -14,8 +14,8 @@ namespace Arbor.NuGetServer.Api.Clean
     [UsedImplicitly]
     public class CleanService
     {
-        private readonly ILogger _logger;
         private readonly IKeyValueConfiguration _keyValueConfiguration;
+        private readonly ILogger _logger;
         private readonly IPathMapper _pathMapper;
 
         public CleanService(IPathMapper pathMapper, ILogger logger, IKeyValueConfiguration keyValueConfiguration)

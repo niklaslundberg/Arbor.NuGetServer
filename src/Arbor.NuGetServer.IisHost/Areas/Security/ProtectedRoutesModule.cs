@@ -22,7 +22,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.Security
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(_assemblies.ToArray())
-                .Where(type => type.GetTypeInfo().IsPublicConcreteClassImplementing<IProtectedRoute>()).As<IProtectedRoute>();
+                .Where(type => type.GetTypeInfo().IsPublicConcreteClassImplementing<IProtectedRoute>())
+                .As<IProtectedRoute>();
         }
     }
 }

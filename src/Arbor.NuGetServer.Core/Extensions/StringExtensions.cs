@@ -12,6 +12,7 @@ namespace Arbor.NuGetServer.Core.Extensions
                 {
                     throw new ArgumentNullException(nameof(value), message);
                 }
+
                 throw new ArgumentNullException(nameof(value));
             }
 

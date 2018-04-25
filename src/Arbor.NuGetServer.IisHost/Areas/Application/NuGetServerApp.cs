@@ -57,7 +57,6 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         public static NuGetServerApp Create(Action<Func<CancellationToken, Task>> backgroundServiceHandler)
         {
             Logger logger = new LoggerConfiguration().WriteTo.Console().WriteTo.Debug().CreateLogger();
-            Log.Logger = logger; //TODO
 
             IKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start();
 
@@ -69,20 +68,18 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
             var backgroundServices = new List<IBackgroundService>();
 
+            if (keyValueConfiguration.ValueOrDefault(CleanConstants.CleanOnStartEnabled))
+            {
+                var cleanService = container.Container.Resolve<CleanService>();
 
-                if (keyValueConfiguration.ValueOrDefault(CleanConstants.CleanOnStartEnabled))
-                {
-                    var cleanService = container.Container.Resolve<CleanService>();
+                cleanService.CleanBinFiles(false);
+            }
 
-                    cleanService.CleanBinFiles(false);
-                }
+            var collection = container.Container.Resolve<IEnumerable<IBackgroundService>>();
 
-                var collection = container.Container.Resolve<IEnumerable<IBackgroundService>>();
+            backgroundServices.AddRange(collection);
 
-                backgroundServices.AddRange(collection);
-
-                logger.Information("Added background services {BackgroundServices}", backgroundServices);
-
+            logger.Information("Added background services {BackgroundServices}", backgroundServices);
 
             string packagesPath =
                 keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath];
@@ -130,11 +127,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             {
                 if (backgroundService is IDisposable disposable)
                 {
-                    disposable.Dispose();
+                    SafeDispose.Dispose(disposable);
                 }
             }
-
-            Log.CloseAndFlush();
 
             SafeDispose.Dispose(_container);
             SafeDispose.Dispose(_logger);
@@ -156,9 +151,11 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                     CancellationToken linkedToken = CancellationTokenSource
                         .CreateLinkedTokenSource(token, _cancellationTokenSource.Token).Token;
 
-                    _logger.Information("Starting background service {BackgroundService}", backgroundService.GetType().Name);
+                    _logger.Information("Starting background service {BackgroundService}",
+                        backgroundService.GetType().Name);
 
-                    return ScheduleWork(linkedToken, cancellationToken => backgroundService.StartAsync(cancellationToken));
+                    return ScheduleWork(linkedToken,
+                        cancellationToken => backgroundService.StartAsync(cancellationToken));
                 });
             }
         }

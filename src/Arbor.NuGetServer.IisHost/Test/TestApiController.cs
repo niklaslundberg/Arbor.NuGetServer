@@ -19,7 +19,7 @@ namespace Arbor.NuGetServer.IisHost.Test
             {
                 Content =
                     new StringContent(
-                        JsonConvert.SerializeObject(new { Message="Shutting down" }),
+                        JsonConvert.SerializeObject(new { Message = "Shutting down" }),
                         Encoding.UTF8,
                         "application/json")
             };

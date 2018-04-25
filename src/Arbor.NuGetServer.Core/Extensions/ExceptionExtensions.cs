@@ -36,7 +36,6 @@ namespace Arbor.NuGetServer.Core.Extensions
                 }
             }
 
-
             return deepestExceptionOfType;
         }
     }

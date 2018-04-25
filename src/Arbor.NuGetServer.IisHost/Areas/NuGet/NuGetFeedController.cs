@@ -14,7 +14,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     public class NuGetFeedController : NuGetODataController
     {
         public NuGetFeedController(NuGetFeedConfiguration nuGetFeedConfiguration)
-            : base(nuGetFeedConfiguration.Repository, new ApiKeyPackageAuthenticationService(true, nuGetFeedConfiguration.ApiKey))
+            : base(nuGetFeedConfiguration.Repository,
+                new ApiKeyPackageAuthenticationService(true, nuGetFeedConfiguration.ApiKey))
         {
         }
 
@@ -25,10 +26,10 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
         {
             string apiKeyFromHeader = GetApiKeyFromHeader();
 
-
             IPrincipal requestContextPrincipal = RequestContext.Principal;
 
-            bool isAuthenticated = _authenticationService.IsAuthenticated(requestContextPrincipal, apiKeyFromHeader, null);
+            bool isAuthenticated =
+                _authenticationService.IsAuthenticated(requestContextPrincipal, apiKeyFromHeader, null);
 
             HttpResponseMessage uploadPackageCompatibility = await UploadPackage(token);
 
@@ -37,12 +38,14 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 
         private string GetApiKeyFromHeader()
         {
-            string str = (string)null;
+            string str = null;
             IEnumerable<string> values;
-            if (this.Request.Headers.TryGetValues("X-NUGET-APIKEY", out values))
-                str = values.FirstOrDefault<string>();
+            if (Request.Headers.TryGetValues("X-NUGET-APIKEY", out values))
+            {
+                str = values.FirstOrDefault();
+            }
+
             return str;
         }
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace Arbor.NuGetServer.Core.Extensions
 {
@@ -7,9 +7,15 @@ namespace Arbor.NuGetServer.Core.Extensions
     {
         public static void Dispose(IDisposable disposable, Action<Exception> exceptionHandler = null)
         {
+            if (disposable is null)
+            {
+                return;
+            }
+
             try
             {
-                disposable?.Dispose();
+                Debug.WriteLine($"Disposing {disposable}");
+                disposable.Dispose();
             }
             catch (Exception ex)
             {
