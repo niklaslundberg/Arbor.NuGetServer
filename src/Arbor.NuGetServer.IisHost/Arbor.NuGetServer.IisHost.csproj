@@ -283,7 +283,6 @@
     <Compile Include="Areas\NuGet\PackagePushedNotificationHandler.cs" />
     <Compile Include="Areas\NuGet\PackagePushedQueueHandler.cs" />
     <Compile Include="Areas\NuGet\WebHookBackgroundService.cs" />
-    <Compile Include="Areas\Security\ProtectedRoutesModule.cs" />
     <Compile Include="Areas\AspNet\WebApiModule.cs" />
     <Compile Include="Areas\AspNet\WebModule.cs" />
     <Compile Include="Areas\NuGet\NuGetFeedConfiguration.cs" />
@@ -313,6 +312,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Html\HtmlAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Areas\AspNet\Startup.cs" />
     <Compile Include="Areas\AspNet\ServerMapPath.cs" />

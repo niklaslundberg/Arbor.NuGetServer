@@ -31,7 +31,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
                 packagesToKeep = packagesToKeepFromConfig;
             }
 
-            return View(new CleanViewOutputModel($"/{CleanConstants.PostRoute}", packagesToKeep));
+            return View(new CleanViewOutputModel($"/{CleanConstants.PostRoute}", packagesToKeep, preReleaseOnly: true, whatIf: true));
         }
     }
 }

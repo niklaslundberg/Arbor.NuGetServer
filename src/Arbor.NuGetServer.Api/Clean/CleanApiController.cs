@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
+using ContentType = Arbor.NuGetServer.Core.Http.ContentType;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
@@ -20,9 +22,9 @@ namespace Arbor.NuGetServer.Api.Clean
 
         [Route]
         [HttpPost]
-        public async Task<IHttpActionResult> CleanAsync(CleanInputModel cleanInputModel)
+        public IHttpActionResult Clean(CleanInputModel cleanInputModel)
         {
-            CleanResult cleanResult = await _cleanService.CleanAsync(cleanInputModel.Whatif,
+            CleanResult cleanResult = _cleanService.Clean(cleanInputModel.Whatif,
                 cleanInputModel.PreReleaseOnly,
                 cleanInputModel.PackageId,
                 cleanInputModel.PackagesToKeep);
@@ -33,7 +35,7 @@ namespace Arbor.NuGetServer.Api.Clean
                     new StringContent(
                         JsonConvert.SerializeObject(new { cleanResult, cleanInputModel }),
                         Encoding.UTF8,
-                        "application/json")
+                        ContentType.Json)
             };
 
             return ResponseMessage(httpResponseMessage);

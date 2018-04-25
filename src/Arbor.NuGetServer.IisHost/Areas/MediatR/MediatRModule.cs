@@ -29,7 +29,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.MediatR
                 .Register<SingleInstanceFactory>(ctx =>
                 {
                     var componentContext = ctx.Resolve<IComponentContext>();
-                    return serviceType => componentContext.TryResolve(serviceType, out object o) ? o : null;
+                    return serviceType =>
+                        componentContext.TryResolve(serviceType, out object instance) ? instance : null;
                 })
                 .InstancePerLifetimeScope();
 

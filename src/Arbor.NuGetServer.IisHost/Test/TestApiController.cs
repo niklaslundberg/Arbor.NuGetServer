@@ -13,7 +13,7 @@ namespace Arbor.NuGetServer.IisHost.Test
     {
         [Route]
         [HttpGet]
-        public async Task<IHttpActionResult> Shutdown()
+        public IHttpActionResult Shutdown()
         {
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,9 +26,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         private readonly List<IBackgroundService> _backgroundServices;
         private CancellationTokenSource _cancellationTokenSource;
         private AppContainer _container;
-        private Logger _logger;
-        private bool _isStopped;
         private bool _isRunning;
+        private bool _isStopped;
+        private Logger _logger;
 
         private NuGetServerApp(
             IKeyValueConfiguration keyValueConfiguration,
@@ -59,13 +60,16 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
         public static NuGetServerApp Create(Action<Func<CancellationToken, Task>> backgroundServiceHandler)
         {
-            Logger logger = new LoggerConfiguration().WriteTo.Console().WriteTo.Debug().CreateLogger();
+            Logger logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .CreateLogger();
 
             IKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start();
 
-            IReadOnlyCollection<Assembly> AssemblyResolver() => BuildManager.GetReferencedAssemblies()
+            ImmutableArray<Assembly> AssemblyResolver() => BuildManager.GetReferencedAssemblies()
                 .OfType<Assembly>()
-                .SafeToReadOnlyCollection();
+                .SafeToImmutableArray();
 
             AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration);
 
@@ -185,7 +189,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             }
         }
 
-        private async Task ScheduleWork(CancellationToken cancellationToken, [NotNull] Func<CancellationToken, Task> taskFunc)
+        private async Task ScheduleWork(
+            CancellationToken cancellationToken,
+            [NotNull] Func<CancellationToken, Task> taskFunc)
         {
             if (taskFunc == null)
             {

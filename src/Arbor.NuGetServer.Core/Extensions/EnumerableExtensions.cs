@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Core.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static IReadOnlyCollection<T> SafeToReadOnlyCollection<T>(this IEnumerable<T> items)
+        public static ImmutableArray<T> SafeToImmutableArray<T>(this IEnumerable<T> items)
         {
             if (items == null)
             {
-                return new List<T>();
+                return ImmutableArray<T>.Empty;
             }
 
-            var list = items as List<T>;
+            if (items is ImmutableArray<T> array)
+            {
+                return array;
+            }
 
-            return list ?? items.ToList();
+            return items.ToImmutableArray();
         }
 
         public static void ForEach<T>([NotNull] this IEnumerable<T> items, [NotNull] Action<T> action)

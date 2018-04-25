@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
@@ -18,11 +17,11 @@ namespace Arbor.NuGetServer.Api.Clean
         private readonly ILogger _logger;
         private readonly IPathMapper _pathMapper;
 
-        public CleanService(IPathMapper pathMapper, ILogger logger, IKeyValueConfiguration keyValueConfiguration)
+        public CleanService([NotNull] IPathMapper pathMapper, [NotNull] ILogger logger, [NotNull] IKeyValueConfiguration keyValueConfiguration)
         {
-            _pathMapper = pathMapper;
-            _logger = logger;
-            _keyValueConfiguration = keyValueConfiguration;
+            _pathMapper = pathMapper ?? throw new ArgumentNullException(nameof(pathMapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _keyValueConfiguration = keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
         }
 
         public void CleanBinFiles(bool whatIf)
@@ -40,17 +39,18 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
             {
-                _logger.Debug($"Deleting bin file '{binFile.FullName}'");
+                _logger.Debug("Deleting bin file '{BinFile}'", binFile.FullName);
 
                 if (!whatIf)
                 {
-                    _logger.Debug($"Skipped deleting bin file '{binFile.FullName}' due to what if flag set to true");
+                    _logger.Debug("Skipped deleting bin file '{BinFile}' due to what if flag set to true",
+                        binFile.FullName);
                     binFile.Delete();
                 }
             }
         }
 
-        public async Task<CleanResult> CleanAsync(
+        public CleanResult Clean(
             bool whatif = false,
             bool preReleaseOnly = true,
             string packageId = "",
@@ -117,11 +117,11 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (CleanTarget cleanTarget in packagesToDelete)
             {
-                _logger.Debug($"Deleting package {cleanTarget.FileInfo.FullName}");
+                _logger.Debug("Deleting package {PackageFile}", cleanTarget.FileInfo.FullName);
             }
 
             IReadOnlyCollection<CleanedPackage> cleanedPackages = packagesToDelete
-                .Select(cleanTarget => new CleanedPackage(cleanTarget.FileInfo.FullName)).SafeToReadOnlyCollection();
+                .Select(cleanTarget => new CleanedPackage(cleanTarget.FileInfo.FullName)).SafeToImmutableArray();
 
             foreach (CleanTarget cleanTarget in packagesToDelete)
             {
@@ -130,7 +130,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
             {
-                _logger.Debug($"Deleting bin file '{binFile.FullName}'");
+                _logger.Debug("Deleting bin file '{BinFile}'", binFile.FullName);
 
                 if (!whatif)
                 {
@@ -166,7 +166,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (nugetPackageFile.FileInfo.Exists)
             {
-                _logger.Debug($"Deleting NuGet package file '{nugetPackageFile.FileInfo.FullName}'");
+                _logger.Debug("Deleting NuGet package file '{PackageFile}'", nugetPackageFile.FileInfo.FullName);
                 if (!whatif)
                 {
                     nugetPackageFile.FileInfo.Delete();
@@ -175,7 +175,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (shaFile.Exists)
             {
-                _logger.Debug($"Deleting NuGet package SHA file '{shaFile.FullName}'");
+                _logger.Debug("Deleting NuGet package SHA file '{ShaFile}'", shaFile.FullName);
                 if (!whatif)
                 {
                     shaFile.Delete();
@@ -184,7 +184,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (nuspecFile.Exists)
             {
-                _logger.Debug($"Deleting NuGet specification file '{nuspecFile.FullName}'");
+                _logger.Debug("Deleting NuGet specification file '{NuSpecFile}'", nuspecFile.FullName);
 
                 if (!whatif)
                 {
@@ -194,7 +194,7 @@ namespace Arbor.NuGetServer.Api.Clean
 
             if (nuspec2File.Exists)
             {
-                _logger.Debug($"Deleting NuGet specification file '{nuspec2File.FullName}'");
+                _logger.Debug("Deleting NuGet specification file '{NuSpecFile}'", nuspec2File.FullName);
 
                 if (!whatif)
                 {

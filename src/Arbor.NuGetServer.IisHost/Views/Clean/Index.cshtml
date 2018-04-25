@@ -1,15 +1,16 @@
-﻿@model Arbor.NuGetServer.IisHost.Areas.Clean.CleanViewOutputModel
+﻿@using Arbor.NuGetServer.IisHost.Html
+@model Arbor.NuGetServer.IisHost.Areas.Clean.CleanViewOutputModel
 
 <h2>Clean packages</h2>
 
 <form method="post" action="@Model.CleanPostRoute">
 
     <div class="input-field">
-        <input id="what-if-field" name="whatif" type="checkbox"/> <label for="what-if-field">What If</label>
+        <input id="what-if-field" name="whatif" type="checkbox" @Model.WhatIf.Checked()/> <label for="what-if-field">What If</label>
     </div>
 
     <div class="input-field">
-        <input id="pre-prelease-only-field" name="preReleaseOnly" type="checkbox"/> <label for="pre-prelease-only-field">Pre-release only</label>
+        <input id="pre-prelease-only-field" name="preReleaseOnly" type="checkbox" @Model.PreReleaseOnly.Checked()/> <label for="pre-prelease-only-field">Pre-release only</label>
     </div>
 
     <div class="input-field">

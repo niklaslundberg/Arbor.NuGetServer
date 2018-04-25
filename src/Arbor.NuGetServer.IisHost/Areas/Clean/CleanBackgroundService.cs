@@ -55,7 +55,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
 
                 _logger.Information("Starting automatic clean");
 
-                CleanResult cleanResult = await _cleanService.CleanAsync(whatIf, preReleaseOnly);
+                CleanResult cleanResult = _cleanService.Clean(whatIf, preReleaseOnly);
 
                 _logger.Information("Ended automatic clean with result {Result}", cleanResult);
 

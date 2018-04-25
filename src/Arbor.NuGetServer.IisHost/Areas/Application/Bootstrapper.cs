@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Arbor.KVConfiguration.Core;
@@ -14,7 +15,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
     public static class Bootstrapper
     {
         public static AppContainer Start(
-            Func<IReadOnlyCollection<Assembly>> assemblyResolver,
+            Func<ImmutableArray<Assembly>> assemblyResolver,
             ILogger logger,
             IKeyValueConfiguration keyValueConfiguration)
         {
@@ -25,26 +26,24 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
             var builder = new ContainerBuilder();
 
-            IReadOnlyCollection<Assembly> assemblies = assemblyResolver()
+            Assembly[] assemblies = assemblyResolver()
                 .Where(assembly => !assembly.IsDynamic && assembly.GetName().Name
-                                       .StartsWith("Arbor.NuGetServer", StringComparison.OrdinalIgnoreCase)).ToArray();
+                                       .StartsWith("Arbor.NuGetServer", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
 
             builder.RegisterInstance(assemblies).AsImplementedInterfaces();
-
             builder.RegisterModule(new LoggingModule(logger));
             builder.RegisterModule(new ConfigurationModule(keyValueConfiguration));
 
-            Assembly[] assembliesToScan = assemblies.ToArray();
-
-            builder.RegisterAssemblyTypes(assembliesToScan)
-                .Where(type => type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>())
+            builder.RegisterAssemblyTypes(assemblies)
+                .Where(type => type.IsPublicConcreteClassImplementing<MetaModule>())
                 .As<MetaModule>();
 
-            builder.RegisterAssemblyTypes(assembliesToScan)
+            builder.RegisterAssemblyTypes(assemblies)
                 .Where(
                     type =>
-                        !type.GetTypeInfo().IsPublicConcreteClassImplementing<MetaModule>()
-                        && type.GetTypeInfo().IsPublicConcreteClassImplementing<IModule>()
+                        !type.IsPublicConcreteClassImplementing<MetaModule>()
+                        && type.IsPublicConcreteClassImplementing<IModule>()
                         && type != typeof(LoggingModule)
                         && type != typeof(ConfigurationModule))
                 .As<IModule>();

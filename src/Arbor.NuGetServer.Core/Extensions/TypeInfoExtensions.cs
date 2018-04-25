@@ -22,7 +22,7 @@ namespace Arbor.NuGetServer.Core.Extensions
                 return false;
             }
 
-            TypeInfo type = typeof(T).GetTypeInfo();
+            Type type = typeof(T);
 
             bool isImplementingType = type.IsAssignableFrom(typeInfo);
 
