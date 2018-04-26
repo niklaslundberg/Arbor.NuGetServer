@@ -15,6 +15,7 @@ using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Autofac;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
 
@@ -23,7 +24,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
     public sealed class NuGetServerApp : IDisposable
     {
         private readonly Action<Func<CancellationToken, Task>> _backgroundServiceHandler;
-        private readonly List<IBackgroundService> _backgroundServices;
+        private readonly List<IHostedService> _backgroundServices;
         private CancellationTokenSource _cancellationTokenSource;
         private AppContainer _container;
         private bool _isRunning;
@@ -35,7 +36,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             AppContainer container,
             Logger logger,
             Action<Func<CancellationToken, Task>> backgroundServiceHandler,
-            IReadOnlyCollection<IBackgroundService> backgroundServices)
+            IReadOnlyCollection<IHostedService> backgroundServices)
         {
             KeyValueConfiguration = keyValueConfiguration;
             _container = container;
@@ -49,7 +50,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
         public IKeyValueConfiguration KeyValueConfiguration { get; }
 
-        public ILifetimeScope LifeTimeScope
+        public ILifetimeScope LifetimeScope
         {
             get
             {
@@ -73,7 +74,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
             AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration);
 
-            var backgroundServices = new List<IBackgroundService>();
+            var backgroundServices = new List<IHostedService>();
 
             if (keyValueConfiguration.ValueOrDefault(CleanConstants.CleanOnStartEnabled))
             {
@@ -82,7 +83,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                 cleanService.CleanBinFiles(false);
             }
 
-            var collection = container.Container.Resolve<IEnumerable<IBackgroundService>>();
+            var collection = container.Container.Resolve<IEnumerable<IHostedService>>();
 
             backgroundServices.AddRange(collection);
 
@@ -130,7 +131,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                 _cancellationTokenSource.Cancel(false);
             }
 
-            foreach (IBackgroundService backgroundService in _backgroundServices)
+            foreach (IHostedService backgroundService in _backgroundServices)
             {
                 if (backgroundService is IDisposable disposable)
                 {
@@ -152,6 +153,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             }
 
             CheckState();
+
             if (!_cancellationTokenSource.IsCancellationRequested)
             {
                 _cancellationTokenSource.Cancel();
@@ -173,7 +175,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                 throw new InvalidOperationException("Could not start when already stopped");
             }
 
-            foreach (IBackgroundService backgroundService in _backgroundServices)
+            CheckState();
+
+            foreach (IHostedService backgroundService in _backgroundServices)
             {
                 _backgroundServiceHandler.Invoke(token =>
                 {

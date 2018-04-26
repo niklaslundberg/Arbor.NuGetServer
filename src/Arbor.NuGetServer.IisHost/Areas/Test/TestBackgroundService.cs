@@ -2,22 +2,22 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.IisHost.Areas.Application;
+using Arbor.NuGetServer.IisHost.Areas.Clean;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost.Areas.Clean
+namespace Arbor.NuGetServer.IisHost.Areas.Test
 {
     [UsedImplicitly]
-    public class TestBackgroundService : IBackgroundService
+    public class TestBackgroundService : BackgroundService
     {
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Debug.WriteLine("Running test background service");
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 Debug.WriteLine("Waiting in test background service");
-                await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(2), stoppingToken);
                 Debug.WriteLine("Waited in test background service");
             }
 

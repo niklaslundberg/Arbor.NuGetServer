@@ -18,7 +18,7 @@ namespace Arbor.NuGetServer.IisHost
             Debug.WriteLine("Application start");
             NuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem);
 
-            var appRegistered = new AppRegistered(NuGetServerApp);
+            var appRegistered = new AppRegisteredAdapter(NuGetServerApp);
 
             HostingEnvironment.RegisterObject(appRegistered);
 

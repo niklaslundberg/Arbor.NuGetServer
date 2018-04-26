@@ -24,13 +24,11 @@ namespace Arbor.NuGetServer.Core.Extensions
                 return null;
             }
 
-            T deepestExceptionOfType = DeepestExceptionOfType<T>(ex.InnerException);
+            var deepestExceptionOfType = DeepestExceptionOfType<T>(ex.InnerException);
 
             if (deepestExceptionOfType == null)
             {
-                var exception = ex as T;
-
-                if (exception != null)
+                if (ex is T exception)
                 {
                     return exception;
                 }

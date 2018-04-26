@@ -1,12 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using Newtonsoft.Json;
 
-namespace Arbor.NuGetServer.IisHost.Test
+namespace Arbor.NuGetServer.IisHost.Areas.Test
 {
     [RoutePrefix("shutdown")]
     public class TestApiController : ApiController

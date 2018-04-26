@@ -31,19 +31,19 @@ namespace Arbor.NuGetServer.Core.Extensions
 
             if (value < Mebibyte)
             {
-                var rounded = (value / (double)Kibibyte).ToString("F");
+                string rounded = (value / (double)Kibibyte).ToString("F");
 
                 return $"{rounded} KiB";
             }
 
             if (value < Gigibyte)
             {
-                var rounded = (value / (double)Mebibyte).ToString("F");
+                string rounded = (value / (double)Mebibyte).ToString("F");
 
                 return $"{rounded} MiB";
             }
 
-            var gibibytes = (value / (double)Gigibyte).ToString("F");
+            string gibibytes = (value / (double)Gigibyte).ToString("F");
 
             return $"{gibibytes} GiB";
         }

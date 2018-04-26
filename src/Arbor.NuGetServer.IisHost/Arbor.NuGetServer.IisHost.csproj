@@ -106,6 +106,9 @@
     <Reference Include="Microsoft.Data.OData, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.OData.5.8.3\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=2.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Hosting.Abstractions.2.0.2\lib\netstandard2.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
@@ -259,17 +262,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Application\AppContainer.cs" />
-    <Compile Include="Areas\Application\AppRegistered.cs" />
+    <Compile Include="Areas\Application\AppRegisteredAdapter.cs" />
     <Compile Include="Areas\Application\BackgroundServiceModule.cs" />
     <Compile Include="Areas\Application\Bootstrapper.cs" />
     <Compile Include="Areas\Application\ConfigurationModule.cs" />
-    <Compile Include="Areas\Application\IBackgroundService.cs" />
     <Compile Include="Areas\Application\MetaModule.cs" />
+    <Compile Include="Areas\Clean\BackgroundService.cs" />
     <Compile Include="Areas\Clean\CleanModule.cs" />
     <Compile Include="Areas\Clean\CleanBackgroundService.cs" />
-    <Compile Include="Areas\Clean\TestBackgroundService.cs" />
-    <Compile Include="Areas\Clean\TestExceptionInBackgroundService.cs" />
-    <Compile Include="Areas\Clean\TestOnceBackgroundService.cs" />
+    <Compile Include="Areas\Test\TestBackgroundService.cs" />
+    <Compile Include="Areas\Test\TestExceptionInBackgroundService.cs" />
+    <Compile Include="Areas\Test\TestOnceBackgroundService.cs" />
     <Compile Include="Areas\Configuration\ConfigurationKeys.cs" />
     <Compile Include="Areas\Configuration\KeyValueSettingsProvider.cs" />
     <Compile Include="Areas\Logging\LoggingModule.cs" />
@@ -298,7 +301,7 @@
     <Compile Include="Areas\NuGet\PackageFileInfo.cs" />
     <Compile Include="Areas\NuGet\PackagesController.cs" />
     <Compile Include="Areas\NuGet\PackagesViewOutputModel.cs" />
-    <Compile Include="Areas\NuGet\NuGetInterceptMiddleware.cs" />
+    <Compile Include="Areas\NuGet\NuGetPackageConflictMiddleware.cs" />
     <Compile Include="Areas\AspNet\MvcStartup.cs" />
     <Compile Include="Areas\Clean\RouteConstants.cs" />
     <Compile Include="Areas\Security\BasicAuthenticationConstants.cs" />
@@ -316,7 +319,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Areas\AspNet\Startup.cs" />
     <Compile Include="Areas\AspNet\ServerMapPath.cs" />
-    <Compile Include="Test\TestApiController.cs" />
+    <Compile Include="Areas\Test\TestApiController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

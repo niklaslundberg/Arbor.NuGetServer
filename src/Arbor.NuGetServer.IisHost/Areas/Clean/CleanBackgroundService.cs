@@ -6,7 +6,6 @@ using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.KVConfiguration.Core.Extensions.IntExtensions;
 using Arbor.NuGetServer.Api.Clean;
-using Arbor.NuGetServer.IisHost.Areas.Application;
 using JetBrains.Annotations;
 using Serilog;
 
@@ -14,7 +13,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
 {
     [UsedImplicitly]
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
-    public class CleanBackgroundService : IBackgroundService
+    public class CleanBackgroundService : BackgroundService
     {
         private readonly CleanService _cleanService;
         private readonly IKeyValueConfiguration _keyValueConfiguration;
@@ -30,7 +29,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
             _cleanService = cleanService;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             if (!_keyValueConfiguration.ValueOrDefault(CleanConstants.AutomaticCleanEnabled, false))
             {
@@ -47,9 +46,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
 
             TimeSpan initialDelay = TimeSpan.FromSeconds(20);
 
-            await Task.Delay(initialDelay, cancellationToken);
+            await Task.Delay(initialDelay, stoppingToken);
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 bool whatIf = false;
 
@@ -61,7 +60,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
 
                 _logger.Information("Ended automatic clean with result {Result}", cleanResult);
 
-                await Task.Delay(delay, cancellationToken);
+                await Task.Delay(delay, stoppingToken);
             }
         }
     }

@@ -1,18 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net.Http;
+using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
+using Serilog;
 
 namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
     [UsedImplicitly]
-    public class HttpClientFactory : IHttpClientFactory
+    public sealed class HttpClientFactory : IHttpClientFactory, IDisposable
     {
-        private Dictionary<string, HttpClient> _dictionary;
+        private readonly ILogger _logger;
+        private ConcurrentDictionary<string, HttpClient> _dictionary;
 
-        public HttpClientFactory()
+        public HttpClientFactory(ILogger logger)
         {
-            _dictionary = new Dictionary<string, HttpClient>(StringComparer.OrdinalIgnoreCase);
+            _logger = logger;
+            _dictionary = new ConcurrentDictionary<string, HttpClient>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        public void Dispose()
+        {
+            _dictionary.Values.ForEach(httpClient => httpClient.SafeDispose());
+            _dictionary.Clear();
         }
 
         public HttpClient GetClient(string name)
@@ -24,12 +34,18 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 
             if (_dictionary.TryGetValue(name, out HttpClient client))
             {
+                _logger.Debug("Found cached http client with name '{Name}'", name);
                 return client;
             }
 
             HttpClient httpClient = System.Net.Http.HttpClientFactory.Create();
 
-            _dictionary.Add(name, httpClient);
+            _logger.Debug("Created new http client with name '{Name}'", name);
+
+            if (_dictionary.TryAdd(name, httpClient))
+            {
+                _logger.Warning("Could not add http client to dictionary");
+            }
 
             return httpClient;
         }

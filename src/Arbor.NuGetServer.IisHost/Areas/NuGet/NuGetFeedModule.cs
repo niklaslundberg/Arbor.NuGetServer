@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.IisHost.Areas.Application;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Autofac;
@@ -15,10 +16,12 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     public class NuGetFeedModule : MetaModule
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
+        private readonly IPathMapper _pathMapper;
 
-        public NuGetFeedModule(IKeyValueConfiguration keyValueConfiguration)
+        public NuGetFeedModule(IKeyValueConfiguration keyValueConfiguration, IPathMapper pathMapper)
         {
             _keyValueConfiguration = keyValueConfiguration;
+            _pathMapper = pathMapper;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -30,7 +33,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
                 new KeyValueSettingsProvider(_keyValueConfiguration);
             ILogger logger = new ConsoleLogger();
             DirectoryInfo packageDirectory = packagePath.StartsWith("~")
-                ? new DirectoryInfo(System.Web.Hosting.HostingEnvironment.MapPath(packagePath))
+                ? new DirectoryInfo(_pathMapper.MapPath(packagePath))
                 : new DirectoryInfo(packagePath);
             IServerPackageRepository repository =
                 NuGetV2WebApiEnabler.CreatePackageRepository(packageDirectory.FullName, settingsProvider, logger);
@@ -43,7 +46,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 
             builder.RegisterInstance(nuGetFeedConfiguration).AsSelf();
 
-            builder.RegisterType<NuGetInterceptMiddleware>().SingleInstance().AsSelf();
+            builder.RegisterType<NuGetPackageConflictMiddleware>().SingleInstance().AsSelf();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
@@ -10,9 +11,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     {
         private readonly PackagePushedQueueHandler _queueHandler;
 
-        public PackagePushedNotificationHandler(PackagePushedQueueHandler queueHandler)
+        public PackagePushedNotificationHandler([NotNull] PackagePushedQueueHandler queueHandler)
         {
-            _queueHandler = queueHandler;
+            _queueHandler = queueHandler ?? throw new ArgumentNullException(nameof(queueHandler));
         }
 
         public Task Handle(PackagePushedNotification notification, CancellationToken cancellationToken)

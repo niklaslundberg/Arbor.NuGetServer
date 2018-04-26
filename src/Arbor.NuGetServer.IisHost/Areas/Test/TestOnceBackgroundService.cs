@@ -2,20 +2,20 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.IisHost.Areas.Application;
+using Arbor.NuGetServer.IisHost.Areas.Clean;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost.Areas.Clean
+namespace Arbor.NuGetServer.IisHost.Areas.Test
 {
     [UsedImplicitly]
-    public class TestOnceBackgroundService : IBackgroundService
+    public class TestOnceBackgroundService : BackgroundService
     {
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Debug.WriteLine("Running once test background service");
 
             Debug.WriteLine("Waiting in test once background service");
-            await Task.Delay(TimeSpan.FromSeconds(7), cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(7), stoppingToken);
             Debug.WriteLine("Waited in test once background service");
 
             Debug.WriteLine("Done once background service");

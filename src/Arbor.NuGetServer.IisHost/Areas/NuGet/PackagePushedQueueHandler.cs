@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using JetBrains.Annotations;
 
@@ -14,8 +15,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
             _queue = new BlockingCollection<PackagePushedNotification>();
         }
 
-        public void Enqueue(PackagePushedNotification packagePushedNotification)
+        public void Enqueue([NotNull] PackagePushedNotification packagePushedNotification)
         {
+            if (packagePushedNotification == null)
+            {
+                throw new ArgumentNullException(nameof(packagePushedNotification));
+            }
+
             _queue.Add(packagePushedNotification);
         }
 

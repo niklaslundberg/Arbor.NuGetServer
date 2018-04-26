@@ -5,10 +5,10 @@ using System.Linq;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Api;
-using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Clean;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
@@ -16,12 +16,10 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     public class PackagesController : Controller
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
-        private readonly IPathMapper _mapper;
 
-        public PackagesController(IPathMapper mapper, IKeyValueConfiguration keyValueConfiguration)
+        public PackagesController([NotNull] IKeyValueConfiguration keyValueConfiguration)
         {
-            _mapper = mapper;
-            _keyValueConfiguration = keyValueConfiguration;
+            _keyValueConfiguration = keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
         }
 
         [Route(RouteConstants.PackageRoute)]

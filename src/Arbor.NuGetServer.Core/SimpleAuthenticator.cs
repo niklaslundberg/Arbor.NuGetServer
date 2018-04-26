@@ -23,8 +23,8 @@ namespace Arbor.NuGetServer.Core
                 return Task.FromResult<IEnumerable<Claim>>(new List<Claim>());
             }
 
-            var usernameKey = "nuget:authentication:basicauthentication:username";
-            var passwordKey = "nuget:authentication:basicauthentication:password";
+            string usernameKey = "nuget:authentication:basicauthentication:username";
+            string passwordKey = "nuget:authentication:basicauthentication:password";
 
             string storedUsername =
                 _keyValueConfiguration[usernameKey].ThrowIfNullOrWhitespace(

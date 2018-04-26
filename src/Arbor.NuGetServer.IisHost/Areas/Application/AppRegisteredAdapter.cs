@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Application
 {
-    public class AppRegistered : IRegisteredObject
+    public class AppRegisteredAdapter : IRegisteredObject
     {
         private readonly NuGetServerApp _app;
 
-        public AppRegistered([NotNull] NuGetServerApp app)
+        public AppRegisteredAdapter([NotNull] NuGetServerApp app)
         {
             _app = app ?? throw new ArgumentNullException(nameof(app));
         }

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.IisHost.Areas.Application;
+using Arbor.NuGetServer.IisHost.Areas.Clean;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Arbor.NuGetServer.IisHost.Areas.Security;
 using JetBrains.Annotations;
@@ -20,7 +20,7 @@ using Serilog;
 namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
     [UsedImplicitly]
-    public class WebHookBackgroundService : IBackgroundService
+    public class WebHookBackgroundService : BackgroundService
     {
         private readonly ILogger _logger;
         private readonly PackagePushedQueueHandler _queueHandler;
@@ -51,7 +51,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
             _httpRequestTimeout = TimeSpan.FromSeconds(timeoutInSeconds);
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Uri[] webHooks = _keyValueConfiguration.AllValues.Where(
                     pair =>
@@ -76,9 +76,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
                 .Where(uri => uri != null)
                 .ToArray();
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
-                PackagePushedNotification packagePushedNotification = _queueHandler.Take(cancellationToken);
+                PackagePushedNotification packagePushedNotification = _queueHandler.Take(stoppingToken);
 
                 _logger.Information("Package {Package} was pushed, triggering web hooks",
                     packagePushedNotification.PackageIdentifier);

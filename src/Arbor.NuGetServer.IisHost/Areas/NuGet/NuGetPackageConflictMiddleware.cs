@@ -17,14 +17,14 @@ using ILogger = Serilog.ILogger;
 namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
     [UsedImplicitly]
-    public class NuGetInterceptMiddleware : OwinMiddleware
+    public class NuGetPackageConflictMiddleware : OwinMiddleware
     {
         private readonly ILogger _logger;
         private bool _allowOverride;
         private IMediator _mediator;
         private string _physicalPath;
 
-        public NuGetInterceptMiddleware(
+        public NuGetPackageConflictMiddleware(
             OwinMiddleware next,
             ILogger logger,
             IKeyValueConfiguration keyValueConfiguration,

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
         [AllowAnonymous]
         [Route("~/api/v2/package")]
         [HttpPut]
-        public virtual async Task<HttpResponseMessage> UploadPackageCompatibility(CancellationToken token)
+        public async Task<HttpResponseMessage> UploadPackageCompatibility(CancellationToken token)
         {
             string apiKeyFromHeader = GetApiKeyFromHeader();
 
@@ -30,6 +31,11 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 
             bool isAuthenticated =
                 _authenticationService.IsAuthenticated(requestContextPrincipal, apiKeyFromHeader, null);
+
+            if (!isAuthenticated)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+            }
 
             HttpResponseMessage uploadPackageCompatibility = await UploadPackage(token);
 
@@ -39,8 +45,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
         private string GetApiKeyFromHeader()
         {
             string str = null;
-            IEnumerable<string> values;
-            if (Request.Headers.TryGetValues("X-NUGET-APIKEY", out values))
+            if (Request.Headers.TryGetValues("X-NUGET-APIKEY", out IEnumerable<string> values))
             {
                 str = values.FirstOrDefault();
             }

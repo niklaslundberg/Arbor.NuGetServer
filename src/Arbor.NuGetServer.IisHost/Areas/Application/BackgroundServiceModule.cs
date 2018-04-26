@@ -4,6 +4,7 @@ using System.Reflection;
 using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Hosting;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Application
 {
@@ -20,7 +21,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(_assemblies.ToArray())
-                .Where(type => type.IsPublicConcreteClassImplementing<IBackgroundService>()).As<IBackgroundService>()
+                .Where(type => type.IsPublicConcreteClassImplementing<IHostedService>()).As<IHostedService>()
                 .SingleInstance();
         }
     }
