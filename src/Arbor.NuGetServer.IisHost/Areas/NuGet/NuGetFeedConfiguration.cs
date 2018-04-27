@@ -19,9 +19,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
         }
 
         public string RouteName { get; }
+
         public string RouteUrl { get; }
+
         public string ControllerName { get; }
+
         public IServerPackageRepository Repository { get; }
+
         public string ApiKey { get; }
     }
 }

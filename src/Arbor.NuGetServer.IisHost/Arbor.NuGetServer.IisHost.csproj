@@ -267,9 +267,16 @@
     <Compile Include="Areas\Application\Bootstrapper.cs" />
     <Compile Include="Areas\Application\ConfigurationModule.cs" />
     <Compile Include="Areas\Application\MetaModule.cs" />
+    <Compile Include="Areas\Application\NuGetTenantModule.cs" />
+    <Compile Include="Areas\Application\PathModule.cs" />
     <Compile Include="Areas\Clean\BackgroundService.cs" />
     <Compile Include="Areas\Clean\CleanModule.cs" />
     <Compile Include="Areas\Clean\CleanBackgroundService.cs" />
+    <Compile Include="Areas\NuGet\InMemoryNuGetTenantReadService.cs" />
+    <Compile Include="Areas\NuGet\INuGetTenantReadService.cs" />
+    <Compile Include="Areas\NuGet\MultiTenantRepository.cs" />
+    <Compile Include="Areas\NuGet\NuGetTenant.cs" />
+    <Compile Include="Areas\NuGet\RouteHelper.cs" />
     <Compile Include="Areas\Test\TestBackgroundService.cs" />
     <Compile Include="Areas\Test\TestExceptionInBackgroundService.cs" />
     <Compile Include="Areas\Test\TestOnceBackgroundService.cs" />

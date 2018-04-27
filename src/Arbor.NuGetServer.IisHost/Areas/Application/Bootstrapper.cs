@@ -6,6 +6,7 @@ using System.Reflection;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Logging;
+using Arbor.NuGetServer.IisHost.Areas.NuGet;
 using Autofac;
 using Autofac.Core;
 using Serilog;
@@ -34,6 +35,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             builder.RegisterInstance(assemblies).AsImplementedInterfaces();
             builder.RegisterModule(new LoggingModule(logger));
             builder.RegisterModule(new ConfigurationModule(keyValueConfiguration));
+            builder.RegisterModule(new NuGetTenantModule());
+            builder.RegisterModule(new PathModule());
+            builder.RegisterType<RouteHelper>();
 
             builder.RegisterAssemblyTypes(assemblies)
                 .Where(type => type.IsPublicConcreteClassImplementing<MetaModule>())
