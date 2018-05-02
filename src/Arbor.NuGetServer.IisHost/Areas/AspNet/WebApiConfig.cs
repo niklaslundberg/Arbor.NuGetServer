@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Mvc;
 using Arbor.NuGetServer.IisHost.Areas.NuGet;
 using Arbor.WebApi.Formatting.HtmlForms;
 using Autofac;
@@ -29,11 +31,14 @@ namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
 
-            var nuGetFeedConfiguration = lifetimeScope.Resolve<NuGetFeedConfiguration>();
+            var nuGetFeedConfigurations = lifetimeScope.Resolve<IEnumerable<NuGetFeedConfiguration>>();
 
-            config.UseNuGetV2WebApiFeed(nuGetFeedConfiguration.RouteName,
-                nuGetFeedConfiguration.RouteUrl,
-                nuGetFeedConfiguration.ControllerName);
+            foreach (NuGetFeedConfiguration nuGetFeedConfiguration in nuGetFeedConfigurations)
+            {
+                config.UseNuGetV2WebApiFeed(nuGetFeedConfiguration.RouteName,
+                    nuGetFeedConfiguration.RouteUrl,
+                    nameof(NuGetFeedController).Replace(nameof(Controller), ""));
+            }
         }
     }
 }

@@ -14,9 +14,9 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     [Authorize]
     public class NuGetFeedController : NuGetODataController
     {
-        public NuGetFeedController(NuGetFeedConfiguration nuGetFeedConfiguration)
-            : base(nuGetFeedConfiguration.Repository,
-                new ApiKeyPackageAuthenticationService(true, nuGetFeedConfiguration.ApiKey))
+        public NuGetFeedController(IEnumerable<NuGetFeedConfiguration> nuGetFeedConfigurations)
+            : base(nuGetFeedConfigurations.FirstOrDefault()?.Repository,
+                new ApiKeyPackageAuthenticationService(true, nuGetFeedConfigurations.FirstOrDefault()?.ApiKey))
         {
         }
 

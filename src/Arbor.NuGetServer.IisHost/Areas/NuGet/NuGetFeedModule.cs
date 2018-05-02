@@ -60,15 +60,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
                 repositories.Add(nuGetTenant, tenantRepository);
 
                 var nuGetFeedConfiguration =
-                    new NuGetFeedConfiguration($"NuGetPrivate-{nuGetTenant.TenantId}",
-                        "nuget/{tenant}",
-                        nameof(NuGetFeedController).Replace(nameof(Controller), ""),
+                    new NuGetFeedConfiguration(nuGetTenant.TenantId,
+                        $"nuget/{nuGetTenant.TenantId}",
                         repository,
                         _keyValueConfiguration[ConfigurationKeys.ApiKey]);
 
                 builder.RegisterInstance(nuGetFeedConfiguration).AsSelf();
             }
-
 
             builder.RegisterInstance(repository).SingleInstance().AsImplementedInterfaces();
 
