@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.IisHost.Areas.AspNet;
 using Arbor.NuGetServer.IisHost.Areas.Logging;
 using Autofac;
 using Autofac.Core;

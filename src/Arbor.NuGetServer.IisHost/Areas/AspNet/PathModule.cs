@@ -1,7 +1,6 @@
-using Arbor.NuGetServer.IisHost.Areas.AspNet;
 using Autofac;
 
-namespace Arbor.NuGetServer.IisHost.Areas.Application
+namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 {
     public class PathModule : Module
     {
