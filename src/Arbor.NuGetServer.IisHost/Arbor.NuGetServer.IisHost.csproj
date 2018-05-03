@@ -262,21 +262,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Application\AppContainer.cs" />
-    <Compile Include="Areas\Application\AppRegisteredAdapter.cs" />
+    <Compile Include="Areas\AspNet\AppRegisteredAdapter.cs" />
     <Compile Include="Areas\Application\BackgroundServiceModule.cs" />
     <Compile Include="Areas\Application\Bootstrapper.cs" />
     <Compile Include="Areas\Application\ConfigurationModule.cs" />
+    <Compile Include="Areas\AspNet\HttpContextHelper.cs" />
     <Compile Include="Areas\Application\MetaModule.cs" />
     <Compile Include="Areas\Application\NuGetTenantModule.cs" />
     <Compile Include="Areas\Application\PathModule.cs" />
+    <Compile Include="Areas\AspNet\IRouteHelper.cs" />
+    <Compile Include="Areas\AspNet\RouteHelper.cs" />
     <Compile Include="Areas\Clean\BackgroundService.cs" />
     <Compile Include="Areas\Clean\CleanModule.cs" />
     <Compile Include="Areas\Clean\CleanBackgroundService.cs" />
+    <Compile Include="Areas\AspNet\CustomHttpPostedFile.cs" />
+    <Compile Include="Areas\Abstraction\IHttpPostedFile.cs" />
     <Compile Include="Areas\NuGet\InMemoryNuGetTenantReadService.cs" />
     <Compile Include="Areas\NuGet\INuGetTenantReadService.cs" />
+    <Compile Include="Areas\Abstraction\IRequestFileHelper.cs" />
+    <Compile Include="Areas\NuGet\ITenantRouteHelper.cs" />
     <Compile Include="Areas\NuGet\MultiTenantRepository.cs" />
     <Compile Include="Areas\NuGet\NuGetTenant.cs" />
-    <Compile Include="Areas\NuGet\RouteHelper.cs" />
+    <Compile Include="Areas\AspNet\OwinSystemWebRequestFileHelper.cs" />
+    <Compile Include="Areas\NuGet\TenantRouteHelper.cs" />
     <Compile Include="Areas\Test\TestBackgroundService.cs" />
     <Compile Include="Areas\Test\TestExceptionInBackgroundService.cs" />
     <Compile Include="Areas\Test\TestOnceBackgroundService.cs" />
@@ -287,7 +295,7 @@
     <Compile Include="Areas\MediatR\MediatRModule.cs" />
     <Compile Include="Areas\NuGet\HttpClientFactory.cs" />
     <Compile Include="Areas\NuGet\HttpFactoryModule.cs" />
-    <Compile Include="Areas\NuGet\IHttpClientFactory.cs" />
+    <Compile Include="Areas\Abstraction\IHttpClientFactory.cs" />
     <Compile Include="Areas\NuGet\OtherFileInfo.cs" />
     <Compile Include="Areas\NuGet\PackagePushedNotification.cs" />
     <Compile Include="Areas\NuGet\PackagePushedNotificationHandler.cs" />
@@ -319,6 +327,7 @@
     <Compile Include="Areas\Start\HomeController.cs" />
     <Compile Include="Areas\WebHooks\WebHookPingController.cs" />
     <Compile Include="Areas\WebHooks\WebHooksModule.cs" />
+    <Compile Include="CustomAspNetModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,8 +1,9 @@
 using System;
 using System.Web.Hosting;
+using Arbor.NuGetServer.IisHost.Areas.Application;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost.Areas.Application
+namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 {
     public class AppRegisteredAdapter : IRegisteredObject
     {

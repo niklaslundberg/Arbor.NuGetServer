@@ -10,17 +10,17 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
     public class MultiTenantRepository : IServerPackageRepository
     {
         private readonly IReadOnlyDictionary<NuGetTenant, IServerPackageRepository> _repositories;
-        private readonly RouteHelper _routeHelper;
+        private readonly ITenantRouteHelper _tenantRouteHelper;
 
-        public MultiTenantRepository(Dictionary<NuGetTenant, IServerPackageRepository> repositories, RouteHelper routeHelper)
+        public MultiTenantRepository(Dictionary<NuGetTenant, IServerPackageRepository> repositories, ITenantRouteHelper tenantRouteHelper)
         {
             _repositories = repositories;
-            _routeHelper = routeHelper;
+            _tenantRouteHelper = tenantRouteHelper;
         }
 
         private IServerPackageRepository GetTenantRepository()
         {
-            NuGetTenant nuGetTenant = _routeHelper.GetTenant();
+            NuGetTenant nuGetTenant = _tenantRouteHelper.GetTenant();
 
             if (nuGetTenant is null)
             {

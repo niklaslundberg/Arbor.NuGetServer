@@ -6,14 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Compilation;
-using System.Web.Hosting;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.NuGetServer.Api.Clean;
+using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Configuration;
 using Autofac;
+using Autofac.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -59,7 +59,10 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             }
         }
 
-        public static NuGetServerApp Create(Action<Func<CancellationToken, Task>> backgroundServiceHandler)
+        public static NuGetServerApp Create(
+            Action<Func<CancellationToken, Task>> backgroundServiceHandler,
+            IReadOnlyList<IModule> modules,
+            Func<Assembly[]> assemblyResolver)
         {
             Logger logger = new LoggerConfiguration()
                 .WriteTo.Console()
@@ -68,11 +71,10 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
 
             IKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start();
 
-            ImmutableArray<Assembly> AssemblyResolver() => BuildManager.GetReferencedAssemblies()
-                .OfType<Assembly>()
+            ImmutableArray<Assembly> AssemblyResolver() => assemblyResolver()
                 .SafeToImmutableArray();
 
-            AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration);
+            AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration, modules);
 
             var backgroundServices = new List<IHostedService>();
 
@@ -96,7 +98,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
             {
                 if (packagesPath.StartsWith("~", StringComparison.OrdinalIgnoreCase))
                 {
-                    packagesPath = HostingEnvironment.MapPath(packagesPath);
+                    packagesPath = container.Container.Resolve<IPathMapper>().MapPath(packagesPath);
                 }
 
                 if (packagesPath != null)

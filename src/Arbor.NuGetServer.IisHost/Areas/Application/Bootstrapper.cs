@@ -6,7 +6,6 @@ using System.Reflection;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Arbor.NuGetServer.IisHost.Areas.Logging;
-using Arbor.NuGetServer.IisHost.Areas.NuGet;
 using Autofac;
 using Autofac.Core;
 using Serilog;
@@ -18,7 +17,8 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
         public static AppContainer Start(
             Func<ImmutableArray<Assembly>> assemblyResolver,
             ILogger logger,
-            IKeyValueConfiguration keyValueConfiguration)
+            IKeyValueConfiguration keyValueConfiguration,
+            IReadOnlyList<IModule> modulesToRegister)
         {
             if (assemblyResolver == null)
             {
@@ -32,12 +32,25 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
                                        .StartsWith("Arbor.NuGetServer", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
 
+            var modules = new List<IModule>
+            {
+                new LoggingModule(logger),
+                new ConfigurationModule(keyValueConfiguration),
+                new NuGetTenantModule(),
+                new PathModule()
+            };
+
             builder.RegisterInstance(assemblies).AsImplementedInterfaces();
-            builder.RegisterModule(new LoggingModule(logger));
-            builder.RegisterModule(new ConfigurationModule(keyValueConfiguration));
-            builder.RegisterModule(new NuGetTenantModule());
-            builder.RegisterModule(new PathModule());
-            builder.RegisterType<RouteHelper>();
+
+            foreach (IModule module in modules)
+            {
+                builder.RegisterModule(module);
+            }
+
+            foreach (IModule module in modulesToRegister)
+            {
+                builder.RegisterModule(module);
+            }
 
             builder.RegisterAssemblyTypes(assemblies)
                 .Where(type => type.IsPublicConcreteClassImplementing<MetaModule>())

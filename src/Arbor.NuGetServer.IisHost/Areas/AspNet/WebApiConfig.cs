@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Mvc;
 using Arbor.NuGetServer.IisHost.Areas.NuGet;
 using Arbor.WebApi.Formatting.HtmlForms;
 using Autofac;
@@ -37,7 +36,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.AspNet
             {
                 config.UseNuGetV2WebApiFeed(nuGetFeedConfiguration.RouteName,
                     nuGetFeedConfiguration.RouteUrl,
-                    nameof(NuGetFeedController).Replace(nameof(Controller), ""));
+                    nameof(NuGetFeedController).Replace("Controller", ""));
             }
         }
     }

@@ -4,25 +4,26 @@ using System.Web.Http.OData.Routing;
 using System.Web.Routing;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost.Areas.NuGet
+namespace Arbor.NuGetServer.IisHost.Areas.AspNet
 {
     [UsedImplicitly]
-    public class RouteHelper
+    public class RouteHelper : IRouteHelper
     {
-        public NuGetTenant GetTenant()
+        public string GetCurrentRouteName()
         {
-            var httpContextWrapper = new HttpContextWrapper(HttpContext.Current);
+            HttpContextBase httpContextWrapper = HttpContextHelper.GetCurrentContext();
             RouteData routeData = RouteTable.Routes.GetRouteData(httpContextWrapper);
 
             if (routeData?.Route is Route route)
             {
-                ODataPathRouteConstraint oDataPathRouteConstraint = route.Constraints.Values.OfType<ODataPathRouteConstraint>().SingleOrDefault();
+                ODataPathRouteConstraint oDataPathRouteConstraint =
+                    route.Constraints.Values.OfType<ODataPathRouteConstraint>().SingleOrDefault();
 
                 if (oDataPathRouteConstraint != null)
                 {
                     if (!string.IsNullOrWhiteSpace(oDataPathRouteConstraint.RouteName))
                     {
-                        return new NuGetTenant(oDataPathRouteConstraint.RouteName);
+                        return oDataPathRouteConstraint.RouteName;
                     }
                 }
             }
@@ -49,7 +50,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.NuGet
                 return null;
             }
 
-            return new NuGetTenant(routeNameValue);
+            return routeNameValue;
         }
     }
 }

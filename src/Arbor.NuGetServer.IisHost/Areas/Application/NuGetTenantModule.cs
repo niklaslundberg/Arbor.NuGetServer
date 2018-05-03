@@ -7,6 +7,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<TenantRouteHelper>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<InMemoryNuGetTenantReadService>().SingleInstance().AsImplementedInterfaces();
         }
     }
