@@ -1,0 +1,19 @@
+﻿@model TenantsOutputViewModel
+
+<h2>Tenants</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Tenant</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (NuGetTenantStatistics item in Model.NuGetTenants)
+        {
+            <tr>
+                <td>@item.TenantId.TenantId</td>
+            </tr>
+        }
+    </tbody>
+</table>

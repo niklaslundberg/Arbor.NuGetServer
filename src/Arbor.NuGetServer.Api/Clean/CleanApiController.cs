@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
+using Arbor.NuGetServer.Core.Http;
 using Newtonsoft.Json;
-using ContentType = Arbor.NuGetServer.Core.Http.ContentType;
 
 namespace Arbor.NuGetServer.Api.Clean
 {

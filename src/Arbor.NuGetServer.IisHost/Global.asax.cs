@@ -5,9 +5,10 @@ using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using Arbor.NuGetServer.Api;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Core.Extensions;
-using Arbor.NuGetServer.IisHost.Areas.Application;
-using Arbor.NuGetServer.IisHost.Areas.AspNet;
+using Arbor.NuGetServer.IisHost.AspNet;
 using Autofac.Core;
 using JetBrains.Annotations;
 
@@ -21,10 +22,12 @@ namespace Arbor.NuGetServer.IisHost
         protected void Application_Start()
         {
             Debug.WriteLine("Application start");
-            IReadOnlyList<IModule> aspNetModules = new List<IModule> { new CustomAspNetModule() };
+            IReadOnlyList<IModule> aspNetModules = new List<IModule> { new CustomAspNetModule(), new PathModule() };
             NuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem,
                 aspNetModules,
                 () => BuildManager.GetReferencedAssemblies().OfType<Assembly>().ToArray());
+
+            ApplicationHolder.App = NuGetServerApp;
 
             var appRegistered = new AppRegisteredAdapter(NuGetServerApp);
 

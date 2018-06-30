@@ -1,11 +1,14 @@
 ﻿using System;
+using JetBrains.Annotations;
 using NuGet.Versioning;
 
 namespace Arbor.NuGetServer.Core
 {
     public class PackageIdentifier
     {
-        public PackageIdentifier(string packageId, SemanticVersion semanticVersion)
+        public PackageIdentifier(
+            [NotNull] string packageId,
+            [NotNull] SemanticVersion semanticVersion)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {

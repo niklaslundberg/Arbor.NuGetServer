@@ -22,7 +22,8 @@ namespace Arbor.NuGetServer.Api
                 throw new ArgumentNullException(nameof(packageDirectory));
             }
 
-            string relativePath = fileInfo.FullName.Replace(packageDirectory.FullName, "")
+            string relativePath = fileInfo.FullName
+                .Replace(packageDirectory.FullName, "")
                 .TrimStart(Path.DirectorySeparatorChar);
 
             int firstSeparatorIndex = relativePath.IndexOf(Path.DirectorySeparatorChar);

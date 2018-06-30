@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
     public class CleanResult
     {
-        public CleanResult(IReadOnlyCollection<CleanedPackage> cleanedPackages, int packagesToKeep)
+        public CleanResult([NotNull] IReadOnlyCollection<CleanedPackage> cleanedPackages, int packagesToKeep)
         {
-            CleanedPackages = cleanedPackages;
+            CleanedPackages = cleanedPackages ?? throw new ArgumentNullException(nameof(cleanedPackages));
             PackagesToKeep = packagesToKeep;
         }
 

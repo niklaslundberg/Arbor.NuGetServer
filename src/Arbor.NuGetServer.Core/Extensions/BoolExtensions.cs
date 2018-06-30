@@ -9,8 +9,7 @@
                 return defaultValue;
             }
 
-            bool result;
-            if (!bool.TryParse(value, out result))
+            if (!bool.TryParse(value, out bool result))
             {
                 return defaultValue;
             }

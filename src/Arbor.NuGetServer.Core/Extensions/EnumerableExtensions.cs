@@ -16,7 +16,7 @@ namespace Arbor.NuGetServer.Core.Extensions
 
             if (items is ImmutableArray<T> array)
             {
-                return array;
+                return array.IsDefault ? ImmutableArray<T>.Empty : array;
             }
 
             return items.ToImmutableArray();
@@ -32,6 +32,11 @@ namespace Arbor.NuGetServer.Core.Extensions
             if (action == null)
             {
                 throw new ArgumentNullException(nameof(action));
+            }
+
+            foreach (T item in items)
+            {
+                action(item);
             }
         }
     }

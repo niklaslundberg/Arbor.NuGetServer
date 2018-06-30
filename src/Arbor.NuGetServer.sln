@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.Core", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.Api", "Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj", "{8DE39052-86C3-44CF-B189-54B9D9577A8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.Tests.Integration", "Arbor.NuGetServer.Tests.Integration\Arbor.NuGetServer.Tests.Integration.csproj", "{0824D7F7-C0B8-47BF-B575-5C6379894460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{8DE39052-86C3-44CF-B189-54B9D9577A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DE39052-86C3-44CF-B189-54B9D9577A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DE39052-86C3-44CF-B189-54B9D9577A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0824D7F7-C0B8-47BF-B575-5C6379894460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0824D7F7-C0B8-47BF-B575-5C6379894460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0824D7F7-C0B8-47BF-B575-5C6379894460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0824D7F7-C0B8-47BF-B575-5C6379894460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
