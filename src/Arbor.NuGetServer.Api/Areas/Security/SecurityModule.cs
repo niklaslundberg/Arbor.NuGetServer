@@ -1,4 +1,5 @@
-﻿using Arbor.NuGetServer.Api.Areas.Application;
+﻿using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 
 namespace Arbor.NuGetServer.Api.Areas.Security

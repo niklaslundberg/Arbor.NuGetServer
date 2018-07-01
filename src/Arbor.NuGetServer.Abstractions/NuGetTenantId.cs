@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
+namespace Arbor.NuGetServer.Abstractions
 {
     public class NuGetTenantId : IEquatable<NuGetTenantId>, IComparable<NuGetTenantId>
     {

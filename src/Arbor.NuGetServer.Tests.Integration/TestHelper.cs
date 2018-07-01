@@ -29,6 +29,22 @@ namespace Arbor.NuGetServer.Tests.Integration
 
                 fileInfo.CopyTo(targetFile.FullName);
             }
+
+            Path binDirectoryPath = Path.Combine(websiteRootPath, "bin");
+
+            var binDirectory = new DirectoryInfo(binDirectoryPath.FullName);
+
+            var assemblyFile = new FileInfo(typeof(TestHelper).Assembly.Location);
+
+            foreach (FileInfo dllFile in assemblyFile.Directory.GetFiles("*.dll"))
+            {
+                Path targetFile = Path.Combine(binDirectory.FullName, dllFile.Name);
+
+                if (!targetFile.Exists)
+                {
+                    dllFile.CopyTo(targetFile.FullName);
+                }
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
+namespace Arbor.NuGetServer.Abstractions
 {
     public interface INuGetTenantReadService
     {

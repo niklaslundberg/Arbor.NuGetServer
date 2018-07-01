@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 
 namespace Arbor.NuGetServer.Api.Areas.Security

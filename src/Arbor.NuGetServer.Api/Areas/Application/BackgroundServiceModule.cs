@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
 using JetBrains.Annotations;

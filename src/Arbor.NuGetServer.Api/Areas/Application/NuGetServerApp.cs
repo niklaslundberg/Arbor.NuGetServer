@@ -55,7 +55,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             get
             {
                 CheckState();
-                return _container.AppScope;
+                return _container.SubScope;
             }
         }
 
@@ -67,12 +67,14 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             Logger logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.Debug()
+                .WriteTo.Seq("http://localhost:5341")
+                .MinimumLevel.Debug()
                 .CreateLogger();
-
-            IKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start();
 
             ImmutableArray<Assembly> AssemblyResolver() => assemblyResolver()
                 .SafeToImmutableArray();
+
+            MultiSourceKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start(AssemblyResolver());
 
             AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration, modules);
 

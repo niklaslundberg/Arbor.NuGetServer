@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 using JetBrains.Annotations;
@@ -27,21 +28,11 @@ namespace Arbor.NuGetServer.Api.Areas.MediatR
                 .InstancePerLifetimeScope();
 
             builder
-                .Register<SingleInstanceFactory>(ctx =>
+                .Register<ServiceFactory>(ctx =>
                 {
                     var componentContext = ctx.Resolve<IComponentContext>();
                     return serviceType =>
                         componentContext.TryResolve(serviceType, out object instance) ? instance : null;
-                })
-                .InstancePerLifetimeScope();
-
-            builder
-                .Register<MultiInstanceFactory>(ctx =>
-                {
-                    var componentContext = ctx.Resolve<IComponentContext>();
-                    return typeArguments =>
-                        (IEnumerable<object>)componentContext.Resolve(
-                            typeof(IEnumerable<>).MakeGenericType(typeArguments));
                 })
                 .InstancePerLifetimeScope();
 

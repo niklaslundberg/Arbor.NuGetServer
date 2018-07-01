@@ -1,6 +1,4 @@
-﻿using Arbor.NuGetServer.Api.Areas.WebHooks;
-
-namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
+﻿namespace Arbor.NuGetServer.Abstractions
 {
     public class TenantWebHook
     {
@@ -11,6 +9,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
         }
 
         public WebHookConfiguration Configuration { get; private set; }
+
         public NuGetTenantId TenantId { get; private set; }
     }
 }

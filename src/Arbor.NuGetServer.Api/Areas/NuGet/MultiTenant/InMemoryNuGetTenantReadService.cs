@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.WebHooks;
 using JetBrains.Annotations;
 
@@ -23,9 +24,9 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
         {
             NuGetTenantConfiguration[] tenantsId =
             {
-                new NuGetTenantConfiguration(new NuGetTenantId("test"), "testkey", "testuser", "testpassword"),
-                new NuGetTenantConfiguration(new NuGetTenantId("test2"), "test2key", "test2user", "test2password"),
-                new NuGetTenantConfiguration(new NuGetTenantId("test3"), "test3key", "", "")
+                new NuGetTenantConfiguration("test", "testkey", "testuser", "testpassword", null),
+                new NuGetTenantConfiguration("test2", "test2key", "test2user", "test2password", null),
+                new NuGetTenantConfiguration("test3", "test3key", "", "", null)
             };
 
             return tenantsId

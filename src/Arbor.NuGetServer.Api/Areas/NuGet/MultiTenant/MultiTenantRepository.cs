@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Arbor.NuGetServer.Abstractions;
 using JetBrains.Annotations;
 using NuGet;
 using NuGet.Server.Core.Infrastructure;

@@ -4,6 +4,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.Logging;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Core.Extensions;
@@ -19,7 +21,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
         public static AppContainer Start(
             Func<ImmutableArray<Assembly>> assemblyResolver,
             [NotNull] ILogger logger,
-            [NotNull] IKeyValueConfiguration keyValueConfiguration,
+            [NotNull] MultiSourceKeyValueConfiguration keyValueConfiguration,
             [NotNull] IReadOnlyList<IModule> modulesToRegister)
         {
             if (assemblyResolver == null)
@@ -44,7 +46,9 @@ namespace Arbor.NuGetServer.Api.Areas.Application
 
             var builder = new ContainerBuilder();
 
-            Assembly[] assemblies = assemblyResolver()
+            ImmutableArray<Assembly> appAssemblies = assemblyResolver();
+
+            Assembly[] assemblies = appAssemblies
                 .Where(assembly => !assembly.IsDynamic && assembly.GetName().Name
                                        .StartsWith("Arbor.NuGetServer", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
@@ -53,7 +57,9 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             {
                 new LoggingModule(logger),
                 new ConfigurationModule(keyValueConfiguration),
+                new KeyValueConfigurationModule(keyValueConfiguration, logger),
                 new NuGetTenantModule(),
+                new UrnConfigurationModule(keyValueConfiguration, logger, appAssemblies)
             };
 
             builder.RegisterInstance(assemblies).AsImplementedInterfaces();
@@ -91,9 +97,25 @@ namespace Arbor.NuGetServer.Api.Areas.Application
                 {
                     scopeBuilder.RegisterModule(metaModule);
                 }
+
+                scopeBuilder.RegisterAssemblyTypes(assemblies)
+                    .Where(
+                        type =>
+                            type.IsPublicConcreteClassImplementing<AppModule>())
+                    .As<AppModule>();
             });
 
-            return new AppContainer(container, appScope);
+            var appModules = appScope.Resolve<IReadOnlyCollection<AppModule>>();
+
+            ILifetimeScope subScope = appScope.BeginLifetimeScope(scopeBuilder =>
+            {
+                foreach (AppModule appModule in appModules)
+                {
+                    scopeBuilder.RegisterModule(appModule);
+                }
+            });
+
+            return new AppContainer(container, appScope, subScope);
         }
     }
 }

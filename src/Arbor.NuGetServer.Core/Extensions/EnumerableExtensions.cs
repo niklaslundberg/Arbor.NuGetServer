@@ -7,6 +7,16 @@ namespace Arbor.NuGetServer.Core.Extensions
 {
     public static class EnumerableExtensions
     {
+        public static ImmutableArray<T> ThrowIfDefault<T>(this ImmutableArray<T> array)
+        {
+            if (array.IsDefault)
+            {
+                throw new InvalidOperationException($"The immutable array of {typeof(T).FullName} must not be default");
+            }
+
+            return array;
+        }
+
         public static ImmutableArray<T> SafeToImmutableArray<T>(this IEnumerable<T> items)
         {
             if (items == null)

@@ -6,13 +6,23 @@
 
   <ItemGroup>
     <PackageReference Include="Arbor.Aesculus" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="MysticMind.PostgresEmbed" Version="1.0.0" />
     <PackageReference Include="Arbor.Ginkgo" Version="2.1.1" />
+    <PackageReference Include="Marten" Version="2.8.2" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="NCrunch.Framework" Version="3.17.0" />
+    <PackageReference Include="Npgsql" Version="3.2.7" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.analyzers" Version="0.9.0" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Arbor.NuGetServer.Marten\Arbor.NuGetServer.Marten.csproj" />
   </ItemGroup>
 
   <ItemGroup>

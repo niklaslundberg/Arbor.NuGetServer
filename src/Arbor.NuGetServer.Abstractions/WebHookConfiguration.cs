@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arbor.NuGetServer.Api.Areas.WebHooks
+namespace Arbor.NuGetServer.Abstractions
 {
     public class WebHookConfiguration
     {
