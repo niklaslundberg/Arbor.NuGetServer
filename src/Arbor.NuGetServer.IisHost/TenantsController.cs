@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost
 {
-    [RoutePrefix(TenantConstants.HttpGetRoute)]
     public class TenantsController : Controller
     {
         private readonly INuGetTenantReadService _tenantReadService;
@@ -18,7 +17,8 @@ namespace Arbor.NuGetServer.IisHost
             _tenantReadService = tenantReadService ?? throw new ArgumentNullException(nameof(tenantReadService));
         }
 
-        [Route("")]
+        [HttpGet]
+        [Route(TenantRouteConstants.TenantsHttpGetRoute, Name = TenantRouteConstants.TenantsHttpGetRouteName)]
         public ActionResult Index()
         {
             ImmutableArray<NuGetTenantStatistics> nuGetTenants = _tenantReadService

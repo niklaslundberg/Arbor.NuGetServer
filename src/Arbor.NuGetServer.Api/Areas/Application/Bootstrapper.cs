@@ -58,7 +58,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
                 new LoggingModule(logger),
                 new ConfigurationModule(keyValueConfiguration),
                 new KeyValueConfigurationModule(keyValueConfiguration, logger),
-                new NuGetTenantModule(),
+                new NuGetTenantModule(keyValueConfiguration),
                 new UrnConfigurationModule(keyValueConfiguration, logger, appAssemblies)
             };
 

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Arbor.KVConfiguration.Urns" Version="0.13.1" />
     <PackageReference Include="autofac" Version="4.8.1" />
     <PackageReference Include="jetbrains.annotations" Version="11.1.0" />
     <PackageReference Include="microsoft.net.compilers" Version="2.8.2" />

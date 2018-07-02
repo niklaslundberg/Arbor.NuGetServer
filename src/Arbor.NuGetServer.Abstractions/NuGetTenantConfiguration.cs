@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Arbor.KVConfiguration.Urns;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Abstractions
 {
+    [Urn(TenantConstants.Tenant)]
     public class NuGetTenantConfiguration
     {
-        private string _id;
-
         public NuGetTenantConfiguration(
             [NotNull] string id,
             [NotNull] string apiKey,
@@ -21,7 +21,7 @@ namespace Arbor.NuGetServer.Abstractions
             }
 
             TenantId = new NuGetTenantId(id);
-            _id = id;
+            Id = id;
             ApiKey = apiKey;
             Username = username;
             Password = password;
@@ -31,7 +31,8 @@ namespace Arbor.NuGetServer.Abstractions
         [IgnoreDataMember]
         public NuGetTenantId TenantId { get; }
 
-        public string Id => _id;
+        [PublicAPI]
+        public string Id { get; }
 
         public string ApiKey { get; }
 

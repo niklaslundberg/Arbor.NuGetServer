@@ -2,10 +2,9 @@
 
 namespace Arbor.NuGetServer.IisHost
 {
-    [RoutePrefix("")]
     public class HomeController : Controller
     {
-        [Route]
+        [Route("~/")]
         public ActionResult Index()
         {
             return View();

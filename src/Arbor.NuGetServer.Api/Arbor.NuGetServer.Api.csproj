@@ -250,11 +250,13 @@
     <Compile Include="Areas\NuGet\Messaging\PackageNotificationQueueHandler.cs" />
     <Compile Include="Areas\NuGet\Messaging\PackagePushedNotification.cs" />
     <Compile Include="Areas\NuGet\Messaging\PackagePushedNotificationHandler.cs" />
+    <Compile Include="Areas\NuGet\MultiTenant\ConfigurationNuGetTenantReadService.cs" />
     <Compile Include="Areas\NuGet\MultiTenant\InMemoryNuGetTenantReadService.cs" />
     <Compile Include="Areas\NuGet\MultiTenant\ITenantRouteHelper.cs" />
     <Compile Include="Areas\NuGet\MultiTenant\MultiTenantRepository.cs" />
     <Compile Include="Areas\NuGet\MultiTenant\NuGetTenantModule.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\TenantConstants.cs" />
+    <Compile Include="Areas\NuGet\MultiTenant\TenantConfigModule.cs" />
+    <Compile Include="Areas\NuGet\MultiTenant\TenantRouteConstants.cs" />
     <Compile Include="Areas\NuGet\MultiTenant\TenantRouteHelper.cs" />
     <Compile Include="Areas\NuGet\OtherFileInfo.cs" />
     <Compile Include="Areas\NuGet\PackageFileInfo.cs" />

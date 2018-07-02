@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -36,15 +35,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
         public override async Task Invoke(IOwinContext context)
         {
-            var allowedAnonymous = new List<string> { "Scripts", "Content", "diagnostics" };
-
-            if (context.Request.Path.Value == "/" || context.Request.Path.Value == "" || allowedAnonymous.Any(allowed =>
-            {
-                IReadOnlyCollection<string> pathSegments = context.Request.Uri.PathSegments();
-
-                return pathSegments.Count > 0 &&
-                       allowed.Equals(pathSegments.First(), StringComparison.OrdinalIgnoreCase);
-            }))
+            if (!context.Request.Path.StartsWithSegments(new PathString("/nuget")))
             {
                 await Next.Invoke(context);
                 return;
@@ -54,9 +45,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             if (nuGetTenantId is null)
             {
-                // TODO unauthorized?
-                Challenge(context);
-                await WriteBodyAsync(context);
+                await BadRequestAsync(context);
                 return;
             }
 
@@ -65,7 +54,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             if (nuGetTenantConfiguration is null)
             {
-                // TODO unauthorized?
+                await BadRequestAsync(context);
                 Challenge(context);
                 await WriteBodyAsync(context);
                 return;
@@ -138,6 +127,17 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
                 await streamWriter.WriteAsync("Unauthorized");
+            }
+        }
+
+        private static async Task BadRequestAsync(IOwinContext context)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.ContentType = ContentTypes.PlainText;
+
+            using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
+            {
+                await streamWriter.WriteAsync("Bad request");
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost

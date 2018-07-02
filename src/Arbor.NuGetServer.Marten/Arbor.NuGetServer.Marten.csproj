@@ -12,6 +12,7 @@
     <PackageReference Include="Marten.Analyzers" Version="1.5.0" />
     <PackageReference Include="microsoft.net.compilers" Version="2.8.2" />
     <PackageReference Include="Npgsql" Version="3.2.7" />
+    <PackageReference Include="serilog" Version="2.7.1" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
   </ItemGroup>
 
