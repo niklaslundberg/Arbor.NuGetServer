@@ -4,9 +4,11 @@
     {
         public const string CleanOnStartEnabled = "urn:arbor-nuget-server:nuget:clean:clean-bin-files-on-start:enabled";
 
-        public const string PostRoute = "manage/clean";
+        public const string PostRoute = "~/nuget/{tenant}/clean";
 
-        public const string GetRoute = "manage/cleaning";
+        public const string CleanGetRoute = "~/nuget/{tenant}/cleaning";
+
+        public const string CleanGetRouteName = nameof(CleanGetRoute);
 
         public const string CleanEnabled = "nuget:clean:enabled";
 

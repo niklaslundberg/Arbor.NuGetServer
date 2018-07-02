@@ -1,334 +1,76 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props')" />
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8DE39052-86C3-44CF-B189-54B9D9577A8C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Arbor.NuGetServer.Api</RootNamespace>
-    <AssemblyName>Arbor.NuGetServer.Api</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <TargetFramework>net471</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
+  <ItemGroup><PackageReference Include="Arbor.KVConfiguration.Core" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.JsonConfiguration" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.Schema" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.Schema.Json" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.SystemConfiguration" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.Urns" Version="0.13.1" />
+  <PackageReference Include="Arbor.KVConfiguration.UserConfiguration" Version="0.13.1" />
+  <PackageReference Include="Arbor.ModelBinding" Version="0.3.3" />
+  <PackageReference Include="Arbor.WebApi.Formatting.HtmlForms" Version="2.1.1" />
+  <PackageReference Include="Autofac" Version="4.8.1" />
+  <PackageReference Include="Autofac.Owin" Version="4.2.0" />
+  <PackageReference Include="Autofac.WebApi" Version="3.1.0" />
+  <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+  <PackageReference Include="MediatR" Version="5.0.1" />
+  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
+  <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.6" />
+  <PackageReference Include="Microsoft.AspNet.WebApi.OData" Version="5.7.0" />
+  <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.0" />
+  <PackageReference Include="Microsoft.Data.Edm" Version="5.8.3" />
+  <PackageReference Include="Microsoft.Data.OData" Version="5.8.3" />
+  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.1" />
+  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
+  <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.1.1" />
+  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.1" />
+  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+  <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.1" />
+  <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="5.2.4" />
+  <PackageReference Include="Microsoft.IdentityModel.Logging" Version="5.2.4" />
+  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.4" />
+  <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2" developmentDependency="true" />
+  <PackageReference Include="Microsoft.Owin" Version="4.0.0" />
+  <PackageReference Include="Microsoft.Owin.Security" Version="4.0.0" />
+  <PackageReference Include="Microsoft.Web.Xdt" Version="2.1.2" />
+  <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  <PackageReference Include="NuGet.Core" Version="2.14.0" />
+  <PackageReference Include="NuGet.Server.Core" Version="3.1.2" />
+  <PackageReference Include="NuGet.Server.V2" Version="3.1.2" />
+  <PackageReference Include="NuGet.Versioning" Version="4.7.0" />
+  <PackageReference Include="Owin" Version="1.0" />
+  <PackageReference Include="Serilog" Version="2.7.1" />
+  <PackageReference Include="Serilog.Formatting.Compact" Version="1.0.0" />
+  <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />
+  <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+  <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.1.1" />
+  <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
+
+  <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+  <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
+
+  <PackageReference Include="Thinktecture.IdentityModel.Owin.BasicAuthentication" Version="1.0.1" />
+  </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="Arbor.KVConfiguration.Core, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Core.0.13.1\lib\net461\Arbor.KVConfiguration.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.JsonConfiguration, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.JsonConfiguration.0.13.1\lib\net461\Arbor.KVConfiguration.JsonConfiguration.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.Schema, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Schema.0.13.1\lib\net461\Arbor.KVConfiguration.Schema.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.Schema.Json, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Schema.Json.0.13.1\lib\net461\Arbor.KVConfiguration.Schema.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.SystemConfiguration, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.SystemConfiguration.0.13.1\lib\net471\Arbor.KVConfiguration.SystemConfiguration.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.Urns, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.Urns.0.13.1\lib\net461\Arbor.KVConfiguration.Urns.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.KVConfiguration.UserConfiguration, Version=0.13.1.109, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.KVConfiguration.UserConfiguration.0.13.1\lib\net461\Arbor.KVConfiguration.UserConfiguration.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.ModelBinding.Core, Version=0.3.3.18, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.ModelBinding.0.3.3\lib\net471\Arbor.ModelBinding.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Arbor.WebApi.Formatting.HtmlForms, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arbor.WebApi.Formatting.HtmlForms.2.1.1\lib\net45\Arbor.WebApi.Formatting.HtmlForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Integration.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.Owin.4.2.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Integration.WebApi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.WebApi.3.1.0\lib\net40\Autofac.Integration.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="MediatR, Version=5.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MediatR.5.0.1\lib\net45\MediatR.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.Edm, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Edm.5.8.3\lib\net40\Microsoft.Data.Edm.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.OData.5.8.3\lib\net40\Microsoft.Data.OData.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Hosting.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.2.4\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.2.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.2.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.2\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Server.Core, Version=3.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Server.Core.3.1.2\lib\net46\NuGet.Server.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Server.V2, Version=3.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Server.V2.3.1.2\lib\net46\NuGet.Server.V2.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Versioning, Version=4.7.0.5, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Versioning.4.7.0\lib\net46\NuGet.Versioning.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Debug, Version=1.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Debug.1.0.1\lib\net46\Serilog.Sinks.Debug.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.PeriodicBatching, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.1.1\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Seq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Seq.4.0.0\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <ProjectReference Include="..\Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj" />
+    <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.2.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.TypeExtensions.4.5.0\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Spatial, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Spatial.5.8.3\lib\net40\System.Spatial.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Thinktecture.IdentityModel.Owin.BasicAuthentication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.BasicAuthentication.1.0.1\lib\net45\Thinktecture.IdentityModel.Owin.BasicAuthentication.dll</HintPath>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ApplicationHolder.cs" />
-    <Compile Include="Areas\Abstraction\IHttpClientFactory.cs" />
-    <Compile Include="Areas\Abstraction\IHttpPostedFile.cs" />
-    <Compile Include="Areas\Abstraction\IRequestFileHelper.cs" />
-    <Compile Include="Areas\Application\AppConfiguration.cs" />
-    <Compile Include="Areas\Application\AppContainer.cs" />
-    <Compile Include="Areas\Application\BackgroundServiceModule.cs" />
-    <Compile Include="Areas\Application\Bootstrapper.cs" />
-    <Compile Include="Areas\Application\ConfigurationModule.cs" />
-    <Compile Include="Areas\Application\HttpClientFactory.cs" />
-    <Compile Include="Areas\Application\HttpFactoryModule.cs" />
-    <Compile Include="Areas\Application\NuGetServerApp.cs" />
-    <Compile Include="Areas\Configuration\ConfigurationHolder.cs" />
-    <Compile Include="Areas\Configuration\KeyValueConfigurationModule.cs" />
-    <Compile Include="Areas\Configuration\ConfigurationKeys.cs" />
-    <Compile Include="Areas\Configuration\ConfigurationStartup.cs" />
-    <Compile Include="Areas\Configuration\KeyValueSettingsProvider.cs" />
-    <Compile Include="Areas\Configuration\UrnConfigurationModule.cs" />
-    <Compile Include="Areas\Configuration\UrnTypes.cs" />
-    <Compile Include="Areas\Configuration\UserConfigUpdater.cs" />
-    <Compile Include="Areas\Diagnostics\DiagnosticsController.cs" />
-    <Compile Include="Areas\Logging\LoggingModule.cs" />
-    <Compile Include="Areas\MediatR\MediatRModule.cs" />
-    <Compile Include="Areas\NuGet\Clean\BackgroundService.cs" />
-    <Compile Include="Areas\NuGet\Clean\CleanBackgroundService.cs" />
-    <Compile Include="Areas\NuGet\Clean\CleanModule.cs" />
-    <Compile Include="Areas\NuGet\Clean\CleanViewOutputModel.cs" />
-    <Compile Include="Areas\NuGet\Clean\RouteConstants.cs" />
-    <Compile Include="Areas\NuGet\Conflicts\NuGetPackageConflictMiddleware.cs" />
-    <Compile Include="Areas\NuGet\Feeds\NuGetFeedConfiguration.cs" />
-    <Compile Include="Areas\NuGet\Feeds\NuGetFeedController.cs" />
-    <Compile Include="Areas\NuGet\Feeds\NuGetFeedModule.cs" />
-    <Compile Include="Areas\NuGet\Feeds\SerilogAdapter.cs" />
-    <Compile Include="Areas\NuGet\Messaging\PackageNotificationQueueHandler.cs" />
-    <Compile Include="Areas\NuGet\Messaging\PackagePushedNotification.cs" />
-    <Compile Include="Areas\NuGet\Messaging\PackagePushedNotificationHandler.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\ConfigurationNuGetTenantReadService.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\InMemoryNuGetTenantReadService.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\ITenantRouteHelper.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\MultiTenantRepository.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\NuGetTenantModule.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\TenantConfigModule.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\TenantRouteConstants.cs" />
-    <Compile Include="Areas\NuGet\MultiTenant\TenantRouteHelper.cs" />
-    <Compile Include="Areas\NuGet\OtherFileInfo.cs" />
-    <Compile Include="Areas\NuGet\PackageFileInfo.cs" />
-    <Compile Include="Areas\NuGet\PackagesViewOutputModel.cs" />
-    <Compile Include="Areas\Security\BasicAuthenticationConstants.cs" />
-    <Compile Include="Areas\Security\ContentTypes.cs" />
-    <Compile Include="Areas\Security\CustomClaimTypes.cs" />
-    <Compile Include="Areas\Security\NuGetAuthorizationMiddleware.cs" />
-    <Compile Include="Areas\Security\SecurityModule.cs" />
-    <Compile Include="Areas\Security\SimpleAuthenticator.cs" />
-    <Compile Include="Areas\Test\IHostingEnvironment.cs" />
-    <Compile Include="Areas\Test\TestApiController.cs" />
-    <Compile Include="Areas\Test\TestBackgroundService.cs" />
-    <Compile Include="Areas\Test\TestExceptionInBackgroundService.cs" />
-    <Compile Include="Areas\Test\TestOnceBackgroundService.cs" />
-    <Compile Include="Areas\WebHooks\FeedId.cs" />
-    <Compile Include="Areas\WebHooks\IKeyStore.cs" />
-    <Compile Include="Areas\WebHooks\InMemoryKeyStore.cs" />
-    <Compile Include="Areas\WebHooks\IPackageNotification.cs" />
-    <Compile Include="Areas\WebHooks\ITokenHelper.cs" />
-    <Compile Include="Areas\WebHooks\IWebHooksReadService.cs" />
-    <Compile Include="Areas\WebHooks\TokenHelper.cs" />
-    <Compile Include="Areas\WebHooks\WebHookBackgroundService.cs" />
-    <Compile Include="Areas\WebHooks\WebHookPingController.cs" />
-    <Compile Include="Areas\WebHooks\WebHooksModule.cs" />
-    <Compile Include="Areas\WebHooks\WebHooksReadService.cs" />
-    <Compile Include="Clean\CleanConstants.cs" />
-    <Compile Include="Clean\CleanApiController.cs" />
-    <Compile Include="Clean\CleanedPackage.cs" />
-    <Compile Include="Clean\CleanInputModel.cs" />
-    <Compile Include="Clean\CleanResult.cs" />
-    <Compile Include="Clean\CleanService.cs" />
-    <Compile Include="Clean\CleanTarget.cs" />
-    <Compile Include="Html\HtmlAttributes.cs" />
-    <Compile Include="IRouteHelper.cs" />
-    <Compile Include="PackageIdentifierHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteExtensions.cs" />
-    <Compile Include="Startup.cs" />
-    <Compile Include="WebApiConfig.cs" />
-    <Compile Include="WebApiModule.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj">
-      <Project>{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}</Project>
-      <Name>Arbor.NuGetServer.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj">
-      <Project>{798F43DF-A7F8-485E-A728-DE661AB0C0C6}</Project>
-      <Name>Arbor.NuGetServer.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Start\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

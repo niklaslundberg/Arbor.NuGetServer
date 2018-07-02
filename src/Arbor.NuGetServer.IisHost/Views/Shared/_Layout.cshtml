@@ -1,7 +1,12 @@
-﻿@using Arbor.NuGetServer.Api.Areas.Application
+﻿@using Arbor.NuGetServer.Abstractions
+@using Arbor.NuGetServer.Api
+@using Arbor.NuGetServer.Api.Areas.Application
 @using Arbor.NuGetServer.Api.Areas.NuGet.Clean
 @using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 @using Arbor.NuGetServer.Api.Clean
+@{
+    string tenant = DependencyResolver.Current.GetService<INuGetTenantReadService>().Tenant(Request?.Url);
+}
 <!doctype html>
 <html lang="en">
 <head>
@@ -37,18 +42,22 @@
                             Dashboard <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/@RouteConstants.PackageRoute">
-                            <span data-feather="file"></span>
-                            Packages
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/@CleanConstants.GetRoute">
-                            <span data-feather="trash-2"></span>
-                            Clean
-                        </a>
-                    </li>
+                    @if (!string.IsNullOrWhiteSpace(tenant))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.RouteUrl(RouteConstants.PackageRouteName, new { tenant = tenant })">
+                                <span data-feather="file"></span>
+                                Packages
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.RouteUrl(CleanConstants.CleanGetRouteName, new { tenant = tenant })">
+                                <span data-feather="trash-2"></span>
+                                Clean
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.RouteUrl(TenantRouteConstants.TenantsHttpGetRouteName)">
                             <span data-feather="file"></span>

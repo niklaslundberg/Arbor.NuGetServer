@@ -64,6 +64,11 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
                     ? new DirectoryInfo(_pathMapper.MapPath(tenantPackageDirectoryPath))
                     : new DirectoryInfo(tenantPackageDirectoryPath);
 
+                if (!packageDirectory.Exists)
+                {
+                    packageDirectory.Create();
+                }
+
                 IServerPackageRepository tenantRepository =
                     NuGetV2WebApiEnabler.CreatePackageRepository(packageDirectory.FullName, settingsProvider, logger);
 
@@ -71,9 +76,11 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
 
                 var nuGetFeedConfiguration =
                     new NuGetFeedConfiguration(nuGetTenant.TenantId.TenantId,
+                        nuGetTenant.TenantId.TenantId,
                         $"nuget/{nuGetTenant.TenantId.TenantId}",
                         repository,
-                        _keyValueConfiguration[ConfigurationKeys.ApiKey]);
+                        _keyValueConfiguration[ConfigurationKeys.ApiKey],
+                        packageDirectory.FullName);
 
                 builder.RegisterInstance(nuGetFeedConfiguration).AsSelf();
             }

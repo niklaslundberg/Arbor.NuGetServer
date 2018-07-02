@@ -2,7 +2,7 @@
 {
     public static class RouteConstants
     {
-        public const string PackageRoute = "{tenant}/manage/packages";
+        public const string PackageRoute = "~/nuget/{tenant}/packages";
 
         public const string PackageRouteName = nameof(PackageRoute);
     }

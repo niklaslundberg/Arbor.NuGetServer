@@ -7,7 +7,6 @@ using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost
 {
-    [RoutePrefix(CleanConstants.GetRoute)]
     [Authorize]
     public class CleanController : Controller
     {
@@ -19,9 +18,9 @@ namespace Arbor.NuGetServer.IisHost
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
         }
 
-        [Route]
+        [Route(CleanConstants.CleanGetRoute, Name = CleanConstants.CleanGetRouteName)]
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string tenant)
         {
             int packagesToKeep;
 

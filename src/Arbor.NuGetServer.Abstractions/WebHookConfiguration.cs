@@ -10,8 +10,8 @@ namespace Arbor.NuGetServer.Abstractions
             SigningKeyName = signingKeyName;
         }
 
-        public Uri Url { get; private set; }
+        public Uri Url { get; }
 
-        public string SigningKeyName { get; private set; }
+        public string SigningKeyName { get; }
     }
 }

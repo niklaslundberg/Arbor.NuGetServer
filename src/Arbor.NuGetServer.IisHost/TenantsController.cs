@@ -28,5 +28,12 @@ namespace Arbor.NuGetServer.IisHost
 
             return View(new TenantsOutputViewModel(nuGetTenants));
         }
+
+        [HttpGet]
+        [Route(TenantRouteConstants.TenantHttpGetRoute, Name = TenantRouteConstants.TenantHttpGetRouteName)]
+        public ActionResult Tenant(string tenant)
+        {
+            return View();
+        }
     }
 }

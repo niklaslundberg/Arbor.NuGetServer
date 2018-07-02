@@ -2,39 +2,49 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
+using Arbor.NuGetServer.Api.Areas.NuGet.Feeds;
 using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost
 {
-    [Authorize]
     public class PackagesController : Controller
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
+        private readonly INuGetTenantReadService _tenantReadService;
+        private readonly IReadOnlyCollection<NuGetFeedConfiguration> _feedConfigurations;
 
-        public PackagesController([NotNull] IKeyValueConfiguration keyValueConfiguration)
+        public PackagesController([NotNull] IKeyValueConfiguration keyValueConfiguration, INuGetTenantReadService tenantReadService, IReadOnlyCollection<NuGetFeedConfiguration> feedConfigurations)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
+            _tenantReadService = tenantReadService;
+            _feedConfigurations = feedConfigurations;
         }
 
         [Route(RouteConstants.PackageRoute, Name = RouteConstants.PackageRouteName)]
-        [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string tenant)
         {
-            string packagesPath =
-                _keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath]
-                    .ThrowIfNullOrWhitespace($"AppSetting key '{ConfigurationKeys.PackagesDirectoryPath}' is not set");
+            var foundTenant = _feedConfigurations
+                .SingleOrDefault(t => t.Id.Equals(tenant, StringComparison.OrdinalIgnoreCase));
 
-            string fullPath = Server.MapPath(packagesPath);
+            if (foundTenant is null)
+            {
+                return new HttpStatusCodeResult(400);
+            }
 
-            var nugetPackagesDirectory = new DirectoryInfo(fullPath);
+            string packagesPath = foundTenant.PackageDirectory;
+
+            var nugetPackagesDirectory = new DirectoryInfo(packagesPath);
 
             if (!nugetPackagesDirectory.Exists)
             {
@@ -63,7 +73,7 @@ namespace Arbor.NuGetServer.IisHost
 
             List<PackageFileInfo> relativeNuGetPaths =
                 nuGetFiles.Select(file => new PackageFileInfo(file,
-                        file.FullName.Substring(fullPath.Length + 1),
+                        file.FullName.Substring(packagesPath.Length + 1),
                         PackageIdentifierHelper.GetPackageIdentifier(file, nugetPackagesDirectory)))
                     .Where(file => file.PackageIdentifier != null)
                     .OrderBy(_ => _.PackageIdentifier.PackageId)
@@ -72,7 +82,7 @@ namespace Arbor.NuGetServer.IisHost
 
             List<OtherFileInfo> relativeOtherPaths =
                 otherFiles.Select(file => new OtherFileInfo(file,
-                        file.FullName.Substring(fullPath.Length + 1)))
+                        file.FullName.Substring(packagesPath.Length + 1)))
                     .ToList();
 
             var viewModel = new PackagesViewOutputModel(relativeNuGetPaths, relativeOtherPaths);

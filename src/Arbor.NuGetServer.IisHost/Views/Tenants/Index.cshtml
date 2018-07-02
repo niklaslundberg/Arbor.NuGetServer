@@ -1,4 +1,5 @@
-﻿@model TenantsOutputViewModel
+﻿@using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
+@model TenantsOutputViewModel
 
 <h2>Tenants</h2>
 
@@ -12,7 +13,7 @@
         @foreach (NuGetTenantStatistics item in Model.NuGetTenants)
         {
             <tr>
-                <td>@item.TenantId.TenantId</td>
+                <td><a href="@Url.RouteUrl(TenantRouteConstants.TenantHttpGetRouteName, new {tenant=item.TenantId.TenantId})">@item.TenantId.TenantId</a></td>
             </tr>
         }
     </tbody>

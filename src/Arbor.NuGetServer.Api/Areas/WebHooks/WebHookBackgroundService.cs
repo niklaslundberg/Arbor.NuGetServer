@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
+using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.Abstraction;
 using Arbor.NuGetServer.Api.Areas.Configuration;
@@ -59,6 +60,14 @@ namespace Arbor.NuGetServer.Api.Areas.WebHooks
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            bool enabled = _keyValueConfiguration.ValueOrDefault(ConfigurationKeys.WebHooksEnabled);
+
+            if (!enabled)
+            {
+                _logger.Information("Web hooks are disabled");
+                return;
+            }
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 IPackageNotification packageNotification = _queueHandler.Take(stoppingToken);

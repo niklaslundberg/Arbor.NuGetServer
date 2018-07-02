@@ -9,5 +9,7 @@
         public const string NuGetWebHookTimeout = "nuget:push:timeout-in-seconds";
 
         public const string PackagesDirectoryPath = "packagesPath";
+
+        public const string WebHooksEnabled = "urn:arbor:nugetserver:webhooks:enabled";
     }
 }

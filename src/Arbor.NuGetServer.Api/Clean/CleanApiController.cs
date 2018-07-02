@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
-    [RoutePrefix(CleanConstants.PostRoute)]
     [Authorize]
     public class CleanApiController : ApiController
     {
@@ -18,9 +17,9 @@ namespace Arbor.NuGetServer.Api.Clean
             _cleanService = cleanService;
         }
 
-        [Route]
+        [Route(CleanConstants.PostRoute)]
         [HttpPost]
-        public IHttpActionResult Clean(CleanInputModel cleanInputModel)
+        public IHttpActionResult Clean(CleanInputModel cleanInputModel, string tenant)
         {
             CleanResult cleanResult = _cleanService.Clean(cleanInputModel.Whatif,
                 cleanInputModel.PreReleaseOnly,

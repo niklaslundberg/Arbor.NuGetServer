@@ -29,7 +29,6 @@ namespace Arbor.NuGetServer.Api.Areas.WebHooks
 
             var issuedClaims = new List<Claim>(claims);
 
-
             RSAParameters parameters = await _keyStore.GetKeyAsync(keyName);
 
             var key = new RsaSecurityKey(parameters);
