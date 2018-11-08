@@ -24,10 +24,10 @@ namespace Arbor.NuGetServer.Marten
         {
             using (IDocumentSession session = _documentStore.LightweightSession())
             {
-                ImmutableArray<NuGetTenantId> nuGetTenantIds = session.Query<NuGetTenantConfiguration>()
+                ImmutableArray<NuGetTenantId> nugetTenantIds = session.Query<NuGetTenantConfiguration>()
                     .Select(configuration => configuration.TenantId).ToList().ToImmutableArray();
 
-                return nuGetTenantIds;
+                return nugetTenantIds;
             }
         }
 

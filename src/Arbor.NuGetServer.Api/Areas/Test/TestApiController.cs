@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Areas.Test
 {
+    [Authorize]
     [RoutePrefix("shutdown")]
     public class TestApiController : ApiController
     {

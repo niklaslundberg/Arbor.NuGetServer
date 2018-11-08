@@ -48,14 +48,14 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
         public Task<IEnumerable<IServerPackage>> SearchAsync(
             string searchTerm,
             IEnumerable<string> targetFrameworks,
-            bool allowPrereleaseVersions,
+            bool allowPreReleaseVersions,
             bool allowUnlistedVersions,
             ClientCompatibility compatibility,
             CancellationToken token)
         {
             return GetTenantRepository().SearchAsync(searchTerm,
                 targetFrameworks,
-                allowPrereleaseVersions,
+                allowPreReleaseVersions,
                 allowUnlistedVersions,
                 compatibility,
                 token);
@@ -75,7 +75,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 
         private IServerPackageRepository GetTenantRepository()
         {
-            NuGetTenantId nuGetTenantId = _tenantRouteHelper.GetTenant();
+            NuGetTenantId nuGetTenantId = _tenantRouteHelper.GetTenantId();
 
             if (nuGetTenantId is null)
             {

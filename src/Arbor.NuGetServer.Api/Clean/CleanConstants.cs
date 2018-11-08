@@ -1,12 +1,14 @@
-﻿namespace Arbor.NuGetServer.Api.Clean
+﻿using Arbor.NuGetServer.Abstractions;
+
+namespace Arbor.NuGetServer.Api.Clean
 {
     public static class CleanConstants
     {
         public const string CleanOnStartEnabled = "urn:arbor-nuget-server:nuget:clean:clean-bin-files-on-start:enabled";
 
-        public const string PostRoute = "~/nuget/{tenant}/clean";
+        public const string PostRoute = "~" + TenantConstants.NuGetBaseRoute + "/{tenant}/clean";
 
-        public const string CleanGetRoute = "~/nuget/{tenant}/cleaning";
+        public const string CleanGetRoute = "~" + TenantConstants.NuGetBaseRoute + "/{tenant}/cleaning";
 
         public const string CleanGetRouteName = nameof(CleanGetRoute);
 

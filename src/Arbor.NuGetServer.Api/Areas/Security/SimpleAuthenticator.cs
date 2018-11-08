@@ -39,7 +39,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             //    _keyValueConfiguration[passwordKey].ThrowIfNullOrWhitespace(
             //        $"AppSetting key '{passwordKey}' is not set");
 
-            NuGetTenantId tenant = _tenantRouteHelper.GetTenant();
+            NuGetTenantId tenant = _tenantRouteHelper.GetTenantId();
 
             if (tenant is null)
             {

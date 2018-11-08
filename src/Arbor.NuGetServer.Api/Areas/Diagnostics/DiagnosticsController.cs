@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Areas.Diagnostics
 {
-    [AllowAnonymous]
+    [Authorize]
     public class DiagnosticsController : ApiController
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;

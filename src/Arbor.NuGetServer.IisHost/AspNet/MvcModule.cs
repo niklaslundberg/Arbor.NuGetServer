@@ -24,6 +24,10 @@ namespace Arbor.NuGetServer.IisHost.AspNet
         {
             builder.RegisterControllers(_assemblies.ToArray());
             builder.RegisterModule<AutofacWebTypesModule>();
+
+            builder.RegisterType<TenantRouteHelper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

@@ -7,6 +7,7 @@ using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.NuGet.Conflicts;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
+using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Core;
 using Autofac;
 using JetBrains.Annotations;
@@ -88,6 +89,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             builder.RegisterInstance(repository).SingleInstance().AsImplementedInterfaces();
 
             builder.RegisterType<NuGetPackageConflictMiddleware>().SingleInstance().AsSelf();
+            builder.RegisterType<TenantMiddleware>().SingleInstance().AsSelf();
         }
     }
 }

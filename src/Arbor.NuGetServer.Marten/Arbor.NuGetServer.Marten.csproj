@@ -5,13 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="arbor.kvconfiguration.urns" Version="0.13.1" />
+    <PackageReference Include="arbor.kvconfiguration.urns" Version="0.16.2" />
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="jetbrains.annotations" Version="11.1.0" />
-    <PackageReference Include="Marten" Version="2.8.2" />
+    <PackageReference Include="jetbrains.annotations" Version="2018.2.1" />
+    <PackageReference Include="Marten" Version="3.0.1" />
     <PackageReference Include="Marten.Analyzers" Version="1.5.0" />
-    <PackageReference Include="microsoft.net.compilers" Version="2.8.2" />
-    <PackageReference Include="Npgsql" Version="4.0.1" />
+    <PackageReference Include="microsoft.net.compilers" Version="2.9.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="serilog" Version="2.7.1" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
   </ItemGroup>

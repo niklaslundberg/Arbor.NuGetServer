@@ -1,10 +1,11 @@
 ﻿using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.Security
 {
-    public class SecurityModule :MetaModule
+    [UsedImplicitly]
+    public class SecurityModule : MetaModule
     {
         protected override void Load(ContainerBuilder builder)
         {

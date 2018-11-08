@@ -18,9 +18,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<TenantRouteHelper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             if (_keyValueConfiguration.ValueOrDefault(TenantConstants.InMemorySourceEnabled, defaultValue: true))
             {

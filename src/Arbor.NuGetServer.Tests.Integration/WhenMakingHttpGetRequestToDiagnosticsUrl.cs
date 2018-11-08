@@ -47,7 +47,7 @@ namespace Arbor.NuGetServer.Tests.Integration
                 "applicationhost.config");
 
             _pgServer = new PgServer(
-                "9.6.9.1",
+                "10.5.1",
                 PostgresqlUser,
                 addLocalUserAccessPermission: AddLocalUserAccessPermission,
                 clearInstanceDirOnStop: true);
@@ -77,7 +77,6 @@ namespace Arbor.NuGetServer.Tests.Integration
                     _outputHelper.WriteLine(content);
 
                     Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
-
                 }
             }
         }

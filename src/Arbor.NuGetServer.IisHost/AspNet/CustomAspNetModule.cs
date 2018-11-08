@@ -6,10 +6,6 @@ namespace Arbor.NuGetServer.IisHost.AspNet
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<RouteHelper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<OwinSystemWebRequestFileHelper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

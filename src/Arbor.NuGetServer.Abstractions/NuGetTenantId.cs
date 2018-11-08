@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Abstractions
 {
@@ -19,8 +20,13 @@ namespace Arbor.NuGetServer.Abstractions
             return string.Compare(TenantId, other.TenantId, StringComparison.Ordinal);
         }
 
-        public NuGetTenantId(string tenantId)
+        public NuGetTenantId([NotNull]string tenantId)
         {
+            if (string.IsNullOrWhiteSpace(tenantId))
+            {
+                throw new ArgumentException("message", nameof(tenantId));
+            }
+
             TenantId = tenantId;
         }
 

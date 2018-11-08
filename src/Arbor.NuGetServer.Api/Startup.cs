@@ -21,9 +21,16 @@ namespace Arbor.NuGetServer.Api
         {
             NuGetServerApp nuGetServerApp = ApplicationHolder.App;
 
+            app.UseAutofacLifetimeScopeInjector(nuGetServerApp.LifetimeScope);
+
+            app.UseMiddlewareFromContainer<TenantMiddleware>();
+
             ConfigureAuth(app, nuGetServerApp);
 
-            if (bool.TryParse(nuGetServerApp.KeyValueConfiguration[ConfigurationKeys.ConflictMiddlewareEnabled], out bool enabled) && enabled)
+            bool conflictMiddlewareEnabled = bool.TryParse(nuGetServerApp.KeyValueConfiguration[ConfigurationKeys.ConflictMiddlewareEnabled],
+                         out bool enabled) && enabled;
+
+            if (conflictMiddlewareEnabled)
             {
                 app.UseAutofacLifetimeScopeInjector(nuGetServerApp.LifetimeScope);
                 app.UseMiddlewareFromContainer<NuGetPackageConflictMiddleware>();
@@ -32,8 +39,6 @@ namespace Arbor.NuGetServer.Api
 
         private void ConfigureAuth(IAppBuilder app, NuGetServerApp nuGetServerApp)
         {
-            app.UseAutofacLifetimeScopeInjector(nuGetServerApp.LifetimeScope);
-
             app.UseBasicAuthentication(
                 new BasicAuthenticationOptions(
                     "Basic",
