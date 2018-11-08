@@ -34,7 +34,9 @@ namespace Arbor.NuGetServer.IisHost
                 packagesToKeep = packagesToKeepFromConfig;
             }
 
-            return View(new CleanViewOutputModel($"/{CleanConstants.PostRoute}", packagesToKeep, true, true));
+            string cleanPostRoute = $"/{CleanConstants.PostRoute}";
+
+            return View(new CleanViewOutputModel(cleanPostRoute, packagesToKeep, true, true));
         }
     }
 }

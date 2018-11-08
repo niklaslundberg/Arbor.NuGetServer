@@ -12,7 +12,7 @@ namespace Arbor.NuGetServer.Tests.Integration
             {
                 var originalSolutionFile = new FileInfo(NCrunchEnvironment.GetOriginalSolutionPath());
 
-                string rootPath = VcsPathHelper.FindVcsRootPath(originalSolutionFile.Directory.FullName);
+                string rootPath = VcsPathHelper.FindVcsRootPath(originalSolutionFile.Directory?.FullName);
 
                 return rootPath;
             }
