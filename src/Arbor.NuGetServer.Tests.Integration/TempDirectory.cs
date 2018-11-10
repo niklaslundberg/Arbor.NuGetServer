@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Alphaleonis.Win32.Filesystem;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 
 namespace Arbor.NuGetServer.Tests.Integration
 {
@@ -34,7 +34,7 @@ namespace Arbor.NuGetServer.Tests.Integration
 
         public static TempDirectory CreateTempDirectory(string contextName = null)
         {
-            var uniqueName = Hash($"arns-{contextName}-{Guid.NewGuid()}");
+            string uniqueName = Hash($"arns-{contextName}-{Guid.NewGuid()}");
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Path.GetTempPath(),
                     uniqueName))
                 .EnsureExists();

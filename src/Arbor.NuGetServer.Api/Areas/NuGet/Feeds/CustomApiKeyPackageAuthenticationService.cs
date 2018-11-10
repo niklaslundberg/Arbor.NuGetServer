@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
+using Arbor.NuGetServer.Api.Areas.Security;
 using NuGet.Server.Core.Infrastructure;
 using Serilog;
 

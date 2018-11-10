@@ -1,5 +1,5 @@
 ﻿using System;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Security;
 
 namespace Arbor.NuGetServer.Tests.Integration
 {

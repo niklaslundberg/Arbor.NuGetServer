@@ -1,6 +1,5 @@
-﻿using Arbor.NuGetServer.Abstractions;
+﻿using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
-using Arbor.NuGetServer.Core;
 
 namespace Arbor.NuGetServer.Api.Areas.WebHooks
 {

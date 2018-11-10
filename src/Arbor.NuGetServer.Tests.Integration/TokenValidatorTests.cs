@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
+using Arbor.NuGetServer.Api.Areas.Security;
+using Arbor.NuGetServer.Api.Areas.Time;
 using Xunit;
 
 namespace Arbor.NuGetServer.Tests.Integration

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
-using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
+using Arbor.NuGetServer.Api.Areas.Routing;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost

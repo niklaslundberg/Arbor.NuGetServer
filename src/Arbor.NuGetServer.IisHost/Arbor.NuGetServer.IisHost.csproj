@@ -504,17 +504,9 @@
     <Folder Include="App_Data\NuGet\Packages\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj">
-      <Project>{c7d6febb-9f1c-4e5f-af5d-7803945a6dce}</Project>
-      <Name>Arbor.NuGetServer.Abstractions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj">
       <Project>{783c1130-2220-4eb1-a31a-138b3856f6b1}</Project>
       <Name>Arbor.NuGetServer.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj">
-      <Project>{b1e58195-7523-4a38-928b-16d783b6d7d2}</Project>
-      <Name>Arbor.NuGetServer.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Arbor.NuGetServer.Marten\Arbor.NuGetServer.Marten.csproj">
       <Project>{42d08653-29ec-4613-945b-ffb699274d24}</Project>

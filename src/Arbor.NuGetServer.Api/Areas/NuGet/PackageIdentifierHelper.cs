@@ -1,6 +1,5 @@
 ﻿using System;
 using Alphaleonis.Win32.Filesystem;
-using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 using NuGet.Versioning;
 

@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.WebHooks;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj" />
+    <ProjectReference Include="..\Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,6 @@
 ﻿using System;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.WebHooks;
-using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 using MediatR;
 

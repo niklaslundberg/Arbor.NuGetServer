@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 
 namespace Arbor.NuGetServer.Api.Areas.Security

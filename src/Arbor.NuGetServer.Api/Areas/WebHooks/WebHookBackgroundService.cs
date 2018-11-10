@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.Http;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
@@ -109,7 +108,7 @@ namespace Arbor.NuGetServer.Api.Areas.WebHooks
 
                     string packageAsJson = JsonConvert.SerializeObject(tokenAsString);
 
-                    request.Content = new StringContent(tokenAsString, Encoding.UTF8, ContentTypes.PlainText);
+                    request.Content = new StringContent(tokenAsString, Encoding.UTF8, ContentType.PlainText);
 
                     var cancellationTokenSource = new CancellationTokenSource(_httpRequestTimeout);
 

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.KVConfiguration.Core.Extensions.IntExtensions;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.Clean;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 using Serilog;
 

@@ -6,7 +6,9 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Http;
+using Arbor.NuGetServer.Api.Areas.NuGet;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.OwinExtensions;
 using JetBrains.Annotations;
 using Microsoft.Owin;
@@ -177,7 +179,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
         private static async Task WriteUnauthorizedBodyAsync(IOwinContext context, string reason = null)
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            context.Response.ContentType = ContentTypes.PlainText;
+            context.Response.ContentType = ContentType.PlainText;
 
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
@@ -188,7 +190,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
         private static async Task BadRequestAsync(IOwinContext context, string reason)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            context.Response.ContentType = ContentTypes.PlainText;
+            context.Response.ContentType = ContentType.PlainText;
 
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {

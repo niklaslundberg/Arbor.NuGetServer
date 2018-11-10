@@ -7,7 +7,7 @@ using System.Web.Compilation;
 using System.Web.Hosting;
 using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.Application;
-using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 using Arbor.NuGetServer.IisHost.AspNet;
 using Autofac.Core;
 using JetBrains.Annotations;

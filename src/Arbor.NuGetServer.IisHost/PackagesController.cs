@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Abstractions;
 
 namespace Arbor.NuGetServer.Api.Areas.WebHooks
 {

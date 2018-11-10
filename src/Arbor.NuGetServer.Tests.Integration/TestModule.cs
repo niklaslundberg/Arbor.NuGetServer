@@ -1,5 +1,4 @@
-﻿using Arbor.NuGetServer.Abstractions;
-using Autofac;
+﻿using Autofac;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Tests.Integration

@@ -1,4 +1,4 @@
-﻿using Arbor.NuGetServer.Abstractions;
+﻿using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 
 namespace Arbor.NuGetServer.Api.Areas.Clean
 {

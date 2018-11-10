@@ -1,6 +1,6 @@
 ﻿using System;
 using Alphaleonis.Win32.Filesystem;
-using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Api.Areas.NuGet;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.Clean

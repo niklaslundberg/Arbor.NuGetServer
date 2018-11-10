@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Security;
 
 namespace Arbor.NuGetServer.Tools
 {

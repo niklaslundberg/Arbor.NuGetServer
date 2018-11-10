@@ -21,10 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Tests.Int
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Marten", "Arbor.NuGetServer.Marten\Arbor.NuGetServer.Marten.csproj", "{42D08653-29EC-4613-945B-FFB699274D24}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Abstractions", "Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj", "{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Core", "Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj", "{B1E58195-7523-4A38-928B-16D783B6D7D2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Api", "Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj", "{783C1130-2220-4EB1-A31A-138B3856F6B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Tools", "Arbor.NuGetServer.Tools\Arbor.NuGetServer.Tools.csproj", "{35A2C826-844C-450B-939A-02CA5DDD0A31}"
@@ -47,14 +43,6 @@ Global
 		{42D08653-29EC-4613-945B-FFB699274D24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D08653-29EC-4613-945B-FFB699274D24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42D08653-29EC-4613-945B-FFB699274D24}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7D6FEBB-9F1C-4E5F-AF5D-7803945A6DCE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1E58195-7523-4A38-928B-16D783B6D7D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1E58195-7523-4A38-928B-16D783B6D7D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1E58195-7523-4A38-928B-16D783B6D7D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1E58195-7523-4A38-928B-16D783B6D7D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,4 +1,4 @@
-﻿using Arbor.NuGetServer.Abstractions;
+﻿using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 
 namespace Arbor.NuGetServer.IisHost

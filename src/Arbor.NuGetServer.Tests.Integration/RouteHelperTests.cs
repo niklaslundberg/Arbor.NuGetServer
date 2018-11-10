@@ -1,4 +1,4 @@
-﻿using Arbor.NuGetServer.Core;
+﻿using Arbor.NuGetServer.Api.Areas.Routing;
 using Xunit;
 
 namespace Arbor.NuGetServer.Tests.Integration

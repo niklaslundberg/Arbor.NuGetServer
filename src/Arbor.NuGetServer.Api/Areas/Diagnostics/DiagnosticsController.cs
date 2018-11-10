@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Core;
+using Arbor.NuGetServer.Api.Areas.Application;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 

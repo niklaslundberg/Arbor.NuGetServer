@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 
 namespace Arbor.NuGetServer.IisHost
 {

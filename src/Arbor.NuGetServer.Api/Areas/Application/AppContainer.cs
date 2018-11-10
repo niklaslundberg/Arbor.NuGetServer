@@ -1,5 +1,5 @@
 using System;
-using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 using Autofac;
 using JetBrains.Annotations;
 

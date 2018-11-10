@@ -4,7 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using Alphaleonis.Win32.Filesystem;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
+using Arbor.NuGetServer.Api.Areas.Security;
+using Arbor.NuGetServer.Api.Areas.Time;
 
 namespace Arbor.NuGetServer.Tools
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using Arbor.NuGetServer.Abstractions;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant

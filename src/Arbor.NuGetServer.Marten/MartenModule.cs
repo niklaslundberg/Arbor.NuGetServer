@@ -1,5 +1,5 @@
 ﻿using System;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 using JetBrains.Annotations;
 using Marten;

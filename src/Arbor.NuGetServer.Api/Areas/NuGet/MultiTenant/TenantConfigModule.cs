@@ -1,7 +1,7 @@
 ﻿using System;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 using JetBrains.Annotations;
 using Serilog;
@@ -25,7 +25,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
                 throw new ArgumentNullException(nameof(logger));
             }
 
-            _enabled = keyValueConfiguration.ValueOrDefault(Abstractions.TenantConstants.ConfigurationSourceEnabled);
+            _enabled = keyValueConfiguration.ValueOrDefault(TenantConstants.ConfigurationSourceEnabled);
             logger.Debug("Tenant configuration source enabled: {Status}", _enabled);
         }
 

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.NuGet.Conflicts;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Security;
-using Arbor.NuGetServer.Core;
 using Autofac;
 using JetBrains.Annotations;
 using NuGet.Server.Core.Infrastructure;

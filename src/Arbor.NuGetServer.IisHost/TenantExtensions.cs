@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web;
-using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 

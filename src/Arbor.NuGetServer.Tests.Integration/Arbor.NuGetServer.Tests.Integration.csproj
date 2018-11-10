@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj" />
-    <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj" />
     <ProjectReference Include="..\Arbor.NuGetServer.Marten\Arbor.NuGetServer.Marten.csproj" />
   </ItemGroup>
 

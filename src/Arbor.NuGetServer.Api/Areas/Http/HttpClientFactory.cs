@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
-using Arbor.NuGetServer.Core.Extensions;
+using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 using JetBrains.Annotations;
 using Serilog;
 

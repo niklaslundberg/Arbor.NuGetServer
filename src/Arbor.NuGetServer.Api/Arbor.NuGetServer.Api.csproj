@@ -16,6 +16,7 @@
   <PackageReference Include="Autofac" Version="4.8.1" />
   <PackageReference Include="Autofac.Owin" Version="4.2.0" />
   <PackageReference Include="Autofac.WebApi" Version="3.1.0" />
+  <PackageReference Include="IdentityModel" Version="3.10.1" />
   <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
   <PackageReference Include="MediatR" Version="5.1.0" />
   <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
@@ -59,11 +60,6 @@
   <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.3.0" />
 
   <PackageReference Include="Thinktecture.IdentityModel.Owin.BasicAuthentication" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Arbor.NuGetServer.Abstractions\Arbor.NuGetServer.Abstractions.csproj" />
-    <ProjectReference Include="..\Arbor.NuGetServer.Core\Arbor.NuGetServer.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
