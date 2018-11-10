@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public sealed class EnvironmentVariableScope : IDisposable
     {

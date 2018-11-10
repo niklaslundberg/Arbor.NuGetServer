@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Arbor.NuGetServer.Api.Areas.Security;
 
-namespace Arbor.NuGetServer.Tools
+namespace Arbor.NuGetServer.Tools.Commands
 {
     internal class CreateKeyCommand : AppCommand
     {

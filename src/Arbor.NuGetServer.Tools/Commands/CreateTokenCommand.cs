@@ -9,7 +9,7 @@ using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Api.Areas.Time;
 
-namespace Arbor.NuGetServer.Tools
+namespace Arbor.NuGetServer.Tools.Commands
 {
     internal class CreateTokenCommand : AppCommand
     {

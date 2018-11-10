@@ -6,7 +6,7 @@ using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Api.Areas.Time;
 using Xunit;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Authorization
 {
     public class TokenValidatorTests
     {

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
-using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 using Arbor.NuGetServer.IisHost.AspNet;
@@ -21,7 +20,6 @@ namespace Arbor.NuGetServer.IisHost
 
         protected void Application_Start()
         {
-            Debug.WriteLine("Application start");
             IReadOnlyList<IModule> aspNetModules = new List<IModule> { new CustomAspNetModule(), new PathModule() };
             NuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem,
                 aspNetModules,
@@ -42,7 +40,6 @@ namespace Arbor.NuGetServer.IisHost
         {
             NuGetServerApp.SafeDispose();
             NuGetServerApp = null;
-            Debug.WriteLine("Shut down, application end");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Arbor.NuGetServer.Api.Areas.Routing;
 using Xunit;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Routes
 {
     public class RouteHelperTests
     {

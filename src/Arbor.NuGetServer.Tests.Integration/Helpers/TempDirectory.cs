@@ -5,7 +5,7 @@ using System.Threading;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public sealed class TempDirectory : IDisposable
     {

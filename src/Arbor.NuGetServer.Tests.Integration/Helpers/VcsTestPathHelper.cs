@@ -1,9 +1,8 @@
-﻿
-using Alphaleonis.Win32.Filesystem;
+﻿using Alphaleonis.Win32.Filesystem;
 using Arbor.Aesculus.Core;
 using NCrunch.Framework;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public static class VcsTestPathHelper
     {

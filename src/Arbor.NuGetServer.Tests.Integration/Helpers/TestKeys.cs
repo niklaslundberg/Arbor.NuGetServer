@@ -1,7 +1,7 @@
 ﻿using System;
 using Arbor.NuGetServer.Api.Areas.Security;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public static class TestKeys
     {

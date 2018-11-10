@@ -4,14 +4,15 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Arbor.NuGetServer.Api.Areas.Security;
+using Arbor.NuGetServer.Tests.Integration.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Diagnostics
 {
-    public sealed class WhenMakingAuthenticatedHttpGetRequestToFeedUrl
+    public sealed class WhenMakingHttpGetRequestToDiagnosticsUrl
     {
-        public WhenMakingAuthenticatedHttpGetRequestToFeedUrl(ITestOutputHelper outputHelper)
+        public WhenMakingHttpGetRequestToDiagnosticsUrl(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
         }
@@ -22,13 +23,12 @@ namespace Arbor.NuGetServer.Tests.Integration
         [Fact]
         public async Task ThenItShouldReturnHttp200Ok()
         {
-            using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingAuthenticatedHttpGetRequestToFeedUrl)))
+            using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingHttpGetRequestToDiagnosticsUrl)))
             {
-                _outputHelper.WriteLine($"Using test key id {TestKeys.TestKey.KeyId}");
                 using (var httpClient = new HttpClient())
                 {
                     using (var request =
-                        new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/nuget/test/"))
+                        new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/diagnostics"))
                     {
                         request.AddToken("testuser", new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
 

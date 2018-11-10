@@ -10,12 +10,13 @@ using Alphaleonis.Win32.Filesystem;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Api.Areas.Time;
+using Arbor.NuGetServer.Tests.Integration.Helpers;
 using Arbor.Tooler;
 using Serilog.Core;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.NuGet
 {
     public class NuGetClientTest
     {

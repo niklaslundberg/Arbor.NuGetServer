@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Arbor.NuGetServer.Tools
+namespace Arbor.NuGetServer.Tools.Commands
 {
     internal class ExitCommand : AppCommand
     {

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Arbor.Ginkgo;
 using Arbor.NuGetServer.Api.Areas.Security;
+using Arbor.NuGetServer.Tests.Integration.Helpers;
 using JetBrains.Annotations;
 using MysticMind.PostgresEmbed;
 

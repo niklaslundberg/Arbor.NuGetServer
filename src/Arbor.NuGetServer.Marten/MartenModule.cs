@@ -23,8 +23,6 @@ namespace Arbor.NuGetServer.Marten
 
         protected override void Load(ContainerBuilder builder)
         {
-            _logger.Debug("Marten enabled: {Status}", _martenConfiguration.Enabled);
-
             if (!_martenConfiguration.Enabled)
             {
                 return;

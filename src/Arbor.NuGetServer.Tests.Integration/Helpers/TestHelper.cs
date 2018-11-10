@@ -1,8 +1,7 @@
-﻿
-using Alphaleonis.Win32.Filesystem;
+﻿using Alphaleonis.Win32.Filesystem;
 using Path = Arbor.Ginkgo.Path;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public static class TestHelper
     {

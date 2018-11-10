@@ -12,12 +12,7 @@ namespace Arbor.NuGetServer.IisHost.AspNet
 
         private static HttpContextBase Wrapped(HttpContext httpContext)
         {
-            if (httpContext == null)
-            {
-                return null;
-            }
-
-            return new HttpContextWrapper(httpContext);
+            return httpContext is null ? null : new HttpContextWrapper(httpContext);
         }
     }
 }

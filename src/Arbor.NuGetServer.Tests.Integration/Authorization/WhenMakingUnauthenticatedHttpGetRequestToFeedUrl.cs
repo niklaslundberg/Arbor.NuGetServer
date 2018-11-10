@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Api.Areas.Security;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Authorization
 {
-    public sealed class WhenMakingHttpGetRequestToDiagnosticsUrl
+    public sealed class WhenMakingUnauthenticatedHttpGetRequestToFeedUrl
     {
-        public WhenMakingHttpGetRequestToDiagnosticsUrl(ITestOutputHelper outputHelper)
+        public WhenMakingUnauthenticatedHttpGetRequestToFeedUrl(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
         }
@@ -20,16 +18,16 @@ namespace Arbor.NuGetServer.Tests.Integration
 
         [NCrunch.Framework.Timeout(120_000)]
         [Fact]
-        public async Task ThenItShouldReturnHttp200Ok()
+        public async Task ThenItShouldReturnHttp401Unauthorized()
         {
-            using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingHttpGetRequestToDiagnosticsUrl)))
+            using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingUnauthenticatedHttpGetRequestToFeedUrl)))
             {
                 using (var httpClient = new HttpClient())
                 {
                     using (var request =
-                        new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/diagnostics"))
+                        new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/nuget/test/"))
                     {
-                        request.AddToken("testuser", new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
+                        //request.AddToken("testuser", new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
 
                         using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(request))
                         {
@@ -37,7 +35,7 @@ namespace Arbor.NuGetServer.Tests.Integration
 
                             _outputHelper.WriteLine(content);
 
-                            Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+                            Assert.Equal(HttpStatusCode.Unauthorized, httpResponseMessage.StatusCode);
                         }
                     }
                 }

@@ -7,7 +7,7 @@ using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Api.Areas.Time;
 
-namespace Arbor.NuGetServer.Tests.Integration
+namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public static class RequestAuthenticationExtensions
     {

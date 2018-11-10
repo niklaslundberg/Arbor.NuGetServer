@@ -3,7 +3,6 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Autofac.Integration.Mvc;
