@@ -25,10 +25,11 @@ namespace Arbor.NuGetServer.IisHost.AspNet
             GlobalConfiguration.Configure(configuration =>
                 WebApiConfig.Register(configuration, app.LifetimeScope));
 
-            AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            AreaRegistration.RegisterAllAreas();
         }
     }
 }

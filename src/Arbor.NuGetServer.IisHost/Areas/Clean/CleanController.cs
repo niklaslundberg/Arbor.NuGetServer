@@ -7,8 +7,9 @@ using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Routing;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.Clean
 {
+    [RouteArea(CleanAreaRegistration.CleanAreaName)]
     [Authorize]
     public class CleanController : Controller
     {

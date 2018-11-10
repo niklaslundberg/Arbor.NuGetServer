@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.Feeds;
@@ -12,8 +11,9 @@ using JetBrains.Annotations;
 using DirectoryInfo = Alphaleonis.Win32.Filesystem.DirectoryInfo;
 using FileInfo = Alphaleonis.Win32.Filesystem.FileInfo;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
+    [RouteArea(NuGetAreaRegistration.NuGetAreaName)]
     public class PackagesController : Controller
     {
         private readonly IReadOnlyCollection<NuGetFeedConfiguration> _feedConfigurations;

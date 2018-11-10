@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Arbor.NuGetServer.Api.Areas.Application;
+using Arbor.NuGetServer.IisHost.Areas.Tenants;
 using Autofac;
 using Autofac.Integration.Mvc;
 using JetBrains.Annotations;

@@ -1,8 +1,7 @@
 ﻿using System.Web.Hosting;
 using Arbor.NuGetServer.Api.Areas.Application;
-using Arbor.NuGetServer.Api.Areas.Test;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.AspNet
 {
     public class AspNetHostingEnvironment : IHostingEnvironment
     {

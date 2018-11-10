@@ -4,7 +4,7 @@ using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
     public static class TenantExtensions
     {

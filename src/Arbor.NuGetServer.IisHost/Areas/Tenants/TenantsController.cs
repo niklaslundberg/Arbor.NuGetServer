@@ -6,8 +6,9 @@ using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
+    [RouteArea(TenantsAreaRegistration.TenantsAreaName)]
     public class TenantsController : Controller
     {
         private readonly INuGetTenantReadService _tenantReadService;

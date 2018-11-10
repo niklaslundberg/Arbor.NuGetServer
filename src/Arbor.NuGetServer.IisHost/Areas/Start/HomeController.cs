@@ -1,7 +1,8 @@
 ﻿using System.Web.Mvc;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.Start
 {
+    [RouteArea(StartAreaRegistration.StartAreaName)]
     public class HomeController : Controller
     {
         [Route("~/")]

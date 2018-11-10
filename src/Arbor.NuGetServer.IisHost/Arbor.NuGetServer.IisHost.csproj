@@ -381,7 +381,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNetHostingEnvironment.cs" />
+    <Compile Include="Areas\Clean\CleanAreaRegistration.cs" />
+    <Compile Include="Areas\NuGet\NuGetAreaRegistration.cs" />
+    <Compile Include="Areas\Start\StartAreaRegistration.cs" />
+    <Compile Include="Areas\Tenants\StartAreaRegistration.cs" />
+    <Compile Include="AspNet\AspNetHostingEnvironment.cs" />
     <Compile Include="AspNet\AppRegisteredAdapter.cs" />
     <Compile Include="AspNet\BundleConfig.cs" />
     <Compile Include="AspNet\CustomAspNetModule.cs" />
@@ -394,19 +398,19 @@
     <Compile Include="AspNet\PathModule.cs" />
     <Compile Include="AspNet\RouteConfig.cs" />
     <Compile Include="AspNet\ServerMapPath.cs" />
-    <Compile Include="CleanController.cs" />
+    <Compile Include="Areas\Clean\CleanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HomeController.cs" />
-    <Compile Include="HostingModule.cs" />
-    <Compile Include="NuGetTenantStatistics.cs" />
-    <Compile Include="PackagesController.cs" />
+    <Compile Include="Areas\Start\HomeController.cs" />
+    <Compile Include="AspNet\HostingModule.cs" />
+    <Compile Include="Areas\Tenants\NuGetTenantStatistics.cs" />
+    <Compile Include="Areas\NuGet\PackagesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TenantExtensions.cs" />
-    <Compile Include="TenantRouteHelper.cs" />
-    <Compile Include="TenantsController.cs" />
-    <Compile Include="TenantsOutputViewModel.cs" />
+    <Compile Include="Areas\Tenants\TenantExtensions.cs" />
+    <Compile Include="Areas\Tenants\TenantRouteHelper.cs" />
+    <Compile Include="Areas\Tenants\TenantsController.cs" />
+    <Compile Include="Areas\Tenants\TenantsOutputViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -424,6 +428,14 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Start\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Start\Views\Web.config" />
+    <Content Include="Areas\Clean\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Clean\Views\Web.config" />
+    <Content Include="Areas\NuGet\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\NuGet\Views\Web.config" />
+    <Content Include="Areas\Tenants\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Tenants\Views\Web.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\milounuget - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\nlundberg-nuget - Web Deploy.pubxml" />
@@ -485,11 +497,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Packages\Index.cshtml" />
-    <Content Include="Views\Clean\Index.cshtml" />
-    <Content Include="Views\Tenants\Index.cshtml" />
-    <Content Include="Views\Tenants\Tenant.cshtml" />
+    <Content Include="Areas\Start\Views\Home\Index.cshtml" />
+    <Content Include="Areas\NuGet\Views\Packages\Index.cshtml" />
+    <Content Include="Areas\Clean\Views\Clean\Index.cshtml" />
+    <Content Include="Areas\Tenants\Views\Tenants\Index.cshtml" />
+    <Content Include="Areas\Tenants\Views\Tenants\Tenant.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />

@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using Arbor.NuGetServer.Api.Areas.CommonExtensions;
 
-namespace Arbor.NuGetServer.IisHost
+namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
     public class TenantsOutputViewModel
     {
