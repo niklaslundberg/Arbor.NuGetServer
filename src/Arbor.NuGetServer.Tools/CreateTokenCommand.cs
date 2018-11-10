@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Core.Extensions;
 
 namespace Arbor.NuGetServer.Tools
 {

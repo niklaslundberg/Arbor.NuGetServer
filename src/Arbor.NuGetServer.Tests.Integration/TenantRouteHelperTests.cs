@@ -1,5 +1,6 @@
 ﻿using System;
 using Arbor.NuGetServer.Api;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Xunit;
 
 namespace Arbor.NuGetServer.Tests.Integration

@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.OwinExtensions;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 

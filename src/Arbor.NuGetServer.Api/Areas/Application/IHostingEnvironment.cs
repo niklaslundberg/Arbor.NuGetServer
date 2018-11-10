@@ -1,4 +1,4 @@
-﻿namespace Arbor.NuGetServer.Api.Areas.Test
+﻿namespace Arbor.NuGetServer.Api.Areas.Application
 {
     public interface IHostingEnvironment
     {

@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using Arbor.NuGetServer.Abstractions;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 {
     public static class TenantUrlExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api.Areas.Application
+namespace Arbor.NuGetServer.Api.Areas.Http
 {
     [UsedImplicitly]
     public class HttpFactoryModule : Module

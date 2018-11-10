@@ -3,7 +3,7 @@ using Alphaleonis.Win32.Filesystem;
 using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api.Clean
+namespace Arbor.NuGetServer.Api.Areas.Clean
 {
     public class CleanTarget
     {

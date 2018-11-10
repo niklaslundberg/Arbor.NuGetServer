@@ -4,7 +4,7 @@ using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 using NuGet.Versioning;
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.NuGet
 {
     public static class PackageIdentifierHelper
     {

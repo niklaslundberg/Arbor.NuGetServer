@@ -9,7 +9,7 @@ using Arbor.NuGetServer.Core.Http;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace Arbor.NuGetServer.Api.Clean
+namespace Arbor.NuGetServer.Api.Areas.Clean
 {
     [Authorize]
     public class CleanApiController : ApiController

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
@@ -14,7 +15,7 @@ using DirectoryInfo = Alphaleonis.Win32.Filesystem.DirectoryInfo;
 using FileInfo = Alphaleonis.Win32.Filesystem.FileInfo;
 using Path = Alphaleonis.Win32.Filesystem.Path;
 
-namespace Arbor.NuGetServer.Api.Clean
+namespace Arbor.NuGetServer.Api.Areas.Clean
 {
     [UsedImplicitly]
     public class CleanService

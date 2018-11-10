@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\build\build.bat = ..\build\build.bat
 		Directory.Build.props = Directory.Build.props
+		..\tools\IISAclUrl.bat = ..\tools\IISAclUrl.bat
 		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Tests.Integration", "Arbor.NuGetServer.Tests.Integration\Arbor.NuGetServer.Tests.Integration.csproj", "{0824D7F7-C0B8-47BF-B575-5C6379894460}"
@@ -25,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Core", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Api", "Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj", "{783C1130-2220-4EB1-A31A-138B3856F6B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.Tools", "Arbor.NuGetServer.Tools\Arbor.NuGetServer.Tools.csproj", "{35A2C826-844C-450B-939A-02CA5DDD0A31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Tools", "Arbor.NuGetServer.Tools\Arbor.NuGetServer.Tools.csproj", "{35A2C826-844C-450B-939A-02CA5DDD0A31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

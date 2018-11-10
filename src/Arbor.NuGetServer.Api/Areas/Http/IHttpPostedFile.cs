@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api.Areas.Abstraction
+namespace Arbor.NuGetServer.Api.Areas.Http
 {
     public interface IHttpPostedFile
     {

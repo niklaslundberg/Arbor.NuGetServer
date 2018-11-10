@@ -1,7 +1,6 @@
 using System;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
 
 namespace Arbor.NuGetServer.Abstractions

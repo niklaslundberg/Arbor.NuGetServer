@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web;
-using Arbor.NuGetServer.Api.Areas.Abstraction;
+using Arbor.NuGetServer.Api.Areas.Http;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost.AspNet

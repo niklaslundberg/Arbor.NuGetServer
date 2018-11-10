@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Areas.Test

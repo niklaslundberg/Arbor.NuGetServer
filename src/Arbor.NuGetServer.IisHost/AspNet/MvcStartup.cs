@@ -5,6 +5,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Arbor.NuGetServer.Api;
 using Arbor.NuGetServer.Api.Areas.Application;
+using Arbor.NuGetServer.Api.Areas.Configuration;
 using Autofac.Integration.Mvc;
 using JetBrains.Annotations;
 

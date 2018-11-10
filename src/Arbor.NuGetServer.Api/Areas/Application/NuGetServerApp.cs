@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
+using Arbor.NuGetServer.Api.Areas.Clean;
 using Arbor.NuGetServer.Api.Areas.Configuration;
-using Arbor.NuGetServer.Api.Clean;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using Autofac;
@@ -74,7 +74,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             ImmutableArray<Assembly> AssemblyResolver() => assemblyResolver()
                 .SafeToImmutableArray();
 
-            MultiSourceKeyValueConfiguration keyValueConfiguration = ConfigurationStartup.Start(AssemblyResolver());
+            MultiSourceKeyValueConfiguration keyValueConfiguration = ConfigurationInitialization.InitializeConfiguration(AssemblyResolver());
 
             AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration, modules);
 
@@ -91,7 +91,10 @@ namespace Arbor.NuGetServer.Api.Areas.Application
 
             backgroundServices.AddRange(collection);
 
-            logger.Information("Added background services {BackgroundServices}", backgroundServices);
+            logger.Information("Added background services {BackgroundServices}",
+                backgroundServices
+                    .Select(s => s.GetType().FullName)
+                    .ToArray());
 
             string packagesPath =
                 keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath];

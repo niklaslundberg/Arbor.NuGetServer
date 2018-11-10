@@ -7,7 +7,7 @@ using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.KVConfiguration.Core.Extensions.IntExtensions;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Clean;
+using Arbor.NuGetServer.Api.Areas.Clean;
 using JetBrains.Annotations;
 using Serilog;
 

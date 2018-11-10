@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
-using Arbor.NuGetServer.Api.Areas.Abstraction;
+using Arbor.NuGetServer.Api.Areas.Http;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;

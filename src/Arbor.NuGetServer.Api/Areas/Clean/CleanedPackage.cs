@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api.Clean
+namespace Arbor.NuGetServer.Api.Areas.Clean
 {
     public class CleanedPackage
     {

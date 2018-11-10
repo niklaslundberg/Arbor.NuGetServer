@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.OwinExtensions
 {
     public static class CustomOwinRequestExtensions
     {

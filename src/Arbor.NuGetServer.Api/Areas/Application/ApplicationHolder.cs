@@ -1,6 +1,4 @@
-﻿using Arbor.NuGetServer.Api.Areas.Application;
-
-namespace Arbor.NuGetServer.Api
+﻿namespace Arbor.NuGetServer.Api.Areas.Application
 {
     public static class ApplicationHolder
     {

@@ -2,8 +2,8 @@
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Abstractions;
+using Arbor.NuGetServer.Api.Areas.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
-using Arbor.NuGetServer.Api.Clean;
 using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 

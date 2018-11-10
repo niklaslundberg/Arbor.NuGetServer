@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arbor.NuGetServer.Core.Extensions
+namespace Arbor.NuGetServer.Abstractions
 {
     public static class StringExtensions
     {

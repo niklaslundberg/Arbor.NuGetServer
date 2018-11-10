@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Areas.Application;
 using Autofac;
 using Autofac.Integration.WebApi;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     [UsedImplicitly]
     public class WebApiModule : MetaModule

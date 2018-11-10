@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
-using Arbor.NuGetServer.Api.Areas.Abstraction;
 using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
 using Serilog;
 
-namespace Arbor.NuGetServer.Api.Areas.Application
+namespace Arbor.NuGetServer.Api.Areas.Http
 {
     [UsedImplicitly]
     public sealed class HttpClientFactory : IHttpClientFactory, IDisposable

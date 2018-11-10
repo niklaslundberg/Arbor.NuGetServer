@@ -10,9 +10,9 @@ using Arbor.KVConfiguration.UserConfiguration;
 
 namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
-    public static class ConfigurationStartup
+    public static class ConfigurationInitialization
     {
-        public static MultiSourceKeyValueConfiguration Start(ImmutableArray<Assembly> assemblies)
+        public static MultiSourceKeyValueConfiguration InitializeConfiguration(ImmutableArray<Assembly> assemblies)
         {
             var siteRootDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 

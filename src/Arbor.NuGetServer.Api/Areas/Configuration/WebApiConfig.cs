@@ -8,7 +8,7 @@ using Autofac.Integration.WebApi;
 using JetBrains.Annotations;
 using NuGet.Server.V2;
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     public static class WebApiConfig
     {

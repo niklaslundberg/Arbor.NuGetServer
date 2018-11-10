@@ -3,7 +3,7 @@ using Arbor.KVConfiguration.Core;
 using Autofac;
 using JetBrains.Annotations;
 
-namespace Arbor.NuGetServer.Api.Areas.Application
+namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     public class ConfigurationModule : Module
     {

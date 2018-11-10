@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Areas.Configuration;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Logging;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Core.Extensions;
@@ -14,7 +14,7 @@ using Autofac.Core;
 using JetBrains.Annotations;
 using Serilog;
 
-namespace Arbor.NuGetServer.Api.Areas.Application
+namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     public static class Bootstrapper
     {

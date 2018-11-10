@@ -1,5 +1,4 @@
-﻿using Arbor.NuGetServer.Api;
-using Arbor.NuGetServer.Api.Areas.Application;
+﻿using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.NuGet.Conflicts;
 using Arbor.NuGetServer.Api.Areas.Security;
@@ -12,7 +11,7 @@ using Thinktecture.IdentityModel.Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
 
-namespace Arbor.NuGetServer.Api
+namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     public class Startup
     {

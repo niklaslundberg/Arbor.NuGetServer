@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Arbor.NuGetServer.Api.Areas.Abstraction;
+using Arbor.NuGetServer.Api.Areas.Http;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 

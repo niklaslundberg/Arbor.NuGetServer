@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.Owin;
 
-namespace Arbor.NuGetServer.Api.Areas.Abstraction
+namespace Arbor.NuGetServer.Api.Areas.Http
 {
     public interface IRequestFileHelper
     {

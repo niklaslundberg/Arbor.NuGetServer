@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arbor.NuGetServer.Api.Html
+namespace Arbor.NuGetServer.Api.Areas.Html
 {
     public static class HtmlAttributes
     {
