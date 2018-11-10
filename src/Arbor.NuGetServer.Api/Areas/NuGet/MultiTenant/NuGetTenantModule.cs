@@ -7,25 +7,25 @@ using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 {
-    public class NuGetTenantModule : MetaModule
+    public class NuGetTenantModule : Module
     {
-        private readonly IKeyValueConfiguration _keyValueConfiguration;
+        //private readonly IKeyValueConfiguration _keyValueConfiguration;
 
-        public NuGetTenantModule([NotNull] IKeyValueConfiguration keyValueConfiguration)
-        {
-            _keyValueConfiguration = keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
-        }
+        //public NuGetTenantModule([NotNull] IKeyValueConfiguration keyValueConfiguration)
+        //{
+        //    _keyValueConfiguration = keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
+        //}
 
         protected override void Load(ContainerBuilder builder)
         {
 
-            if (_keyValueConfiguration.ValueOrDefault(TenantConstants.InMemorySourceEnabled, defaultValue: true))
-            {
+            //if (_keyValueConfiguration.ValueOrDefault(TenantConstants.InMemorySourceEnabled, defaultValue: true))
+            //{
                 builder.RegisterType<InMemoryNuGetTenantReadService>()
                     .IfNotRegistered(typeof(INuGetTenantReadService))
                     .AsImplementedInterfaces()
                     .SingleInstance();
-            }
+            //}
         }
     }
 }

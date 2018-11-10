@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api;
-using Arbor.NuGetServer.Api.Areas.Configuration;
 using Arbor.NuGetServer.Api.Areas.NuGet;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.Feeds;
-using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
+using DirectoryInfo = Alphaleonis.Win32.Filesystem.DirectoryInfo;
+using FileInfo = Alphaleonis.Win32.Filesystem.FileInfo;
 
 namespace Arbor.NuGetServer.IisHost
 {
     public class PackagesController : Controller
     {
+        private readonly IReadOnlyCollection<NuGetFeedConfiguration> _feedConfigurations;
         private readonly IKeyValueConfiguration _keyValueConfiguration;
         private readonly INuGetTenantReadService _tenantReadService;
-        private readonly IReadOnlyCollection<NuGetFeedConfiguration> _feedConfigurations;
 
-        public PackagesController([NotNull] IKeyValueConfiguration keyValueConfiguration, INuGetTenantReadService tenantReadService, IReadOnlyCollection<NuGetFeedConfiguration> feedConfigurations)
+        public PackagesController(
+            [NotNull] IKeyValueConfiguration keyValueConfiguration,
+            INuGetTenantReadService tenantReadService,
+            IReadOnlyCollection<NuGetFeedConfiguration> feedConfigurations)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));

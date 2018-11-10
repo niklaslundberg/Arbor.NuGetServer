@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
 using Arbor.NuGetServer.Api.Clean;
+using Arbor.NuGetServer.Core;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost
@@ -24,6 +26,8 @@ namespace Arbor.NuGetServer.IisHost
         {
             int packagesToKeep;
 
+            NuGetTenantId tenantId = ValidateTenant(tenant);
+
             if (!int.TryParse(_keyValueConfiguration[CleanConstants.PackagesToKeepKey],
                     out int packagesToKeepFromConfig) || packagesToKeepFromConfig <= 0)
             {
@@ -34,9 +38,15 @@ namespace Arbor.NuGetServer.IisHost
                 packagesToKeep = packagesToKeepFromConfig;
             }
 
-            string cleanPostRoute = $"/{CleanConstants.PostRoute}";
+            string cleanPostRoute = $"/{CleanConstants.PostRoute.WithParameter(CleanConstants.TenantRouteParameterName, tenantId.TenantId)}";
 
             return View(new CleanViewOutputModel(cleanPostRoute, packagesToKeep, true, true));
+        }
+
+        private NuGetTenantId ValidateTenant(string tenant)
+        {
+            // TODO add tenant validation
+            return new NuGetTenantId(tenant);
         }
     }
 }

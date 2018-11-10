@@ -1,8 +1,12 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Core.Http;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Arbor.NuGetServer.Api.Clean
@@ -12,16 +16,20 @@ namespace Arbor.NuGetServer.Api.Clean
     {
         private readonly CleanService _cleanService;
 
-        public CleanApiController(CleanService cleanService)
+        public CleanApiController([NotNull] CleanService cleanService)
         {
-            _cleanService = cleanService;
+            _cleanService = cleanService ?? throw new ArgumentNullException(nameof(cleanService));
         }
 
         [Route(CleanConstants.PostRoute)]
         [HttpPost]
-        public IHttpActionResult Clean(CleanInputModel cleanInputModel, string tenant)
+        public async Task<IHttpActionResult> Clean(CleanInputModel cleanInputModel, string tenant)
         {
-            CleanResult cleanResult = _cleanService.Clean(cleanInputModel.Whatif,
+            NuGetTenantId nugetTenantId = ValidateTenant(tenant);
+
+            CleanResult cleanResult = await _cleanService.CleanAsync(
+                nugetTenantId,
+                cleanInputModel.Whatif,
                 cleanInputModel.PreReleaseOnly,
                 cleanInputModel.PackageId,
                 cleanInputModel.PackagesToKeep);
@@ -36,6 +44,12 @@ namespace Arbor.NuGetServer.Api.Clean
             };
 
             return ResponseMessage(httpResponseMessage);
+        }
+
+        private NuGetTenantId ValidateTenant(string tenant)
+        {
+            //TODO add validation
+            return new NuGetTenantId(tenant);
         }
     }
 }

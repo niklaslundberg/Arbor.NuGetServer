@@ -18,5 +18,15 @@ namespace Arbor.NuGetServer.Core.Extensions
 
             return value;
         }
+
+        public static string WithDefault(this string text, string defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return defaultValue;
+            }
+
+            return text;
+        }
     }
 }

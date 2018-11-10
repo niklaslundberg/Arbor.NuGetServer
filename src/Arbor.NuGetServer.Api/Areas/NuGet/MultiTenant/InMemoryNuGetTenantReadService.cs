@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Alphaleonis.Win32.Filesystem;
 using Arbor.NuGetServer.Abstractions;
-using Arbor.NuGetServer.Api.Areas.WebHooks;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
@@ -13,6 +14,13 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
     [UsedImplicitly]
     public sealed class InMemoryNuGetTenantReadService : INuGetTenantReadService
     {
+        private readonly TokenGenerator _tokenGenerator;
+
+        public InMemoryNuGetTenantReadService(TokenGenerator tokenGenerator)
+        {
+            _tokenGenerator = tokenGenerator;
+        }
+
         public ImmutableArray<NuGetTenantId> GetNuGetTenantIds()
         {
             return GetNuGetTenantConfigurations()
@@ -22,9 +30,19 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 
         public ImmutableArray<NuGetTenantConfiguration> GetNuGetTenantConfigurations()
         {
+            JwtSecurityToken testToken = _tokenGenerator.CreateJwt(new NuGetTenantId("test"),
+                new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
+
+            JwtSecurityToken pushToken = _tokenGenerator.CreateJwt(new NuGetTenantId("test"),
+                new List<NuGetClaimType> { NuGetClaimType.CanPushPackage });
+
+            var handler = new JwtSecurityTokenHandler();
+            string testPassword = handler.WriteToken(testToken);
+            string pushApiToken = handler.WriteToken(pushToken);
+
             NuGetTenantConfiguration[] tenantsId =
             {
-                new NuGetTenantConfiguration("test", "testkey", "testuser", "testpassword", null),
+                new NuGetTenantConfiguration("test", pushApiToken, "testuser", testPassword, GetPackageDirectory("test").FullName),
                 new NuGetTenantConfiguration("test2", "test2key", "test2user", "test2password", null),
                 new NuGetTenantConfiguration("test3", "test3key", "", "", null)
             };
@@ -32,6 +50,13 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
             return tenantsId
                 .OrderBy(_ => _.TenantId)
                 .ToImmutableArray();
+        }
+
+        private DirectoryInfo GetPackageDirectory(string tenantId)
+        {
+            return new DirectoryInfo(Path.Combine(Path.GetTempPath(), "ANS",
+                tenantId,
+                Guid.NewGuid().ToString())).EnsureExists();
         }
 
         public Task<IReadOnlyList<TenantWebHook>> GetPackageWebHooksAsync(
@@ -51,6 +76,14 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
                 .ToImmutableArray();
 
             return Task.FromResult(result);
+        }
+
+        public Task<NuGetTenantConfiguration> GetNuGetTenantConfigurationAsync(
+            NuGetTenantId nugetTenantId,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult(GetNuGetTenantConfigurations().SingleOrDefault(tenant =>
+                tenant.Id.Equals(nugetTenantId.TenantId, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }

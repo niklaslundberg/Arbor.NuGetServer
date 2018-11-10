@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
-using System.IO;
 using System.Reflection;
+using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.JsonConfiguration;
 using Arbor.KVConfiguration.SystemConfiguration;

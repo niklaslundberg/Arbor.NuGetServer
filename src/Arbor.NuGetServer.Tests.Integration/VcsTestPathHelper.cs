@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿
+using Alphaleonis.Win32.Filesystem;
 using Arbor.Aesculus.Core;
 using NCrunch.Framework;
 

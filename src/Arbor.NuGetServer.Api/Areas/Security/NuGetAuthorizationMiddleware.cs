@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -51,36 +52,39 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             if (nuGetTenantConfiguration is null)
             {
-                await BadRequestAsync(context, "Missing tenant configuration");
+                string reason = "Missing tenant configuration";
+                await BadRequestAsync(context, reason);
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context);
+                await WriteUnauthorizedBodyAsync(context, reason);
                 return;
             }
 
-            if (nuGetTenantConfiguration.AllowAnonymous)
+            bool isGetRequest = context.Request.IsGetRequest();
+
+            if (isGetRequest && nuGetTenantConfiguration.AllowAnonymous)
             {
                 await Next.Invoke(context);
                 return;
             }
 
-            if (context.Authentication.User == null)
+            if (context.Authentication.User is null)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context);
+                await WriteUnauthorizedBodyAsync(context, "Missing user");
                 return;
             }
 
-            if (context.Authentication.User.Identity == null)
+            if (context.Authentication.User.Identity is null)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context);
+                await WriteUnauthorizedBodyAsync(context, "Missing identity");
                 return;
             }
 
             if (!context.Authentication.User.Identity.IsAuthenticated)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context);
+                await WriteUnauthorizedBodyAsync(context, "Unauthenticated");
                 return;
             }
 
@@ -91,7 +95,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                         claim => claim.Type == ClaimTypes.NameIdentifier && !string.IsNullOrWhiteSpace(claim.Value)))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context);
+                    await WriteUnauthorizedBodyAsync(context, "Missing name identifier");
                     return;
                 }
 
@@ -101,29 +105,82 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                 if (string.IsNullOrWhiteSpace(tenantClaimValue))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context);
+                    await WriteUnauthorizedBodyAsync(context, "Missing tenant");
                     return;
                 }
 
                 if (!tenantClaimValue.Equals(nuGetTenantId.TenantId, StringComparison.OrdinalIgnoreCase))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context);
+                    await WriteUnauthorizedBodyAsync(context, "Tenant mismatch");
                     return;
+                }
+
+                bool isFeedRequest = IsFeedRequest(context, isGetRequest);
+
+                if (isFeedRequest)
+                {
+                    string canReadTenantFeedClaimType = NuGetClaimType.CanReadTenantFeed.Key;
+
+                    string canReedFeedValue = claimsIdentity.Claims.SingleOrDefault(
+                        claim => string.Equals(claim.Type,
+                            canReadTenantFeedClaimType,
+                            StringComparison.Ordinal))?.Value;
+
+                    if (string.IsNullOrWhiteSpace(canReedFeedValue))
+                    {
+                        Challenge(context);
+                        await WriteUnauthorizedBodyAsync(context, $"Missing claim type {canReadTenantFeedClaimType}");
+                        return;
+                    }
+
+                    if (!nuGetTenantId.TenantId.Equals(canReedFeedValue))
+                    {
+                        Challenge(context);
+                        await WriteUnauthorizedBodyAsync(context, $"Claim value mismatch for claim type {canReadTenantFeedClaimType}");
+                        return;
+                    }
                 }
             }
 
             await Next.Invoke(context);
         }
 
-        private static async Task WriteUnauthorizedBodyAsync(IOwinContext context)
+        private static bool IsFeedRequest(IOwinContext context, bool isGetRequest)
+        {
+            if (!isGetRequest)
+            {
+                return false;
+            }
+
+            ImmutableArray<string> immutableArray = context.Request.GetPathSegments();
+
+            if (immutableArray.Length == 2)
+            {
+                return true;
+            }
+
+            //if (immutableArray.Length >= 3 && immutableArray[2].Equals("$metadata", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    return true;
+            //}
+
+            if (immutableArray.Length >= 3 && immutableArray[2].Equals("Search()", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static async Task WriteUnauthorizedBodyAsync(IOwinContext context, string reason = null)
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             context.Response.ContentType = ContentTypes.PlainText;
 
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
-                await streamWriter.WriteAsync("Unauthorized");
+                await streamWriter.WriteAsync("Unauthorized2 " + reason);
             }
         }
 

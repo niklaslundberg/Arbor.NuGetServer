@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Core.Extensions.BoolExtensions;
 using Arbor.NuGetServer.Api.Areas.Configuration;
@@ -26,10 +26,10 @@ namespace Arbor.NuGetServer.Api.Areas.Application
         private readonly Action<Func<CancellationToken, Task>> _backgroundServiceHandler;
         private readonly List<IHostedService> _backgroundServices;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly Logger _logger;
         private AppContainer _container;
         private bool _isRunning;
         private bool _isStopped;
-        private readonly Logger _logger;
 
         private NuGetServerApp(
             IKeyValueConfiguration keyValueConfiguration,
@@ -191,7 +191,8 @@ namespace Arbor.NuGetServer.Api.Areas.Application
                     _logger.Information("Starting background service {BackgroundService}",
                         backgroundService.GetType().Name);
 
-                    return ScheduleWork(cancellationToken => backgroundService.StartAsync(cancellationToken), linkedToken);
+                    return ScheduleWork(cancellationToken => backgroundService.StartAsync(cancellationToken),
+                        linkedToken);
                 });
             }
         }

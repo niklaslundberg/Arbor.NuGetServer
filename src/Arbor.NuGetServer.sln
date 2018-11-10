@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Core", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.NuGetServer.Api", "Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj", "{783C1130-2220-4EB1-A31A-138B3856F6B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.NuGetServer.Tools", "Arbor.NuGetServer.Tools\Arbor.NuGetServer.Tools.csproj", "{35A2C826-844C-450B-939A-02CA5DDD0A31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{783C1130-2220-4EB1-A31A-138B3856F6B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35A2C826-844C-450B-939A-02CA5DDD0A31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35A2C826-844C-450B-939A-02CA5DDD0A31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35A2C826-844C-450B-939A-02CA5DDD0A31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35A2C826-844C-450B-939A-02CA5DDD0A31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

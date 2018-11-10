@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+   <PackageReference Include="AlphaFS" Version="2.2.6" />
    <PackageReference Include="Arbor.KVConfiguration.Core" Version="0.16.2" />
   <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+  <PackageReference Include="MediatR" Version="5.1.0" />
   <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.1" />
   <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.1" />
   <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0">

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿
+using Alphaleonis.Win32.Filesystem;
 using Path = Arbor.Ginkgo.Path;
 
 namespace Arbor.NuGetServer.Tests.Integration
@@ -42,7 +43,7 @@ namespace Arbor.NuGetServer.Tests.Integration
 
                 if (!targetFile.Exists)
                 {
-                    dllFile.CopyTo(targetFile.FullName);
+                    //dllFile.CopyTo(targetFile.FullName);
                 }
             }
         }

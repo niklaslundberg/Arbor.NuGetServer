@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 
@@ -11,33 +10,28 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 {
     public class SimpleAuthenticator
     {
-        private readonly IKeyValueConfiguration _keyValueConfiguration;
         private readonly INuGetTenantReadService _nuGetTenantReadService;
         private readonly ITenantRouteHelper _tenantRouteHelper;
+        private readonly TokenValidator _tokenValidator;
 
-        public SimpleAuthenticator(IKeyValueConfiguration keyValueConfiguration, INuGetTenantReadService nuGetTenantReadService, ITenantRouteHelper tenantRouteHelper)
+        public SimpleAuthenticator(
+            INuGetTenantReadService nuGetTenantReadService,
+            ITenantRouteHelper tenantRouteHelper,
+            TokenValidator tokenValidator)
         {
-            _keyValueConfiguration = keyValueConfiguration;
             _nuGetTenantReadService = nuGetTenantReadService;
             _tenantRouteHelper = tenantRouteHelper;
+            _tokenValidator = tokenValidator;
         }
+
+        public Task<IEnumerable<Claim>> InvalidUser => Task.FromResult<IEnumerable<Claim>>(Array.Empty<Claim>());
 
         public Task<IEnumerable<Claim>> IsAuthenticated(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                return Task.FromResult<IEnumerable<Claim>>(new List<Claim>());
+                return InvalidUser;
             }
-
-            //string usernameKey = "nuget:authentication:basicauthentication:username";
-            //string passwordKey = "nuget:authentication:basicauthentication:password";
-
-            //string storedUsername =
-            //    _keyValueConfiguration[usernameKey].ThrowIfNullOrWhitespace(
-            //        $"AppSetting key '{usernameKey}' is not set");
-            //string storedPassword =
-            //    _keyValueConfiguration[passwordKey].ThrowIfNullOrWhitespace(
-            //        $"AppSetting key '{passwordKey}' is not set");
 
             NuGetTenantId tenant = _tenantRouteHelper.GetTenantId();
 
@@ -46,34 +40,45 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                 return InvalidUser;
             }
 
-            NuGetTenantConfiguration nuGetTenantConfiguration = _nuGetTenantReadService.GetNuGetTenantConfigurations().SingleOrDefault(tenantId => tenantId.TenantId == tenant);
+            NuGetTenantConfiguration nuGetTenantConfiguration = _nuGetTenantReadService.GetNuGetTenantConfigurations()
+                .SingleOrDefault(tenantId => tenantId.TenantId == tenant);
 
             if (nuGetTenantConfiguration is null)
             {
                 return InvalidUser;
             }
 
-            string storedUsername = nuGetTenantConfiguration.Username;
-            string storedPassword = nuGetTenantConfiguration.Password;
+            ClaimsPrincipal claimsPrincipal = _tokenValidator.Validate(password);
 
-            bool correctUsername = username.Equals(storedUsername, StringComparison.InvariantCultureIgnoreCase);
-            bool correctPassword = password.Equals(storedPassword, StringComparison.InvariantCulture);
-
-            if (!(correctUsername && correctPassword))
+            if (claimsPrincipal is null)
             {
                 return InvalidUser;
             }
 
-            return
-                Task.FromResult<IEnumerable<Claim>>(
-                    new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, storedUsername),
-                        new Claim(ClaimTypes.NameIdentifier, storedUsername),
-                        new Claim(CustomClaimTypes.TenantId, tenant.TenantId),
-                    });
-        }
+            //string storedUsername = nuGetTenantConfiguration.Username;
+            //string storedPassword = nuGetTenantConfiguration.Password;
 
-        public Task<IEnumerable<Claim>> InvalidUser => Task.FromResult<IEnumerable<Claim>>(new List<Claim>());
+            //bool correctUsername = username.Equals(storedUsername, StringComparison.InvariantCultureIgnoreCase);
+            //bool correctPassword = password.Equals(storedPassword, StringComparison.InvariantCulture);
+
+            //if (!(correctUsername && correctPassword))
+            //{
+            //    return InvalidUser;
+            //}
+
+            var finalClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(CustomClaimTypes.TenantId, tenant.TenantId)
+            };
+
+            foreach (Claim claim in claimsPrincipal.Claims.Where(NuGetClaimType.IsNuGetClaimType))
+            {
+                finalClaims.Add(claim);
+            }
+
+            return Task.FromResult<IEnumerable<Claim>>(finalClaims);
+        }
     }
 }

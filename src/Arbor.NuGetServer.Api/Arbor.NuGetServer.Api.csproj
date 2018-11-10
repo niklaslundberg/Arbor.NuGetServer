@@ -4,7 +4,7 @@
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup><PackageReference Include="Arbor.KVConfiguration.Core" Version="0.16.2" />
+  <ItemGroup><PackageReference Include="AlphaFS" Version="2.2.6" /><PackageReference Include="Arbor.KVConfiguration.Core" Version="0.16.2" />
   <PackageReference Include="Arbor.KVConfiguration.JsonConfiguration" Version="0.16.2" />
   <PackageReference Include="Arbor.KVConfiguration.Schema" Version="0.16.2" />
   <PackageReference Include="Arbor.KVConfiguration.Schema.Json" Version="0.16.2" />

@@ -6,6 +6,8 @@ namespace Arbor.NuGetServer.Api.Clean
     {
         public const string CleanOnStartEnabled = "urn:arbor-nuget-server:nuget:clean:clean-bin-files-on-start:enabled";
 
+        public const string TenantRouteParameterName = "tenant";
+
         public const string PostRoute = "~" + TenantConstants.NuGetBaseRoute + "/{tenant}/clean";
 
         public const string CleanGetRoute = "~" + TenantConstants.NuGetBaseRoute + "/{tenant}/cleaning";

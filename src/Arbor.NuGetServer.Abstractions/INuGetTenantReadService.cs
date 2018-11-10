@@ -12,5 +12,7 @@ namespace Arbor.NuGetServer.Abstractions
         ImmutableArray<NuGetTenantConfiguration> GetNuGetTenantConfigurations();
 
         Task<IReadOnlyList<TenantWebHook>> GetPackageWebHooksAsync(NuGetTenantId tenantId, CancellationToken cancellationToken);
+
+        Task<NuGetTenantConfiguration> GetNuGetTenantConfigurationAsync(NuGetTenantId nugetTenantId, CancellationToken cancellationToken = default);
     }
 }

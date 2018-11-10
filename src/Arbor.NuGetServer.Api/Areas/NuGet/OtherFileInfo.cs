@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using Alphaleonis.Win32.Filesystem;
 using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet

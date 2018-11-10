@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -33,6 +34,11 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
             CancellationToken cancellationToken)
         {
             return Task.FromResult<IReadOnlyList<TenantWebHook>>(ImmutableArray<TenantWebHook>.Empty);
+        }
+
+        public Task<NuGetTenantConfiguration> GetNuGetTenantConfigurationAsync(NuGetTenantId nugetTenantId, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(_nugetTenants.SingleOrDefault(tenant => tenant.Id.Equals(nugetTenantId.TenantId, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }

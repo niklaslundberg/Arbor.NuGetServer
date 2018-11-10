@@ -5,26 +5,11 @@ namespace Arbor.NuGetServer.Abstractions
 {
     public class NuGetTenantId : IEquatable<NuGetTenantId>, IComparable<NuGetTenantId>
     {
-        public int CompareTo(NuGetTenantId other)
-        {
-            if (ReferenceEquals(this, other))
-            {
-                return 0;
-            }
-
-            if (ReferenceEquals(null, other))
-            {
-                return 1;
-            }
-
-            return string.Compare(TenantId, other.TenantId, StringComparison.Ordinal);
-        }
-
-        public NuGetTenantId([NotNull]string tenantId)
+        public NuGetTenantId([NotNull] string tenantId)
         {
             if (string.IsNullOrWhiteSpace(tenantId))
             {
-                throw new ArgumentException("message", nameof(tenantId));
+                throw new ArgumentException("TenantId cannot be null or white space", nameof(tenantId));
             }
 
             TenantId = tenantId;
@@ -40,6 +25,21 @@ namespace Arbor.NuGetServer.Abstractions
         public static bool operator !=(NuGetTenantId left, NuGetTenantId right)
         {
             return !Equals(left, right);
+        }
+
+        public int CompareTo(NuGetTenantId other)
+        {
+            if (ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+
+            if (ReferenceEquals(null, other))
+            {
+                return 1;
+            }
+
+            return string.Compare(TenantId, other.TenantId, StringComparison.Ordinal);
         }
 
         public bool Equals(NuGetTenantId other)
@@ -84,7 +84,7 @@ namespace Arbor.NuGetServer.Abstractions
 
         public override int GetHashCode()
         {
-            return (TenantId != null ? TenantId.GetHashCode() : 0);
+            return TenantId?.GetHashCode() ?? 0;
         }
     }
 }

@@ -49,5 +49,18 @@ namespace Arbor.NuGetServer.Marten
         {
             return Task.FromResult<IReadOnlyList<TenantWebHook>>(Array.Empty<TenantWebHook>());
         }
+
+        public async Task<NuGetTenantConfiguration> GetNuGetTenantConfigurationAsync(
+            NuGetTenantId nugetTenantId,
+            CancellationToken cancellationToken)
+        {
+            using (IDocumentSession session = _documentStore.LightweightSession())
+            {
+                NuGetTenantConfiguration tenant =
+                    await session.LoadAsync<NuGetTenantConfiguration>(nugetTenantId.TenantId, cancellationToken);
+
+                return tenant;
+            }
+        }
     }
 }

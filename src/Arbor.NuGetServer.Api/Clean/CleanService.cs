@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Abstractions;
 using Arbor.NuGetServer.Core;
 using Arbor.NuGetServer.Core.Extensions;
 using JetBrains.Annotations;
 using Serilog;
+using DirectoryInfo = Alphaleonis.Win32.Filesystem.DirectoryInfo;
+using FileInfo = Alphaleonis.Win32.Filesystem.FileInfo;
+using Path = Alphaleonis.Win32.Filesystem.Path;
 
 namespace Arbor.NuGetServer.Api.Clean
 {
@@ -16,12 +22,19 @@ namespace Arbor.NuGetServer.Api.Clean
         private readonly IKeyValueConfiguration _keyValueConfiguration;
         private readonly ILogger _logger;
         private readonly IPathMapper _pathMapper;
+        private readonly INuGetTenantReadService _tenantReadService;
 
-        public CleanService([NotNull] IPathMapper pathMapper, [NotNull] ILogger logger, [NotNull] IKeyValueConfiguration keyValueConfiguration)
+        public CleanService(
+            [NotNull] IPathMapper pathMapper,
+            [NotNull] ILogger logger,
+            [NotNull] IKeyValueConfiguration keyValueConfiguration,
+            INuGetTenantReadService tenantReadService)
         {
             _pathMapper = pathMapper ?? throw new ArgumentNullException(nameof(pathMapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _keyValueConfiguration = keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
+            _keyValueConfiguration =
+                keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
+            _tenantReadService = tenantReadService;
         }
 
         public void CleanBinFiles(bool whatIf)
@@ -50,18 +63,20 @@ namespace Arbor.NuGetServer.Api.Clean
             }
         }
 
-        public CleanResult Clean(
-            bool whatif = false,
+        public async Task<CleanResult> CleanAsync(
+            NuGetTenantId nugetTenantId,
+            bool whatIf = false,
             bool preReleaseOnly = true,
             string packageId = "",
-            int packagesToKeep = -1)
+            int packagesToKeep = -1,
+            CancellationToken cancellationToken = default)
         {
             if (!_keyValueConfiguration[CleanConstants.CleanEnabled].ParseAsBoolOrDefault())
             {
                 return CleanResult.NotRun;
             }
 
-            if (packagesToKeep < 0)
+            if (packagesToKeep <= 0)
             {
                 if (!int.TryParse(_keyValueConfiguration[CleanConstants.PackagesToKeepKey],
                         out int packagesToKeepFromConfig) || packagesToKeepFromConfig <= 0)
@@ -70,9 +85,11 @@ namespace Arbor.NuGetServer.Api.Clean
                 }
             }
 
+            NuGetTenantConfiguration configuration =
+                await _tenantReadService.GetNuGetTenantConfigurationAsync(nugetTenantId, cancellationToken);
+
             string packagesFullPath =
-                _pathMapper.MapPath(
-                    _keyValueConfiguration[PackageConfigurationConstants.PackagePath]);
+                _pathMapper.MapPath(configuration.PackageDirectory);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 
@@ -81,7 +98,8 @@ namespace Arbor.NuGetServer.Api.Clean
                 return CleanResult.NotRun;
             }
 
-            FileInfo[] allNuGetPackageFiles = packageDirectory.GetFiles("*.nupkg", SearchOption.AllDirectories);
+            FileInfo[] allNuGetPackageFiles = packageDirectory
+                .GetFiles("*.nupkg", SearchOption.AllDirectories);
 
             CleanTarget[] packagesInfo = allNuGetPackageFiles
                 .Select(package => new CleanTarget(package,
@@ -125,14 +143,14 @@ namespace Arbor.NuGetServer.Api.Clean
 
             foreach (CleanTarget cleanTarget in packagesToDelete)
             {
-                DeletePackageAndRelatedFiles(cleanTarget, whatif);
+                DeletePackageAndRelatedFiles(cleanTarget, whatIf);
             }
 
             foreach (FileInfo binFile in packageDirectory.GetFiles("*.bin", SearchOption.AllDirectories))
             {
                 _logger.Debug("Deleting bin file '{BinFile}'", binFile.FullName);
 
-                if (!whatif)
+                if (!whatIf)
                 {
                     binFile.Delete();
                 }
@@ -141,7 +159,7 @@ namespace Arbor.NuGetServer.Api.Clean
             return new CleanResult(cleanedPackages, packagesToKeep);
         }
 
-        private void DeletePackageAndRelatedFiles(CleanTarget nugetPackageFile, bool whatif)
+        private void DeletePackageAndRelatedFiles(CleanTarget nugetPackageFile, bool whatIf)
         {
             DirectoryInfo directoryInfo = nugetPackageFile.FileInfo.Directory;
 
@@ -167,7 +185,7 @@ namespace Arbor.NuGetServer.Api.Clean
             if (nugetPackageFile.FileInfo.Exists)
             {
                 _logger.Debug("Deleting NuGet package file '{PackageFile}'", nugetPackageFile.FileInfo.FullName);
-                if (!whatif)
+                if (!whatIf)
                 {
                     nugetPackageFile.FileInfo.Delete();
                 }
@@ -176,7 +194,7 @@ namespace Arbor.NuGetServer.Api.Clean
             if (shaFile.Exists)
             {
                 _logger.Debug("Deleting NuGet package SHA file '{ShaFile}'", shaFile.FullName);
-                if (!whatif)
+                if (!whatIf)
                 {
                     shaFile.Delete();
                 }
@@ -186,7 +204,7 @@ namespace Arbor.NuGetServer.Api.Clean
             {
                 _logger.Debug("Deleting NuGet specification file '{NuSpecFile}'", nuspecFile.FullName);
 
-                if (!whatif)
+                if (!whatIf)
                 {
                     nuspecFile.Delete();
                 }
@@ -196,7 +214,7 @@ namespace Arbor.NuGetServer.Api.Clean
             {
                 _logger.Debug("Deleting NuGet specification file '{NuSpecFile}'", nuspec2File.FullName);
 
-                if (!whatif)
+                if (!whatIf)
                 {
                     nuspec2File.Delete();
                 }
@@ -213,7 +231,7 @@ namespace Arbor.NuGetServer.Api.Clean
                 {
                     DirectoryInfo parent = nuspec2File.Directory.Parent;
 
-                    if (!whatif)
+                    if (!whatIf)
                     {
                         nuspec2File.Directory.Delete();
                     }
@@ -227,7 +245,7 @@ namespace Arbor.NuGetServer.Api.Clean
                         {
                             if (parent.GetDirectories().Length == 0 && parent.GetFiles().Length == 0)
                             {
-                                if (!whatif)
+                                if (!whatIf)
                                 {
                                     parent.Refresh();
 
