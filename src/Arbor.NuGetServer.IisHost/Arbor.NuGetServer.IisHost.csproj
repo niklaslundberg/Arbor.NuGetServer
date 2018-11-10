@@ -384,7 +384,7 @@
     <Compile Include="Areas\Clean\CleanAreaRegistration.cs" />
     <Compile Include="Areas\NuGet\NuGetAreaRegistration.cs" />
     <Compile Include="Areas\Start\StartAreaRegistration.cs" />
-    <Compile Include="Areas\Tenants\StartAreaRegistration.cs" />
+    <Compile Include="Areas\Tenants\TenantsAreaRegistration.cs" />
     <Compile Include="AspNet\AspNetHostingEnvironment.cs" />
     <Compile Include="AspNet\AppRegisteredAdapter.cs" />
     <Compile Include="AspNet\BundleConfig.cs" />
