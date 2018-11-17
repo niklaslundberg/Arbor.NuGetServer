@@ -12,6 +12,7 @@ using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.OwinExtensions;
 using JetBrains.Annotations;
 using Microsoft.Owin;
+using Serilog;
 
 namespace Arbor.NuGetServer.Api.Areas.Security
 {
@@ -20,10 +21,12 @@ namespace Arbor.NuGetServer.Api.Areas.Security
     {
         private readonly PathString _nuGetPath = new PathString(TenantConstants.NuGetBaseRoute);
         private readonly INuGetTenantReadService _tenantReadService;
+        private readonly ILogger _logger;
 
         public NuGetAuthorizationMiddleware(
             [NotNull] OwinMiddleware next,
-            [NotNull] INuGetTenantReadService tenantReadService)
+            [NotNull] INuGetTenantReadService tenantReadService,
+            [NotNull] ILogger logger)
             : base(next)
         {
             if (next == null)
@@ -32,6 +35,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             }
 
             _tenantReadService = tenantReadService ?? throw new ArgumentNullException(nameof(tenantReadService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public override async Task Invoke(IOwinContext context)
@@ -58,7 +62,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                 string reason = "Missing tenant configuration";
                 await BadRequestAsync(context, reason);
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context, reason);
+                await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Unauthorized, reason);
                 return;
             }
 
@@ -73,21 +77,21 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             if (context.Authentication.User is null)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context, "Missing user");
+                await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Unauthorized, "Missing user");
                 return;
             }
 
             if (context.Authentication.User.Identity is null)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context, "Missing identity");
+                await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Unauthorized, "Missing identity");
                 return;
             }
 
             if (!context.Authentication.User.Identity.IsAuthenticated)
             {
                 Challenge(context);
-                await WriteUnauthorizedBodyAsync(context, "Unauthenticated");
+                await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Unauthorized, "Unauthenticated");
                 return;
             }
 
@@ -98,7 +102,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                         claim => claim.Type == ClaimTypes.NameIdentifier && !string.IsNullOrWhiteSpace(claim.Value)))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context, "Missing name identifier");
+                    await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Forbidden, "Missing name identifier");
                     return;
                 }
 
@@ -108,14 +112,14 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                 if (string.IsNullOrWhiteSpace(tenantClaimValue))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context, "Missing tenant");
+                    await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Forbidden, "Missing tenant");
                     return;
                 }
 
                 if (!tenantClaimValue.Equals(nuGetTenantId.TenantId, StringComparison.OrdinalIgnoreCase))
                 {
                     Challenge(context);
-                    await WriteUnauthorizedBodyAsync(context, "Tenant mismatch");
+                    await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Forbidden, "Tenant mismatch");
                     return;
                 }
 
@@ -133,14 +137,14 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                     if (string.IsNullOrWhiteSpace(canReedFeedValue))
                     {
                         Challenge(context);
-                        await WriteUnauthorizedBodyAsync(context, $"Missing claim type {canReadTenantFeedClaimType}");
+                        await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Forbidden, $"Missing claim type {canReadTenantFeedClaimType}");
                         return;
                     }
 
                     if (!nuGetTenantId.TenantId.Equals(canReedFeedValue))
                     {
                         Challenge(context);
-                        await WriteUnauthorizedBodyAsync(context, $"Claim value mismatch for claim type {canReadTenantFeedClaimType}");
+                        await WriteAuthorizationFailedBodyAsync(context, HttpStatusCode.Forbidden, $"Claim value mismatch for claim type {canReadTenantFeedClaimType}");
                         return;
                     }
                 }
@@ -163,11 +167,6 @@ namespace Arbor.NuGetServer.Api.Areas.Security
                 return true;
             }
 
-            //if (immutableArray.Length >= 3 && immutableArray[2].Equals("$metadata", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    return true;
-            //}
-
             if (immutableArray.Length >= 3 && immutableArray[2].Equals("Search()", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
@@ -176,14 +175,15 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             return false;
         }
 
-        private static async Task WriteUnauthorizedBodyAsync(IOwinContext context, string reason = null)
+        private async Task WriteAuthorizationFailedBodyAsync(IOwinContext context, HttpStatusCode statusCode, string reason = null)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            _logger.Warning("Authorization failed {Reason}, status code {StatusCode}", reason, statusCode);
+            context.Response.StatusCode = (int)statusCode;
             context.Response.ContentType = ContentType.PlainText;
 
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
-                await streamWriter.WriteAsync("Unauthorized2 " + reason);
+                await streamWriter.WriteAsync(statusCode + " " + reason);
             }
         }
 

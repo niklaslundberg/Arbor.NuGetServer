@@ -19,30 +19,30 @@ namespace Arbor.NuGetServer.Tests.Integration.Diagnostics
 
         private readonly ITestOutputHelper _outputHelper;
 
-        [NCrunch.Framework.Timeout(120_000)]
-        [Fact]
-        public async Task ThenItShouldReturnHttp200Ok()
-        {
-            using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingHttpGetRequestToDiagnosticsUrl)))
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var request =
-                        new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/diagnostics"))
-                    {
-                        request.AddToken("testuser", new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
+        //[NCrunch.Framework.Timeout(120_000)]
+        //[Fact]
+        //public async Task ThenItShouldReturnHttp200Ok()
+        //{
+        //    using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingHttpGetRequestToDiagnosticsUrl)))
+        //    {
+        //        using (var httpClient = new HttpClient())
+        //        {
+        //            using (var request =
+        //                new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/diagnostics"))
+        //            {
+        //                request. AddToken("testuser", new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
 
-                        using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(request))
-                        {
-                            string content = await httpResponseMessage.Content.ReadAsStringAsync();
+        //                using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(request))
+        //                {
+        //                    string content = await httpResponseMessage.Content.ReadAsStringAsync();
 
-                            _outputHelper.WriteLine(content);
+        //                    _outputHelper.WriteLine(content);
 
-                            Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
-                        }
-                    }
-                }
-            }
-        }
+        //                    Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

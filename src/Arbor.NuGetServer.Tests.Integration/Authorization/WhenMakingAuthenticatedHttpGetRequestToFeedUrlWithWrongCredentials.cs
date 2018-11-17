@@ -10,9 +10,9 @@ using Xunit.Abstractions;
 
 namespace Arbor.NuGetServer.Tests.Integration.Authorization
 {
-    public sealed class WhenMakingAuthenticatedHttpGetRequestToFeedUrl
+    public sealed class WhenMakingAuthenticatedHttpGetRequestToFeedUrlWithWrongCredentials
     {
-        public WhenMakingAuthenticatedHttpGetRequestToFeedUrl(ITestOutputHelper outputHelper)
+        public WhenMakingAuthenticatedHttpGetRequestToFeedUrlWithWrongCredentials(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
         }
@@ -21,17 +21,16 @@ namespace Arbor.NuGetServer.Tests.Integration.Authorization
 
         [NCrunch.Framework.Timeout(120_000)]
         [Fact]
-        public async Task ThenItShouldReturnHttp200Ok()
+        public async Task ThenItShouldReturnHttp403Forbidden()
         {
             using (IntegrationTestSetup server = await IntegrationTestSetup.StartServerAsync(nameof(WhenMakingAuthenticatedHttpGetRequestToFeedUrl)))
             {
-                _outputHelper.WriteLine($"Using test key id {TestKeys.TestKey.KeyId}");
                 using (var httpClient = new HttpClient())
                 {
                     using (var request =
                         new HttpRequestMessage(HttpMethod.Get, $"http://{Environment.MachineName}:{server.IIS.Port}/nuget/test/"))
                     {
-                        request.AddToken("testuser", "test", TestKeys.TestKey, new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
+                        request.AddToken("testuser2", "test2", TestKeys.TestKey, new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
 
                         using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(request))
                         {
@@ -39,7 +38,7 @@ namespace Arbor.NuGetServer.Tests.Integration.Authorization
 
                             _outputHelper.WriteLine(content);
 
-                            Assert.Equal(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+                            Assert.Equal(HttpStatusCode.Forbidden, httpResponseMessage.StatusCode);
                         }
                     }
                 }

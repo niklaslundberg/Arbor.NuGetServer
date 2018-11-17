@@ -11,14 +11,13 @@ namespace Arbor.NuGetServer.Tests.Integration.Helpers
 {
     public static class RequestAuthenticationExtensions
     {
-        public static HttpRequestMessage AddToken(this HttpRequestMessage request, string username, List<NuGetClaimType> claimTypes)
+        public static HttpRequestMessage AddToken(this HttpRequestMessage request, string username, string tenantId, RsaKey rsaKey, List<NuGetClaimType> claimTypes)
         {
-
             var handler = new JwtSecurityTokenHandler();
 
             JwtSecurityToken token =
-                new TokenGenerator(TestKeys.TestConfiguration, new CustomSystemClock()).CreateJwt(
-                    new NuGetTenantId("test"),
+                new TokenGenerator(TestKeys.GetTestConfiguration(rsaKey), new CustomSystemClock()).CreateJwt(
+                    new NuGetTenantId(tenantId),
                     claimTypes);
 
             string jwt = handler.WriteToken(token);
@@ -28,7 +27,6 @@ namespace Arbor.NuGetServer.Tests.Integration.Helpers
             request.Headers.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(byteArray));
-
 
             return request;
 

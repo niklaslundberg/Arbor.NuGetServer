@@ -11,7 +11,7 @@ namespace Arbor.NuGetServer.Tests.Integration.Helpers
 
         public static readonly RsaKey TestKey = RsaKeyHelper.CreateKey();
 
-        public static readonly TokenConfiguration TestConfiguration = new TokenConfiguration(TimeSpan.FromMinutes(5),
+        public static TokenConfiguration GetTestConfiguration(RsaKey rsaKey) => new TokenConfiguration(TimeSpan.FromMinutes(5),
             new TokenAudience(TestAudience),
             new TokenIssuer(TestIssuer),
             TestKey);

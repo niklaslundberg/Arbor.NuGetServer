@@ -92,12 +92,12 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
                             "Arbor.Ginkgo.2.1.1.nupkg"));
 
 
-                        string hostname = Environment.MachineName; // "ipv4.fiddler";
+                        string hostname = Environment.MachineName;
 
                         string sourceUrl = $"http://{hostname}:{server.IIS.Port}/nuget/test";
 
                         string username = "testuser";
-                        var tokenGenerator = new TokenGenerator(TestKeys.TestConfiguration, new CustomSystemClock());
+                        var tokenGenerator = new TokenGenerator(TestKeys.GetTestConfiguration(TestKeys.TestKey), new CustomSystemClock());
                         JwtSecurityToken jwtSecurityToken = tokenGenerator.CreateJwt(new NuGetTenantId("test"),
                             new List<NuGetClaimType> { NuGetClaimType.CanReadTenantFeed });
 
@@ -107,13 +107,6 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
                             .Single(nuGetTenantConfiguration =>
                                 nuGetTenantConfiguration.Id.Equals("test", StringComparison.Ordinal));
 
-                        //string destFileName = Path.Combine(tenantConfig.PackageDirectory, nugetFile.Name);
-
-                        //if (!File.Exists(destFileName))
-                        //{
-                        //    nugetFile.CopyTo(destFileName, overwrite: false);
-                        //}
-
                         var handler = new JwtSecurityTokenHandler();
 
                         string password = handler.WriteToken(jwtSecurityToken);
@@ -122,7 +115,7 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
                         JwtSecurityToken apiKeyToken = tokenGenerator.CreateJwt(new NuGetTenantId("test"),
                             new List<NuGetClaimType> { NuGetClaimType.CanPushPackage });
 
-                        var apiKey = handler.WriteToken(apiKeyToken);
+                        string apiKey = handler.WriteToken(apiKeyToken);
 
                         PushPackage(nugetFile, source, configFile, apiKey, nuGetDownloadResult.NuGetExePath);
 
@@ -150,8 +143,6 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
                             RedirectStandardError = true,
                             RedirectStandardOutput = true,
                         };
-
-                        //startInfo.EnvironmentVariables.Add("http_proxy", "http://127.0.0.1:8888");
 
                         using (var process = new Process())
                         {
