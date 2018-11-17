@@ -9,11 +9,7 @@ SET Arbor.X.Vcs.Branch.Name.Version.OverrideEnabled=false
 SET Arbor.X.Build.VariableOverrideEnabled=true
 SET Arbor.X.Artifacts.CleanupBeforeBuildEnabled=true
 SET Arbor.X.Build.NetAssembly.Configuration=
-
-SET Version.Major=1
-SET Version.Minor=1
-SET Version.Patch=0
-SET Version.Build=0
+SET ArborBuild_PublishDotNetExecutableEnabled=false
 
 IF "%Arbor.X.Vcs.Branch.Name%" == "" (
 	SET Arbor.X.Vcs.Branch.Name=develop
@@ -27,7 +23,7 @@ SET Arbor.X.NuGet.Package.CreateNuGetWebPackages.Enabled=true
 SET Arbor.X.Build.NetAssembly.MetadataEnabled=true
 SET Arbor.X.Build.NetAssembly.Description=A NuGet.Server based app
 SET Arbor.X.Build.NetAssembly.Company=Niklas Lundberg
-SET Arbor.X.Build.NetAssembly.Copyright=© Niklas Lundberg 2014-2016
+SET Arbor.X.Build.NetAssembly.Copyright=© Niklas Lundberg 2014-2018
 SET Arbor.X.Build.NetAssembly.Trademark=
 SET Arbor.X.Build.NetAssembly.Product=Arbor.NuGet
 SET Arbor.X.ShowAvailableVariablesEnabled=false
@@ -37,7 +33,7 @@ SET Arbor.X.NuGet.Package.AllowManifestReWriteEnabled=false
 
 SET Arbor.X.Tools.External.MSBuild.CodeAnalysis.Enabled=true
 
-CALL "%~dp0\Build.exe"
+CALL dotnet arbor-build
 
 REM Restore variables to default
 
@@ -53,7 +49,4 @@ SET Arbor.X.VariableOverrideEnabled=
 SET Arbor.X.Artifacts.CleanupBeforeBuildEnabled=
 SET Arbor.X.Build.NetAssembly.Configuration=
 
-SET Version.Major=
-SET Version.Minor=
-SET Version.Patch=
-SET Version.Build=
+EXIT /B %ERRORLEVEL%
