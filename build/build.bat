@@ -10,7 +10,7 @@ SET Arbor.X.Build.VariableOverrideEnabled=true
 SET Arbor.X.Artifacts.CleanupBeforeBuildEnabled=true
 SET Arbor.X.Build.NetAssembly.Configuration=
 SET ArborBuild_PublishDotNetExecutableEnabled=false
-
+SET Arbor.X.Build.PublishDotNetExecutableProjects=false
 IF "%Arbor.X.Vcs.Branch.Name%" == "" (
 	SET Arbor.X.Vcs.Branch.Name=develop
 )
