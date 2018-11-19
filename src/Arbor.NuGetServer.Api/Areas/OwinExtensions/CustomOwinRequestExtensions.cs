@@ -7,6 +7,16 @@ namespace Arbor.NuGetServer.Api.Areas.OwinExtensions
 {
     public static class CustomOwinRequestExtensions
     {
+        public static bool IsLoginRequest([NotNull] this IOwinRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return request.Uri.PathAndQuery.Split('?')[0].TrimEnd('/').EndsWith("login", StringComparison.OrdinalIgnoreCase);
+        }
+
         public static bool IsGetRequest([NotNull] this IOwinRequest request)
         {
             if (request == null)

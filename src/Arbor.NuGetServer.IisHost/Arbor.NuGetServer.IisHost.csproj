@@ -384,6 +384,13 @@
     <Compile Include="Areas\Clean\CleanAreaRegistration.cs" />
     <Compile Include="Areas\NuGet\NuGetAreaRegistration.cs" />
     <Compile Include="Areas\Start\StartAreaRegistration.cs" />
+    <Compile Include="Areas\Tenants\CustomAuthenticationService.cs" />
+    <Compile Include="Areas\Tenants\LoginInput.cs" />
+    <Compile Include="Areas\Tenants\LoginResult.cs" />
+    <Compile Include="Areas\Tenants\TenantLoginController.cs" />
+    <Compile Include="Areas\Tenants\TenantLoginRequest.cs" />
+    <Compile Include="Areas\Tenants\TenantLoginRequestHandler.cs" />
+    <Compile Include="Areas\Tenants\TenantLoginViewModel.cs" />
     <Compile Include="Areas\Tenants\TenantsAreaRegistration.cs" />
     <Compile Include="AspNet\AspNetHostingEnvironment.cs" />
     <Compile Include="AspNet\AppRegisteredAdapter.cs" />
@@ -436,6 +443,7 @@
     <Content Include="Areas\NuGet\Views\Web.config" />
     <Content Include="Areas\Tenants\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Tenants\Views\Web.config" />
+    <Content Include="Areas\Tenants\Views\TenantLogin\Index.cshtml" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\milounuget - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\nlundberg-nuget - Web Deploy.pubxml" />

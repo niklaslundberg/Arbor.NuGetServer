@@ -68,6 +68,12 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             bool isGetRequest = context.Request.IsGetRequest();
 
+            if (context.Request.IsLoginRequest())
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
             if (isGetRequest && nuGetTenantConfiguration.AllowAnonymous)
             {
                 await Next.Invoke(context);

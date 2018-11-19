@@ -6,6 +6,7 @@ using Autofac;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 using Microsoft.Owin.Extensions;
+using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Thinktecture.IdentityModel.Owin;
 
@@ -47,6 +48,11 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
 
                         return simpleAuthenticator.IsAuthenticated(username, password);
                     }));
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
+            });
 
             app.UseStageMarker(PipelineStage.Authenticate);
 

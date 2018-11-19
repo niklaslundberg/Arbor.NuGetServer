@@ -45,13 +45,42 @@ namespace Arbor.NuGetServer.Api.Areas.MediatR
                 .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(_assemblies.ToArray())
-                .Where(type => type.GetTypeInfo()
-                    .ImplementedInterfaces.Any(
-                        currentInterface => currentInterface.IsGenericType
-                                            && currentInterface.GetGenericTypeDefinition()
-                                            == typeof(IRequestHandler<>)))
+                .Where(TypeIsHandler)
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+        }
+
+        private bool TypeIsHandler(Type type)
+        {
+            Type[] implementedInterfaces = type.GetTypeInfo()
+                .ImplementedInterfaces.ToArray();
+
+            if (implementedInterfaces.Length == 0)
+            {
+                return false;
+            }
+
+            Type[] genericInterfaces = implementedInterfaces
+                .Where(
+                    currentInterface => currentInterface.IsGenericType)
+                .ToArray();
+
+            if (genericInterfaces.Length == 0)
+            {
+                return false;
+            }
+
+            Type[] matchingType = genericInterfaces
+                .Where(currentInterface =>
+                    currentInterface.GetGenericTypeDefinition() == typeof(IRequestHandler<,>))
+                .ToArray();
+
+            if (matchingType.Length == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
