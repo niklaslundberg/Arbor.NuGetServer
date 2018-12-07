@@ -13,6 +13,7 @@ using FileInfo = Alphaleonis.Win32.Filesystem.FileInfo;
 
 namespace Arbor.NuGetServer.IisHost.Areas.NuGet
 {
+    [Authorize]
     [RouteArea(NuGetAreaRegistration.NuGetAreaName)]
     public class PackagesController : Controller
     {

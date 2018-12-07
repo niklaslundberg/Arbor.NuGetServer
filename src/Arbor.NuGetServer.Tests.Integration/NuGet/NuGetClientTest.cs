@@ -185,7 +185,6 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
             string apiKey,
             string nugetExePath)
         {
-            //nuget push foo.nupkg 4003d786-cc37-4004-bfdf-c4f3e8ef9b3a -s https://customsource/
             var arguments = new List<string>
             {
                 "push",
@@ -211,8 +210,6 @@ namespace Arbor.NuGetServer.Tests.Integration.NuGet
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
             };
-
-            //startInfo.EnvironmentVariables.Add("http_proxy", "http://127.0.0.1:8888");
 
             using (var process = new Process())
             {

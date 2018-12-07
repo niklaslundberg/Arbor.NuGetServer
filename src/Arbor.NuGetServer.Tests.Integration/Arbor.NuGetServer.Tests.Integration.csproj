@@ -16,6 +16,7 @@
     <PackageReference Include="AlphaFS" Version="2.2.6" />
     <PackageReference Include="Arbor.Aesculus" Version="3.0.2" />
     <PackageReference Include="Arbor.Tooler" Version="0.1.4" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -44,6 +45,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arbor.NuGetServer.Api\Arbor.NuGetServer.Api.csproj" />
+    <ProjectReference Include="..\Arbor.NuGetServer.IisHost\Arbor.NuGetServer.IisHost.csproj" />
     <ProjectReference Include="..\Arbor.NuGetServer.Marten\Arbor.NuGetServer.Marten.csproj" />
   </ItemGroup>
 

@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Alphaleonis.Win32.Filesystem;
 using Arbor.KVConfiguration.Core;
 using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.CommonExtensions;
-using Arbor.NuGetServer.Api.Areas.Http;
+using Arbor.NuGetServer.Api.Areas.NuGet.Feeds;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using JetBrains.Annotations;
 using Microsoft.Owin;
 using NuGet;
+using NuGet.Server.Core;
+using File = Alphaleonis.Win32.Filesystem.File;
 using ILogger = Serilog.ILogger;
+using Path = Alphaleonis.Win32.Filesystem.Path;
+using SemanticVersion = NuGet.Versioning.SemanticVersion;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
 {
@@ -18,16 +27,20 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
     public class NuGetPackageConflictMiddleware : OwinMiddleware
     {
         private readonly bool _allowOverride;
+
+        private readonly IReadOnlyCollection<NuGetFeedConfiguration> _feedConfigurations;
         private readonly ILogger _logger;
-        private readonly string _physicalPath;
-        private readonly IRequestFileHelper _requestFileHelper;
+
+        [NotNull]
+        private readonly ITenantServerPackageRepository _serverPackageRepository;
 
         public NuGetPackageConflictMiddleware(
             [NotNull] OwinMiddleware next,
             [NotNull] ILogger logger,
             [NotNull] IKeyValueConfiguration keyValueConfiguration,
             [NotNull] IPathMapper pathMapper,
-            [NotNull] IRequestFileHelper requestFileHelper)
+            [NotNull] ITenantServerPackageRepository serverPackageRepository,
+            IReadOnlyCollection<NuGetFeedConfiguration> feedConfigurations)
             : base(next)
         {
             if (next == null)
@@ -46,57 +59,97 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
             }
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _requestFileHelper = requestFileHelper ?? throw new ArgumentNullException(nameof(requestFileHelper));
-
-            string packagesPath = keyValueConfiguration[PackageConfigurationConstants.PackagePath];
+            _serverPackageRepository = serverPackageRepository ??
+                                       throw new ArgumentNullException(nameof(serverPackageRepository));
+            _feedConfigurations = feedConfigurations;
 
             _allowOverride = keyValueConfiguration
                 [PackageConfigurationConstants.AllowPackageOverride].ParseAsBoolOrDefault(
                 false);
-
-            _physicalPath = pathMapper.MapPath(packagesPath);
         }
 
         public override async Task Invoke(IOwinContext context)
         {
-            if (context.Request.Method.Equals("PUT", StringComparison.OrdinalIgnoreCase))
+            if (!context.Request.Method.Equals("PUT", StringComparison.OrdinalIgnoreCase))
             {
+                await Next.Invoke(context);
+                return;
+            }
+
+            NuGetTenantId nuGetTenantId = _serverPackageRepository.CurrentTenantId;
+
+            NuGetFeedConfiguration nuGetFeedConfiguration = _feedConfigurations.SingleOrDefault(s =>
+                s.Id.Equals(nuGetTenantId.TenantId, StringComparison.OrdinalIgnoreCase));
+
+            if (nuGetFeedConfiguration is null)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync("Could not find nuget feed configuration");
+                return;
+            }
+
+            using (var cts = new CancellationTokenSource())
+            {
+                Stopwatch stopwatch = null;
+
+                PackageIdentifier packageIdentifier = null;
+                bool? result = null;
+                Exception caughtException = null;
+                string tempFilePath = null;
                 try
                 {
-                    IReadOnlyList<IHttpPostedFile> postedFiles = _requestFileHelper.GetFiles(context);
+                    stopwatch = Stopwatch.StartNew();
 
-                    var packageIdentifiers = new List<PackageIdentifier>();
-
-                    foreach (IHttpPostedFile file in postedFiles)
+                    try
                     {
-                        string tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
-                        file.SaveAs(tempFilePath);
-
-                        var myPackage = new ZipPackage(tempFilePath);
-
-                        string id = myPackage.Id;
-                        global::NuGet.Versioning.SemanticVersion semVer =
-                            global::NuGet.Versioning.SemanticVersion.Parse(myPackage.Version.ToNormalizedString());
-
-                        if (File.Exists(tempFilePath))
+                        using (HttpContent content = new StreamContent(context.Request.Body))
                         {
-                            try
+                            content.Headers.TryAddWithoutValidation("Content-Type", context.Request.ContentType);
+
+                            tempFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.nupkg");
+                            if (!content.IsMimeMultipartContent("multipart/form-data"))
                             {
-                                File.Delete(tempFilePath);
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.Error(ex, "Could not delete temp file '{TempFilePath}'", tempFilePath);
+                                var provider = new MultipartMemoryStreamProvider();
+                                await content.ReadAsMultipartAsync(provider, cts.Token);
+
+                                if (provider.Contents.Count != 1)
+                                {
+                                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                                    await context.Response.WriteAsync("Expected exactly 1 file part in content",
+                                        cts.Token);
+
+                                    return;
+                                }
+
+                                HttpContent fileContent = provider.Contents.First();
+
+                                using (var fs = new FileStream(tempFilePath,
+                                    FileMode.OpenOrCreate,
+                                    FileAccess.Write))
+                                {
+                                    using (Stream stream = await fileContent.ReadAsStreamAsync())
+                                    {
+                                        await stream.CopyToAsync(fs);
+                                    }
+
+                                    await fs.FlushAsync(cts.Token);
+                                }
                             }
                         }
 
-                        string normalizedSemVer = semVer.ToNormalizedString();
+                        IPackage package = PackageFactory.Open(tempFilePath);
+
+                        SemanticVersion semanticVersion =
+                            SemanticVersion.Parse(package.Version
+                                .ToNormalizedString());
+                        string normalizedSemVer = semanticVersion.ToNormalizedString();
+                        string packageId = package.Id;
 
                         string existingPackage = Path.Combine(
-                            _physicalPath,
-                            id,
+                            nuGetFeedConfiguration.PackageDirectory,
+                            packageId,
                             normalizedSemVer,
-                            $"{id}.{normalizedSemVer}.nupkg");
+                            $"{packageId}.{normalizedSemVer}.nupkg");
 
                         if (!_allowOverride)
                         {
@@ -105,29 +158,67 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
                                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                                 await
                                     context.Response.WriteAsync(
-                                        $"The package '{id}' version '{normalizedSemVer}' already exists");
+                                        $"The package '{packageId}' version '{normalizedSemVer}' already exists",
+                                        cts.Token);
                                 return;
                             }
                         }
 
-                        packageIdentifiers.Add(new PackageIdentifier(id, semVer));
-                    }
+                        await _serverPackageRepository.AddPackageAsync(package, cts.Token);
 
-                    foreach (PackageIdentifier packageIdentifier in packageIdentifiers)
-                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Created;
+
+                        packageIdentifier = new PackageIdentifier(packageId, semanticVersion);
+
                         //await Task.Run(() => _mediator.Publish(new PackagePushedNotification(packageIdentifier))); //TODO add tenant support
+
+                        context.Request.Body.Position = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        caughtException = ex;
+                        _logger.Error(ex, "Could not intercept NuGet PUT request");
+                        throw;
+                    }
+                }
+                finally
+                {
+                    if (stopwatch != null)
+                    {
+                        stopwatch.Stop();
+
+                        HttpStatusCode[] allowed = { HttpStatusCode.OK, HttpStatusCode.Created };
+                        if (caughtException != null)
+                        {
+                            result = false;
+                        }
+                        else if (allowed.Any(a => a == (HttpStatusCode)context.Response.StatusCode))
+                        {
+                            result = true;
+                        }
+
+                        string resultText = result.HasValue ? result.Value ? "Succeeded" : "Failed" : "Unknown";
+
+                        _logger.Information("Package push result {PackageId} {Version} {Result} took {ElapsedMilliseconds} ms",
+                            packageIdentifier?.PackageId,
+                            packageIdentifier?.SemanticVersion?.ToNormalizedString(),
+                            resultText,
+                            stopwatch.Elapsed.TotalMilliseconds.ToString("F1"));
                     }
 
-                    context.Request.Body.Position = 0;
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Could not intercept NuGet PUT request");
-                    throw;
+                    if (!string.IsNullOrWhiteSpace(tempFilePath) && File.Exists(tempFilePath))
+                    {
+                        try
+                        {
+                            File.Delete(tempFilePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error(ex, "Could not delete temp file '{TempFilePath}'", tempFilePath);
+                        }
+                    }
                 }
             }
-
-            await Next.Invoke(context);
         }
     }
 }

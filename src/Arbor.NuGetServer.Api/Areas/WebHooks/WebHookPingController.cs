@@ -6,6 +6,7 @@ using Serilog;
 
 namespace Arbor.NuGetServer.Api.Areas.WebHooks
 {
+    [AllowAnonymous]
     [RoutePrefix("webhooks/ping")]
     public class WebHookPingController : ApiController
     {

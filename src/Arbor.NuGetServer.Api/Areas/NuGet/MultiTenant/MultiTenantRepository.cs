@@ -72,7 +72,9 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
 
         public string Source => GetTenantRepository().Source;
 
-        private IServerPackageRepository GetTenantRepository()
+        public NuGetTenantId CurrentTenantId => _tenantRouteHelper.GetTenantId();
+
+        public IServerPackageRepository GetTenantRepository()
         {
             NuGetTenantId nuGetTenantId = _tenantRouteHelper.GetTenantId();
 

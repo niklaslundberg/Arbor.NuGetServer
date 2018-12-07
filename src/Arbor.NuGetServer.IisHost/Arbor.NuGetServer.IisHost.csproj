@@ -395,6 +395,7 @@
     <Compile Include="AspNet\AspNetHostingEnvironment.cs" />
     <Compile Include="AspNet\AppRegisteredAdapter.cs" />
     <Compile Include="AspNet\BundleConfig.cs" />
+    <Compile Include="AspNet\CacheModule.cs" />
     <Compile Include="AspNet\CustomAspNetModule.cs" />
     <Compile Include="AspNet\CustomHttpPostedFile.cs" />
     <Compile Include="AspNet\FilterConfig.cs" />

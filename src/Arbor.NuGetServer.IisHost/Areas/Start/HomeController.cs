@@ -2,6 +2,7 @@
 
 namespace Arbor.NuGetServer.IisHost.Areas.Start
 {
+    [AllowAnonymous]
     [RouteArea(StartAreaRegistration.StartAreaName)]
     public class HomeController : Controller
     {

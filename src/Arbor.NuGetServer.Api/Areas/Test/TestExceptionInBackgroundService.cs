@@ -12,13 +12,13 @@ namespace Arbor.NuGetServer.Api.Areas.Test
     {
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Debug.WriteLine("Running exception test background service");
+            //Debug.WriteLine("Running exception test background service");
 
-            Debug.WriteLine("Waiting in test exception background service");
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-            Debug.WriteLine("Waited in test exception background service");
+            //Debug.WriteLine("Waiting in test exception background service");
+            //await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            //Debug.WriteLine("Waited in test exception background service");
 
-            throw new InvalidOperationException("Exception from test background service");
+            //throw new InvalidOperationException("Exception from test background service");
         }
     }
 }

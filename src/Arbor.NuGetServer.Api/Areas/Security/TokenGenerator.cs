@@ -21,7 +21,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             _customClock = customClock;
         }
 
-        public JwtSecurityToken CreateJwt([NotNull] NuGetTenantId nugetTenantId, IEnumerable<NuGetClaimType> claimTypes)
+        public JwtSecurityToken CreateJwt([NotNull] NuGetTenantId nugetTenantId, IEnumerable<NuGetClaimType> claimTypes, IReadOnlyCollection<Claim> claims = default)
         {
             if (nugetTenantId == null)
             {
@@ -40,14 +40,19 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             DateTime utcNow = _customClock.UtcNow().UtcDateTime;
 
-            var claims = new List<Claim>();
+            var issuedClaims = new List<Claim>();
+
+            if (claims != null)
+            {
+                issuedClaims.AddRange(claims);
+            }
 
             foreach (NuGetClaimType nugetClaimType in usedClaimTypes)
             {
-                claims.Add(new Claim(nugetClaimType.Key, nugetTenantId.TenantId));
+                issuedClaims.Add(new Claim(nugetClaimType.Key, nugetTenantId.TenantId));
             }
 
-            var claimsIdentity = new ClaimsIdentity(claims);
+            var claimsIdentity = new ClaimsIdentity(issuedClaims);
 
             var credentials =
                 new SigningCredentials(_tokenConfiguration.RsaKey.ConvertToRsaSecurityKey(), RsaKey.Algorithm);

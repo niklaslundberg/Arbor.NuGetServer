@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
+    [Authorize]
     [RouteArea(TenantsAreaRegistration.TenantsAreaName)]
     public class TenantsController : Controller
     {
