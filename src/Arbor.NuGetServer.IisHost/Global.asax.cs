@@ -20,10 +20,10 @@ namespace Arbor.NuGetServer.IisHost
 
         protected void Application_Start()
         {
-            IReadOnlyList<IModule> aspNetModules = new List<IModule> { new CustomAspNetModule(), new PathModule(), new CacheModule() };
+            IReadOnlyList<IModule> aspNetModules = new List<IModule> { new CustomAspNetModule(), new CacheModule() };
             NuGetServerApp = NuGetServerApp.Create(HostingEnvironment.QueueBackgroundWorkItem,
                 aspNetModules,
-                () => BuildManager.GetReferencedAssemblies().OfType<Assembly>().ToArray());
+                () => BuildManager.GetReferencedAssemblies().OfType<Assembly>().ToArray(), new Functions {MapPath = HostingEnvironment.MapPath});
 
             ApplicationHolder.App = NuGetServerApp;
 

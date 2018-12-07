@@ -12,13 +12,13 @@ namespace Arbor.NuGetServer.Api.Areas.Diagnostics
     public class DiagnosticsController : ApiController
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
-        private readonly IPathMapper _pathMapper;
+        private readonly Functions _functions;
 
-        public DiagnosticsController([NotNull] IKeyValueConfiguration keyValueConfiguration, IPathMapper pathMapper)
+        public DiagnosticsController([NotNull] IKeyValueConfiguration keyValueConfiguration, Functions functions)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
-            _pathMapper = pathMapper;
+            _functions = functions;
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace Arbor.NuGetServer.Api.Areas.Diagnostics
 
             var data = new
             {
-                BaseDirectory = _pathMapper.MapPath("~/"),
+                BaseDirectory = _functions.MapPath("~/"),
                 Sources = multiSourceKeyValueConfiguration.SourceChain,
                 Values = multiSourceKeyValueConfiguration.AllKeys
                     .OrderBy(key => key)

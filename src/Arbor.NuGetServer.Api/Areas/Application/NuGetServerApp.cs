@@ -23,6 +23,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
     public sealed class NuGetServerApp : IDisposable
     {
         private readonly Action<Func<CancellationToken, Task>> _backgroundServiceHandler;
+        public Functions Functions { get; }
         private readonly List<IHostedService> _backgroundServices;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly Logger _logger;
@@ -35,12 +36,14 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             AppContainer container,
             Logger logger,
             Action<Func<CancellationToken, Task>> backgroundServiceHandler,
-            IReadOnlyCollection<IHostedService> backgroundServices)
+            IReadOnlyCollection<IHostedService> backgroundServices,
+            Functions functions)
         {
             KeyValueConfiguration = keyValueConfiguration;
             _container = container;
             _logger = logger;
             _backgroundServiceHandler = backgroundServiceHandler;
+            Functions = functions;
             _backgroundServices = backgroundServices.ToList();
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -61,7 +64,8 @@ namespace Arbor.NuGetServer.Api.Areas.Application
         public static NuGetServerApp Create(
             Action<Func<CancellationToken, Task>> backgroundServiceHandler,
             IReadOnlyList<IModule> modules,
-            Func<Assembly[]> assemblyResolver)
+            Func<Assembly[]> assemblyResolver,
+            Functions functions)
         {
             Logger logger = new LoggerConfiguration()
                 .WriteTo.Console()
@@ -75,7 +79,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
 
             MultiSourceKeyValueConfiguration keyValueConfiguration = ConfigurationInitialization.InitializeConfiguration(AssemblyResolver());
 
-            AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration, modules);
+            AppContainer container = Bootstrapper.Start(AssemblyResolver, logger, keyValueConfiguration, modules, functions);
 
             var backgroundServices = new List<IHostedService>();
 
@@ -102,7 +106,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             {
                 if (packagesPath.StartsWith("~", StringComparison.OrdinalIgnoreCase))
                 {
-                    packagesPath = container.Container.Resolve<IPathMapper>().MapPath(packagesPath);
+                    packagesPath = functions.MapPath(packagesPath);
                 }
 
                 if (packagesPath != null)
@@ -120,7 +124,8 @@ namespace Arbor.NuGetServer.Api.Areas.Application
                 container,
                 logger,
                 backgroundServiceHandler,
-                backgroundServices);
+                backgroundServices,
+                functions);
 
             return app;
         }

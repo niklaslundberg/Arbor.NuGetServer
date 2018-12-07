@@ -22,11 +22,11 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
 
         public UserConfigUpdater(
             ConfigurationHolder configurationHolder,
-            IPathMapper pathMapper)
+            MapPath mapPath)
         {
             _configurationHolder = configurationHolder;
 
-            _fileName = Path.Combine(pathMapper.MapPath("~/"), "config.user");
+            _fileName = Path.Combine(mapPath("~/"), "config.user");
 
             if (File.Exists(_fileName))
             {

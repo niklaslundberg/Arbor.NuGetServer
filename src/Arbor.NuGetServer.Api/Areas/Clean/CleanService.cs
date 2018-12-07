@@ -21,17 +21,18 @@ namespace Arbor.NuGetServer.Api.Areas.Clean
     public class CleanService
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
+        [NotNull]
+        private readonly Functions _functions;
         private readonly ILogger _logger;
-        private readonly IPathMapper _pathMapper;
         private readonly INuGetTenantReadService _tenantReadService;
 
         public CleanService(
-            [NotNull] IPathMapper pathMapper,
+            [NotNull] Functions functions,
             [NotNull] ILogger logger,
             [NotNull] IKeyValueConfiguration keyValueConfiguration,
             INuGetTenantReadService tenantReadService)
         {
-            _pathMapper = pathMapper ?? throw new ArgumentNullException(nameof(pathMapper));
+            _functions = functions;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
@@ -41,7 +42,7 @@ namespace Arbor.NuGetServer.Api.Areas.Clean
         public void CleanBinFiles(bool whatIf)
         {
             string packagesFullPath =
-                _pathMapper.MapPath(
+                _functions.MapPath(
                     _keyValueConfiguration[PackageConfigurationConstants.PackagePath]);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
@@ -90,7 +91,7 @@ namespace Arbor.NuGetServer.Api.Areas.Clean
                 await _tenantReadService.GetNuGetTenantConfigurationAsync(nugetTenantId, cancellationToken);
 
             string packagesFullPath =
-                _pathMapper.MapPath(configuration.PackageDirectory);
+                _functions.MapPath(configuration.PackageDirectory);
 
             var packageDirectory = new DirectoryInfo(packagesFullPath);
 

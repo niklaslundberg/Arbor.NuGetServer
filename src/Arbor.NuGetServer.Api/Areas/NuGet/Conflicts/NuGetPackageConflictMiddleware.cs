@@ -38,7 +38,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
             [NotNull] OwinMiddleware next,
             [NotNull] ILogger logger,
             [NotNull] IKeyValueConfiguration keyValueConfiguration,
-            [NotNull] IPathMapper pathMapper,
             [NotNull] ITenantServerPackageRepository serverPackageRepository,
             IReadOnlyCollection<NuGetFeedConfiguration> feedConfigurations)
             : base(next)
@@ -52,12 +51,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Conflicts
             {
                 throw new ArgumentNullException(nameof(keyValueConfiguration));
             }
-
-            if (pathMapper == null)
-            {
-                throw new ArgumentNullException(nameof(pathMapper));
-            }
-
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serverPackageRepository = serverPackageRepository ??
                                        throw new ArgumentNullException(nameof(serverPackageRepository));

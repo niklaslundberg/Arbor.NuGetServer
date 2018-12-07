@@ -15,6 +15,7 @@ using Autofac;
 using JetBrains.Annotations;
 using NuGet.Server.Core.Infrastructure;
 using NuGet.Server.V2;
+using Serilog;
 
 namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
 {
@@ -26,19 +27,21 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
         private readonly ICache _cache;
         private readonly ICustomClock _customClock;
         private readonly INuGetTenantReadService _nuGetTenantReadService;
-        private readonly IPathMapper _pathMapper;
         private readonly ITenantRouteHelper _tenantRouteHelper;
+        private NuGetServerApp _nugetServerApp;
 
         public NuGetFeedModule(
             [NotNull] IKeyValueConfiguration keyValueConfiguration,
-            [NotNull] IPathMapper pathMapper,
             [NotNull] INuGetTenantReadService nuGetTenantReadService,
             [NotNull] ITenantRouteHelper tenantRouteHelper,
-            [NotNull] Serilog.ILogger logger, ICache cache, ICustomClock customClock)
+            [NotNull] ILogger logger,
+            ICache cache,
+            ICustomClock customClock,
+            NuGetServerApp nugetServerApp)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
-            _pathMapper = pathMapper ?? throw new ArgumentNullException(nameof(pathMapper));
+            _nugetServerApp = nugetServerApp;
             _nuGetTenantReadService =
                 nuGetTenantReadService ?? throw new ArgumentNullException(nameof(nuGetTenantReadService));
             _tenantRouteHelper = tenantRouteHelper ?? throw new ArgumentNullException(nameof(tenantRouteHelper));
@@ -54,7 +57,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             var multiTenantRepository = new MultiTenantRepository(repositories, _tenantRouteHelper);
             var repository = new ProxyRepository(multiTenantRepository, new NuGetCache(_cache, _customClock));
 
-            var logger = new SerilogAdapter(_logger);
+            var logger = new NuGetLoggerToSerilogAdapter(_logger);
 
             foreach (NuGetTenantConfiguration nuGetTenant in _nuGetTenantReadService.GetNuGetTenantConfigurations())
             {
@@ -77,7 +80,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
                     new KeyValueSettingsProvider(_keyValueConfiguration);
 
                 DirectoryInfo packageDirectory = tenantPackageDirectoryPath.StartsWith("~")
-                    ? new DirectoryInfo(_pathMapper.MapPath(tenantPackageDirectoryPath))
+                    ? new DirectoryInfo(_nugetServerApp.Functions.MapPath(tenantPackageDirectoryPath))
                     : new DirectoryInfo(tenantPackageDirectoryPath);
 
                 if (!packageDirectory.Exists)

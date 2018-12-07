@@ -403,9 +403,7 @@
     <Compile Include="AspNet\MvcModule.cs" />
     <Compile Include="AspNet\MvcStartup.cs" />
     <Compile Include="AspNet\OwinSystemWebRequestFileHelper.cs" />
-    <Compile Include="AspNet\PathModule.cs" />
     <Compile Include="AspNet\RouteConfig.cs" />
-    <Compile Include="AspNet\ServerMapPath.cs" />
     <Compile Include="Areas\Clean\CleanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

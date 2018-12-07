@@ -23,7 +23,8 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
             Func<ImmutableArray<Assembly>> assemblyResolver,
             [NotNull] ILogger logger,
             [NotNull] MultiSourceKeyValueConfiguration keyValueConfiguration,
-            [NotNull] IReadOnlyList<IModule> modulesToRegister)
+            [NotNull] IReadOnlyList<IModule> modulesToRegister,
+            Functions functions)
         {
             if (assemblyResolver == null)
             {
@@ -46,6 +47,8 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
             }
 
             var builder = new ContainerBuilder();
+
+            builder.RegisterInstance(functions).AsSelf().SingleInstance();
 
             ImmutableArray<Assembly> appAssemblies = assemblyResolver();
 
