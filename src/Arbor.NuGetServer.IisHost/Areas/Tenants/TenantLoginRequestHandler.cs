@@ -1,20 +1,10 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Arbor.NuGetServer.Api.Areas.Application;
-using Autofac;
 using MediatR;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
-    public class AuthenticationModule : AppModule
-    {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<CustomAuthenticationService>().SingleInstance();
-        }
-    }
-
     public class TenantLoginRequestHandler : IRequestHandler<TenantLoginRequest, LoginResult>
     {
         private readonly CustomAuthenticationService _customAuthenticationService;

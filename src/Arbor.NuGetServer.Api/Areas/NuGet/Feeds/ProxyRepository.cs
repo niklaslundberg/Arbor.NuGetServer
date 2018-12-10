@@ -129,9 +129,4 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
         public string Source => _multiTenantRepository.Source;
         public NuGetTenantId CurrentTenantId => _multiTenantRepository.CurrentTenantId;
     }
-
-    public interface ITenantServerPackageRepository : IServerPackageRepository
-    {
-        NuGetTenantId CurrentTenantId { get; }
-    }
 }

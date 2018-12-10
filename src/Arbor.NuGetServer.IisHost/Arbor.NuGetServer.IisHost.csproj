@@ -384,6 +384,7 @@
     <Compile Include="Areas\Clean\CleanAreaRegistration.cs" />
     <Compile Include="Areas\NuGet\NuGetAreaRegistration.cs" />
     <Compile Include="Areas\Start\StartAreaRegistration.cs" />
+    <Compile Include="Areas\Tenants\AuthenticationModule.cs" />
     <Compile Include="Areas\Tenants\CustomAuthenticationService.cs" />
     <Compile Include="Areas\Tenants\LoginInput.cs" />
     <Compile Include="Areas\Tenants\LoginResult.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="AspNet\AppRegisteredAdapter.cs" />
     <Compile Include="AspNet\BundleConfig.cs" />
     <Compile Include="AspNet\CacheModule.cs" />
+    <Compile Include="AspNet\CacheWrapper.cs" />
     <Compile Include="AspNet\CustomAspNetModule.cs" />
     <Compile Include="AspNet\CustomHttpPostedFile.cs" />
     <Compile Include="AspNet\FilterConfig.cs" />
