@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Arbor.Ginkgo;
+using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
 using Arbor.NuGetServer.Api.Areas.Security;
 using Arbor.NuGetServer.Tests.Integration.Helpers;
 using JetBrains.Annotations;
@@ -56,7 +57,8 @@ namespace Arbor.NuGetServer.Tests.Integration
                 new Dictionary<string, string>
                 {
                     ["TMP"] = tempDirectory.Directory.FullName,
-                    ["TEMP"] = tempDirectory.Directory.FullName
+                    ["TEMP"] = tempDirectory.Directory.FullName,
+                    [TenantConstants.InMemorySourceEnabled] = "true"
                 });
 
             try

@@ -11,7 +11,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             [NotNull] string routeName,
             [NotNull] string routeUrl,
             [NotNull] IServerPackageRepository repository,
-            [CanBeNull] string apiKey,
             [NotNull] string packageDirectory)
         {
             if (string.IsNullOrWhiteSpace(routeName))
@@ -38,7 +37,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             RouteName = routeName;
             RouteUrl = routeUrl;
             Repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            ApiKey = apiKey;
             PackageDirectory = packageDirectory;
         }
 
@@ -48,8 +46,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
         public string RouteUrl { get; }
 
         public IServerPackageRepository Repository { get; }
-
-        public string ApiKey { get; }
 
         public string PackageDirectory { get; }
     }

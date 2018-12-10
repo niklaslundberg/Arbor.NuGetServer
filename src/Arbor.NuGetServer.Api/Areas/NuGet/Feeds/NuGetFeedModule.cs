@@ -24,9 +24,9 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
         private readonly Serilog.ILogger _logger;
         private readonly ICache _cache;
         private readonly ICustomClock _customClock;
+        private readonly Functions _functions;
         private readonly INuGetTenantReadService _nuGetTenantReadService;
         private readonly ITenantRouteHelper _tenantRouteHelper;
-        private NuGetServerApp _nugetServerApp;
 
         public NuGetFeedModule(
             [NotNull] IKeyValueConfiguration keyValueConfiguration,
@@ -35,17 +35,17 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             [NotNull] ILogger logger,
             ICache cache,
             ICustomClock customClock,
-            NuGetServerApp nugetServerApp)
+            [NotNull] Functions functions)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
-            _nugetServerApp = nugetServerApp;
             _nuGetTenantReadService =
                 nuGetTenantReadService ?? throw new ArgumentNullException(nameof(nuGetTenantReadService));
             _tenantRouteHelper = tenantRouteHelper ?? throw new ArgumentNullException(nameof(tenantRouteHelper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cache = cache;
             _customClock = customClock;
+            _functions = functions ?? throw new ArgumentNullException(nameof(functions));
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -60,7 +60,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
             foreach (NuGetTenantConfiguration nuGetTenant in _nuGetTenantReadService.GetNuGetTenantConfigurations())
             {
                 string packagePath =
-                    _keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath];
+                    _keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPathKey];
 
                 bool customTenantPackagePathsEnabled =
                     _keyValueConfiguration[ConfigurationKeys.CustomTenantPackagePathsEnabled]
@@ -78,7 +78,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
                     new KeyValueSettingsProvider(_keyValueConfiguration);
 
                 DirectoryInfo packageDirectory = tenantPackageDirectoryPath.StartsWith("~")
-                    ? new DirectoryInfo(_nugetServerApp.Functions.MapPath(tenantPackageDirectoryPath))
+                    ? new DirectoryInfo(_functions.MapPath(tenantPackageDirectoryPath))
                     : new DirectoryInfo(tenantPackageDirectoryPath);
 
                 if (!packageDirectory.Exists)
@@ -96,7 +96,6 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.Feeds
                         nuGetTenant.TenantId.TenantId,
                         $"nuget/{nuGetTenant.TenantId.TenantId}",
                         repository,
-                        _keyValueConfiguration[ConfigurationKeys.ApiKey],
                         packageDirectory.FullName);
 
                 builder.RegisterInstance(nuGetFeedConfiguration).AsSelf();

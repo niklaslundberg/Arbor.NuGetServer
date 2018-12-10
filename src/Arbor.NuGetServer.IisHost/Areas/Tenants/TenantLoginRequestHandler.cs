@@ -1,10 +1,12 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using MediatR;
 
 namespace Arbor.NuGetServer.IisHost.Areas.Tenants
 {
+    [UsedImplicitly]
     public class TenantLoginRequestHandler : IRequestHandler<TenantLoginRequest, LoginResult>
     {
         private readonly CustomAuthenticationService _customAuthenticationService;

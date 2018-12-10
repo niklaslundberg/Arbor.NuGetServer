@@ -16,7 +16,7 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
     public sealed class UserConfigUpdater : IDisposable
     {
         private readonly ConfigurationHolder _configurationHolder;
-        private string _fileName;
+        private readonly string _fileName;
         private FileSystemWatcher _fileSystemWatcher;
         private bool _isDisposed;
 

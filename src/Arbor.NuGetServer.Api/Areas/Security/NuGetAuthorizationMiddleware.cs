@@ -183,7 +183,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
         private async Task WriteAuthorizationFailedBodyAsync(IOwinContext context, HttpStatusCode statusCode, string reason = null)
         {
-            _logger.Warning("Authorization failed {Reason}, status code {StatusCode}", reason, statusCode);
+            _logger.Warning("Authorization failed {Reason}, {Url} status code {StatusCode}", reason, context.Request.Uri.ToString(), statusCode);
             context.Response.StatusCode = (int)statusCode;
             context.Response.ContentType = ContentType.PlainText;
 
@@ -193,14 +193,15 @@ namespace Arbor.NuGetServer.Api.Areas.Security
             }
         }
 
-        private static async Task BadRequestAsync(IOwinContext context, string reason)
+        private async Task BadRequestAsync(IOwinContext context, string reason)
         {
+            _logger.Warning("Authorization failed, bad request {Reason}, {Url} status code {StatusCode}", reason, context.Request.Uri.ToString(), HttpStatusCode.BadRequest);
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.Response.ContentType = ContentType.PlainText;
 
             using (var streamWriter = new StreamWriter(context.Response.Body, Encoding.UTF8, 1024, true))
             {
-                await streamWriter.WriteAsync("Bad request - " + reason);
+                await streamWriter.WriteAsync($"Bad request - {reason}");
             }
         }
 

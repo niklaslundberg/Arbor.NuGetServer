@@ -8,7 +8,7 @@ namespace Arbor.NuGetServer.Api.Areas.Configuration
 {
     public class ConfigurationHolder
     {
-        private ConcurrentDictionary<Type, ConcurrentDictionary<string, object>> _configurationInstances =
+        private readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, object>> _configurationInstances =
             new ConcurrentDictionary<Type, ConcurrentDictionary<string, object>>();
 
         public ImmutableArray<Type> RegisteredTypes => _configurationInstances.Keys.ToImmutableArray();

@@ -100,7 +100,7 @@ namespace Arbor.NuGetServer.Api.Areas.Application
                     .ToArray());
 
             string packagesPath =
-                keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPath];
+                keyValueConfiguration[ConfigurationKeys.PackagesDirectoryPathKey];
 
             if (!string.IsNullOrWhiteSpace(packagesPath))
             {
