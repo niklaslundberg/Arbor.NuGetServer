@@ -11,7 +11,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
     [UsedImplicitly]
     public class TenantConfigModule : MetaModule
     {
-        private bool _enabled;
+        private readonly bool _enabled;
 
         public TenantConfigModule([NotNull] IKeyValueConfiguration keyValueConfiguration, [NotNull] ILogger logger)
         {
@@ -34,7 +34,7 @@ namespace Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant
             if (_enabled)
             {
                 builder.RegisterType<ConfigurationNuGetTenantReadService>()
-                    .AsSelf()
+                    .AsImplementedInterfaces()
                     .SingleInstance();
             }
         }
