@@ -17,6 +17,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 
 namespace Arbor.NuGetServer.Api.Areas.Application
 {
@@ -67,11 +68,28 @@ namespace Arbor.NuGetServer.Api.Areas.Application
             Func<Assembly[]> assemblyResolver,
             Functions functions)
         {
-            Logger logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.Debug()
-                .WriteTo.Seq("http://localhost:5341")
-                .MinimumLevel.Debug()
+            var seqUrl = Environment.GetEnvironmentVariable(ConfigurationKeys.SeqUrl);
+
+            var loggerConfiguration = new LoggerConfiguration()
+                .WriteTo.Console();
+
+            if (!string.IsNullOrWhiteSpace(seqUrl))
+            {
+                loggerConfiguration = loggerConfiguration
+                    .WriteTo.Seq(seqUrl);
+            }
+
+            var level = Environment.GetEnvironmentVariable(ConfigurationKeys.SerilogLogLevel);
+
+            if (!Enum.TryParse(level, out LogEventLevel logLevel))
+            {
+                logLevel = LogEventLevel.Information;
+            }
+
+            var logSwitch = new LoggingLevelSwitch(logLevel);
+
+            Logger logger = loggerConfiguration
+                .MinimumLevel.ControlledBy(logSwitch)
                 .CreateLogger();
 
             ImmutableArray<Assembly> AssemblyResolver() => assemblyResolver()
