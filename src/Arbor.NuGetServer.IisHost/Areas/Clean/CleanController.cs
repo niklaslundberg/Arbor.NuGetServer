@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Arbor.KVConfiguration.Core;
+using Arbor.NuGetServer.Api.Areas.Application;
 using Arbor.NuGetServer.Api.Areas.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.Clean;
 using Arbor.NuGetServer.Api.Areas.NuGet.MultiTenant;
@@ -14,11 +15,13 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
     public class CleanController : Controller
     {
         private readonly IKeyValueConfiguration _keyValueConfiguration;
+        private readonly Functions _functions;
 
-        public CleanController([NotNull] IKeyValueConfiguration keyValueConfiguration)
+        public CleanController([NotNull] IKeyValueConfiguration keyValueConfiguration, Functions functions)
         {
             _keyValueConfiguration =
                 keyValueConfiguration ?? throw new ArgumentNullException(nameof(keyValueConfiguration));
+            _functions = functions;
         }
 
         [Route(CleanConstants.CleanGetRoute, Name = CleanConstants.CleanGetRouteName)]
@@ -39,7 +42,7 @@ namespace Arbor.NuGetServer.IisHost.Areas.Clean
                 packagesToKeep = packagesToKeepFromConfig;
             }
 
-            string cleanPostRoute = $"/{CleanConstants.PostRoute.WithParameter(CleanConstants.TenantRouteParameterName, tenantId.TenantId)}";
+            string cleanPostRoute = _functions.MapPath($"{CleanConstants.PostRoute.WithParameter(CleanConstants.TenantRouteParameterName, tenantId.TenantId)}");
 
             return View(new CleanViewOutputModel(cleanPostRoute, packagesToKeep, true, true));
         }
