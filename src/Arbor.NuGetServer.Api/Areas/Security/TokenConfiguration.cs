@@ -4,6 +4,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 {
     public class TokenConfiguration
     {
+        public const string DefaultExpirationMinutes = "urn:arbor-nuget-server:security:tokens:expiration-time-in-minutes";
         public const string DefaultAudience= "Arbor NuGet Server Client";
         public const string DefaultIssuer = "Arbor NuGet Server";
         public const string AudienceKey = "urn:arbor-nuget-server:security:tokens:audience";

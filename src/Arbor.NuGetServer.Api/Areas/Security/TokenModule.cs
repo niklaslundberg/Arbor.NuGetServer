@@ -19,6 +19,7 @@ namespace Arbor.NuGetServer.Api.Areas.Security
         {
             builder.RegisterType<TokenGenerator>().AsSelf().SingleInstance();
 
+            string expiration = _keyValueConfiguration[TokenConfiguration.AudienceKey].WithDefault(TokenConfiguration.DefaultExpirationMinutes);
             string audience = _keyValueConfiguration[TokenConfiguration.AudienceKey].WithDefault(TokenConfiguration.DefaultAudience);
             string issuer = _keyValueConfiguration[TokenConfiguration.IssuerKey].WithDefault(TokenConfiguration.DefaultIssuer);
             string keyFile = _keyValueConfiguration[TokenConfiguration.SecurityKeyFileKey];
@@ -40,7 +41,13 @@ namespace Arbor.NuGetServer.Api.Areas.Security
 
             RsaKey rsaKey = RsaKeyHelper.ReadKey(keyFile);
 
-            var tokenConfiguration = new TokenConfiguration(TimeSpan.FromMinutes(5),
+
+            if (!int.TryParse(expiration, out int expirationMinutes) || expirationMinutes <= 0)
+            {
+                expirationMinutes = 5;
+            }
+
+            var tokenConfiguration = new TokenConfiguration(TimeSpan.FromMinutes(expirationMinutes),
                 new TokenAudience(audience),
                 new TokenIssuer(issuer),
                 rsaKey);
