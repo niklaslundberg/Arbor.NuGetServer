@@ -34,7 +34,7 @@
   <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="5.4.0" />
   <PackageReference Include="Microsoft.IdentityModel.Logging" Version="5.4.0" />
   <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.4.0" />
-  <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0" developmentDependency="true">
+  <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0">
     <PrivateAssets>all</PrivateAssets>
     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
   </PackageReference>

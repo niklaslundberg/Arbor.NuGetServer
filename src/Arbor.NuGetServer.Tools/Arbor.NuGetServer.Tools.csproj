@@ -7,6 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="AlphaFS" Version="2.2.6" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
